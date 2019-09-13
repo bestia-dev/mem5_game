@@ -1,0 +1,101 @@
+# mem5_game/mem5/Makefile.toml
+# https://github.com/sagiegurari/cargo-make/blob/master/src/lib/Makefile.stable.toml
+
+# Building on windows is just cumbersome. The result is only good for windows.
+# The web server will always be on linux. Wasm/Webassembly is OS agnostic.
+# It has much more sense to build always in Linux. 
+# OS for code editing does not change anything.
+# Building for both OS means I would need to call every utils exe and 
+# every copy command in 2 different ways. So complicated.
+# Not good.
+# Decision: I will always build only for for Linux inside Linux subsystem for Windows !
+
+[config]
+skip_core_tasks = true
+
+#region: public callable tasks/flows
+
+    [tasks.default]
+    description = "show list of public callable tasks"
+    clear = true
+    command = "cargo"
+    args = ["make","--list-all-steps"]
+
+    [tasks.dev]
+    description = "cargo build development"
+    clear = true
+    dependencies = [
+        "lmake_version_from_date",
+        "build_dev",
+        "post_build",
+    ]
+
+    [tasks.release]
+    description = "cargo build release"
+    clear = true
+    dependencies = [
+        "lmake_version_from_date",
+        "build_release",
+        "post_build",
+    ]
+
+    [tasks.doc]
+    description = "call cargo doc"
+    clear=true
+    dependencies = [
+        "insert_readme",
+        "cargo_doc",
+        "cargo_docs_copy"
+    ]
+
+# endregion
+
+[tasks.build_dev]
+description = "build for debug / dev"
+clear = true
+private = true
+command = "wasm-pack"
+args = ["build", "--target", "web","--dev"]
+
+[tasks.build_release]
+description = "build for release"
+clear = true
+private = true
+command = "wasm-pack"
+args = ["build","--target", "web","--release"]
+
+[tasks.post_build]
+description = "copy wasm pkg to webfolder"
+clear = true
+private = true
+script = [
+    "\\cp ~/rustprojects/mem5_game/mem5/pkg/* -rf -v ~/rustprojects/mem5_game/webfolder/mem5/pkg",
+]
+
+[tasks.insert_readme]
+description = "copy the content of readme.md into *.rs comments (for the docs)"
+clear = true
+private = true
+script= ["../../utils_linux/lmake_readme"]
+
+[tasks.cargo_doc]
+description = "generate docs from source code"
+clear = true
+private = true
+command="cargo"
+args=["doc","--no-deps","--document-private-items","--open"]
+
+[tasks.cargo_docs_copy]
+description = "copy target doc to docs (github standard)"
+# TODO: should be better if first delete old content
+clear = true
+private = true
+script = [
+    "\\cp ~/rustprojects/mem5_game/target/doc/* -rf -v ~/rustprojects/mem5_game/docs",
+]
+
+[tasks.lmake_version_from_date]
+description = "in cargo.toml change version to today date"
+clear = true
+private = true
+script= ["../../utils_linux/lmake_version_from_date"]

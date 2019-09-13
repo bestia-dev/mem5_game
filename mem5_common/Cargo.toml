@@ -1,0 +1,17 @@
+[package]
+name = "mem5_common"
+version = "19.9.9" #no need for semver if it is not a library
+description = "commons for mem5 wasm and server"
+authors = ["Luciano Bestia"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/lucianobestia/mem5_game"
+categories = ["web-programming::http-server"]
+keywords = ["warp", "server", "http", "websocket"]
+
+[dependencies]
+serde = "1.0.91"
+serde_derive = "1.0.91"
+serde_json = "1.0"
+strum = "0.15.0"
+strum_macros = "0.15.0"

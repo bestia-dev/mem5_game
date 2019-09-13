@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <!--a lot of tricks to make it fullscreen. Best option is to "Add to home screen" the webapp on both iPhone and Android. -->
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <title>mem5</title>
+  <link rel="stylesheet" href="css/mem5.css">
+  <script type='text/javascript' charset='utf-8'>
+    // Hides mobile browser's address bar when page is done loading.
+      window.addEventListener('load', function(e) {
+        setTimeout(function() { window.scrollTo(0, 1); }, 1);
+      }, false);
+  </script>
+</head>
+
+<body>
+  <div id="div_for_virtual_dom">
+  </div>
+  <script type="module">
+    import init from "./pkg/mem5.js";
+    init("./pkg/mem5_bg.wasm");
+   </script>
+</body>
+
+</html>
