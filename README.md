@@ -1,6 +1,6 @@
 Things are changing fast. This is the situation on 2019-09-13. LucianoBestia
 # mem5_game
-Learning Rust Wasm/WebAssembly with Virtual Dom Dodrio and WebSocket communication - part four.
+Learning Rust Wasm/WebAssembly with Virtual Dom Dodrio and WebSocket communication - part five.
 ## Documentation
 Documentation generated from source code:  
 https://lucianobestia.github.io/mem5_game/mem5/index.html  
@@ -13,10 +13,7 @@ Read the `Last project`:
 https://github.com/LucianoBestia/mem4_game  
 You can play the game here (hosted on google cloud platform):  
 http://bestia.shorturl.com/mem5   
-## Shorturl.com
-Google cloud platform does not give any subdomain name for free. Google is also a domain registrar and it looks like they are trying to push me to buy a domain.  
-I didn't like to have the raw IP in the url. People don't like numbers like that.  
-I created a subdomain on shorturl.com. It is not the perfect solution, but it is free or very cheap.  
+
 ## Cargo make
 I prepared some flows and tasks for Cargo make for the workspace.  
 `cargo make` - lists the possible available/public flows/tasks  
@@ -31,6 +28,8 @@ I prepared some flows and tasks for Cargo make for the workspace.
 - onfullscreen vdom schedule render  
 - iPhone/android webapp manifest file  
 - why/how to reset/reload the webapp in "add to homescreen" on iPhone?  
+- add server database to write points - it is not informative, but it shows how to use a database  
+- use html5 localstorage to remember player name and unique id  
 
 ## Changelog
 2019-09-13 mem4 is finished, start the mem5  
