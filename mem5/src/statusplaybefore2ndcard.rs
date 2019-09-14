@@ -14,6 +14,7 @@ use typed_html::dodrio;
 //endregion
 
 ///render Play or Wait
+#[allow(clippy::integer_arithmetic)]
 pub fn div_click_2nd_card<'a, 'bump>(
     rrc: &'a RootRenderingComponent,
     bump: &'bump Bump,

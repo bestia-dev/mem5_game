@@ -13,6 +13,7 @@ use dodrio::Node;
 use typed_html::dodrio;
 //endregion
 
+#[allow(clippy::integer_arithmetic)]
 ///render Play or Wait
 pub fn div_click_1st_card<'a, 'bump>(
     rrc: &'a RootRenderingComponent,

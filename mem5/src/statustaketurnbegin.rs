@@ -14,6 +14,7 @@ use typed_html::dodrio;
 //endregion
 
 ///render take turn
+#[allow(clippy::integer_arithmetic)]
 pub fn div_take_turn_begin<'a, 'bump>(
     rrc: &'a RootRenderingComponent,
     bump: &'bump Bump,
