@@ -14,7 +14,7 @@ use typed_html::dodrio;
 
 ///render asked
 pub fn div_invite_asked<'a, 'bump>(
-    root_rendering_component: &'a RootRenderingComponent,
+    rrc: &'a RootRenderingComponent,
     bump: &'bump Bump,
 ) -> Node<'bump>
 where
@@ -32,7 +32,7 @@ where
         <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
                     //show Ask Player2 to Play!
-                    bumpalo::format!(in bump, "Click here to Accept {}!", root_rendering_component.game_data.asked_folder_name)
+                    bumpalo::format!(in bump, "Click here to Accept {}!", rrc.game_data.asked_folder_name)
                         .into_bump_str(),
                 )]}
         </h2>
@@ -48,16 +48,18 @@ pub fn div_invite_asked_on_click(rrc: &mut RootRenderingComponent) {
         &rrc.game_data.ws,
         &WsMessage::PlayAccept {
             my_ws_uid: rrc.game_data.my_ws_uid,
+            my_nickname: rrc.game_data.my_nickname.clone(),
             players: unwrap!(serde_json::to_string(&rrc.game_data.players)),
         },
     );
 }
 
 ///msg accept play
-pub fn on_msg_play_accept(rrc: &mut RootRenderingComponent, my_ws_uid: usize) {
+pub fn on_msg_play_accept(rrc: &mut RootRenderingComponent, his_ws_uid: usize, his_nickname: String) {
     if rrc.game_data.my_player_number == 1 {
         rrc.game_data.players.push(Player {
-            ws_uid: my_ws_uid,
+            ws_uid: his_ws_uid,
+            nickname: his_nickname,
             points: 0,
         });
         rrc.check_invalidate_for_all_components();

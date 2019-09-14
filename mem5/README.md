@@ -84,7 +84,7 @@ The rendering is scheduled and it will happen shortly (async).
 | GameOverPlayAgainBegin | div_play_again         | window.location().reload()                  | -                                    | -                  | -                  | -                            | -                                  |
 |  |  |  |  |  |  |  |  |
  
-t.p. = this player,   o.p. = other players,  rrc = root_rendering_component, rcv = receive
+t.p. = this player,   o.p. = other players,  rrc = rrc, rcv = receive
 1. Some actions can have different results. For example the condition card match or card don’t match.  
 2. one action must be only for one status1. This action changes Status for this player and sends Msg to other players.  
 3. on receive msg can produce only one status2.  

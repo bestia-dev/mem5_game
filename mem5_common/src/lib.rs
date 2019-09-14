@@ -75,6 +75,8 @@ pub enum WsMessage {
     Invite {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
+        /// my nickname
+        my_nickname: String,
         ///content folder name
         asked_folder_name: String,
     },
@@ -82,6 +84,8 @@ pub enum WsMessage {
     PlayAccept {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
+        /// my nickname
+        my_nickname: String,
         ///json of vector of players
         players: String,
     },
@@ -195,6 +199,8 @@ pub enum GameStatus {
 pub struct Player {
     ///ws_uid
     pub ws_uid: usize,
+    ///nickname
+    pub nickname: String,
     ///field for src attribute for HTML element image and filename of card image
     pub points: usize,
 }

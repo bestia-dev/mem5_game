@@ -2,6 +2,7 @@
 
 //region: extern, use,
 extern crate mem5_common;
+use crate::localstoragemod;
 use crate::logmod;
 
 use mem5_common::{GameStatus, Player};
@@ -64,6 +65,16 @@ pub struct Card {
 }
 ///game data
 pub struct GameData {
+    ///my ws client instance unique id. To not listen the echo to yourself.
+    pub my_ws_uid: usize,
+    ///my nickname
+    pub my_nickname: String,
+    ///What player am I
+    pub my_player_number: usize,
+    ///web socket. used it to send message onclick.
+    pub ws: WebSocket,
+    ///players
+    pub players: Vec<Player>,
     ///game status: InviteAskBegin,InviteAsking,InviteAsked,Player1,Player2
     pub game_status: GameStatus,
     ///vector of cards
@@ -72,18 +83,11 @@ pub struct GameData {
     pub card_index_of_first_click: usize,
     ///card index of second click
     pub card_index_of_second_click: usize,
-    ///web socket. used it to send message onclick.
-    pub ws: WebSocket,
-    ///my ws client instance unique id. To not listen the echo to yourself.
-    pub my_ws_uid: usize,
-    ///players
-    pub players: Vec<Player>,
     ///content folder name
     pub content_folder_name: String,
     ///invite asks for a specific game
     pub asked_folder_name: String,
-    ///What player am I
-    pub my_player_number: usize,
+
     ///whose turn is now:  player 1,2,3,...
     pub player_turn: usize,
     ///content folders vector
@@ -206,11 +210,15 @@ impl GameData {
     }
     ///constructor of game data
     pub fn new(ws: WebSocket, my_ws_uid: usize) -> Self {
+        
         let mut players = Vec::new();
         players.push(Player {
             ws_uid: 0,
+            nickname: "Player".to_string(),
             points: 0,
         });
+        let my_nickname = localstoragemod::load_nickname();
+
         //return from constructor
         GameData {
             card_grid_data: Self::prepare_for_empty(),
@@ -218,6 +226,7 @@ impl GameData {
             card_index_of_second_click: 0,
             ws,
             my_ws_uid,
+            my_nickname,
             players,
             game_status: GameStatus::InviteAskBegin,
             content_folder_name: "alphabet".to_string(),

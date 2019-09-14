@@ -11,7 +11,7 @@ use typed_html::dodrio;
 
 ///play again
 pub fn div_play_again<'a, 'bump>(
-    _root_rendering_component: &'a RootRenderingComponent,
+    _rrc: &'a RootRenderingComponent,
     bump: &'bump Bump,
 ) -> Node<'bump>
 where

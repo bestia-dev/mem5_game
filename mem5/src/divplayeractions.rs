@@ -55,7 +55,7 @@ where
 
 ///render unpredicted
 fn div_unpredicted<'a, 'bump>(
-    root_rendering_component: &'a RootRenderingComponent,
+    rrc: &'a RootRenderingComponent,
     bump: &'bump Bump,
 ) -> Node<'bump>
 where
@@ -65,7 +65,7 @@ where
     //return
     dodrio!(bump,
     <h2 id= "ws_elem">
-        {vec![text(bumpalo::format!(in bump, "gamestatus: {} player {}", root_rendering_component.game_data.game_status.as_ref(),root_rendering_component.game_data.my_player_number).into_bump_str())]}
+        {vec![text(bumpalo::format!(in bump, "gamestatus: {} player {}", rrc.game_data.game_status.as_ref(),rrc.game_data.my_player_number).into_bump_str())]}
     </h2>
     )
 }

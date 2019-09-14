@@ -78,11 +78,11 @@ where
 ///prepare a vector<Node> for the Virtual Dom for 'css grid' item with <img>
 ///the grid container needs only grid items. There is no need for rows and columns in 'css grid'.
 pub fn div_grid_items<'a, 'bump>(
-    root_rendering_component: &'a RootRenderingComponent,
+    rrc: &'a RootRenderingComponent,
     bump: &'bump Bump,
 ) -> Vec<Node<'bump>> {
     //this game_data mutable reference is dropped on the end of the function
-    let game_data = &root_rendering_component.game_data;
+    let game_data = &rrc.game_data;
 
     let mut vec_grid_items: Vec<Node<'bump>> = Vec::new();
     if game_data.game_config.is_some() {
@@ -114,7 +114,7 @@ pub fn div_grid_items<'a, 'bump>(
         /*
         logmod::log1_str(&format!(
             "div_grid_items: my_player_number {} start_index {} end_index {} card_grid_data.len {}",
-            &root_rendering_component.game_data.my_player_number,
+            &rrc.game_data.my_player_number,
             start_index,
             end_index,
             game_data.card_grid_data.len()
@@ -169,7 +169,7 @@ pub fn div_grid_items<'a, 'bump>(
 
             //creating grid_width*grid_height <div> in loop
             let grid_item_bump =
-                div_grid_item(root_rendering_component, bump, img_src, img_id, opacity);
+                div_grid_item(rrc, bump, img_src, img_id, opacity);
             vec_grid_items.push(grid_item_bump);
         }
     }
@@ -179,7 +179,7 @@ pub fn div_grid_items<'a, 'bump>(
 }
 ///on click is the most important part and here is more or less isolated
 pub fn div_grid_item<'a, 'bump>(
-    _root_rendering_component: &'a RootRenderingComponent,
+    _rrc: &'a RootRenderingComponent,
     bump: &'bump Bump,
     img_src: &str,
     img_id: &str,
@@ -309,9 +309,9 @@ pub fn grid_height() -> usize {
 }
 
 ///calculate max with and height for a grid in pixels
-pub fn max_grid_size(root_rendering_component: &RootRenderingComponent) -> Size2d {
+pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
     //if the game_config is None, then return full screen
-    if root_rendering_component.game_data.game_config.is_none() {
+    if rrc.game_data.game_config.is_none() {
         Size2d {
             hor: rootrenderingcomponent::usize_window_inner_width_but_max_600(),
             ver: rootrenderingcomponent::usize_window_inner_height(),
@@ -329,13 +329,13 @@ pub fn max_grid_size(root_rendering_component: &RootRenderingComponent) -> Size2
         //default if not choosen
         let mut card_width = 115;
         let mut card_height = 115;
-        match &root_rendering_component.game_data.game_config {
+        match &rrc.game_data.game_config {
             None => (),
             Some(_x) => {
                 card_width =
-                    unwrap!(root_rendering_component.game_data.game_config.clone()).card_width;
+                    unwrap!(rrc.game_data.game_config.clone()).card_width;
                 card_height =
-                    unwrap!(root_rendering_component.game_data.game_config.clone()).card_height;
+                    unwrap!(rrc.game_data.game_config.clone()).card_height;
             }
         }
         /*
@@ -347,13 +347,13 @@ pub fn max_grid_size(root_rendering_component: &RootRenderingComponent) -> Size2
         //ratio between width and height must stay the same
         let ratio = (unwrap!(card_height.approx_as::<f64>())
             * unwrap!(
-                unwrap!(root_rendering_component.game_data.game_config.as_ref())
+                unwrap!(rrc.game_data.game_config.as_ref())
                     .grid_items_ver
                     .approx_as::<f64>()
             ))
             / (unwrap!(card_width.approx_as::<f64>())
                 * unwrap!(
-                    unwrap!(root_rendering_component.game_data.game_config.as_ref())
+                    unwrap!(rrc.game_data.game_config.as_ref())
                         .grid_items_hor
                         .approx_as::<f64>()
                 ));

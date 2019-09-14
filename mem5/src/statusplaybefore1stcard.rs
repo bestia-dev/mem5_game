@@ -15,19 +15,21 @@ use typed_html::dodrio;
 
 ///render Play or Wait
 pub fn div_click_1st_card<'a, 'bump>(
-    root_rendering_component: &'a RootRenderingComponent,
+    rrc: &'a RootRenderingComponent,
     bump: &'bump Bump,
 ) -> Node<'bump>
 where
     'a: 'bump,
 {
-    if root_rendering_component.game_data.my_player_number
-        == root_rendering_component.game_data.player_turn
+    if rrc.game_data.my_player_number
+        == rrc.game_data.player_turn
     {
         dodrio!(bump,
         <div >
             <h2 id= "ws_elem" style= "color:orange;">
-                {vec![text(bumpalo::format!(in bump, "Play player{} !", root_rendering_component.game_data.player_turn).into_bump_str())]}
+                {vec![text(bumpalo::format!(in bump, "Play {} {} !", 
+                unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
+                rrc.game_data.player_turn).into_bump_str())]}
             </h2>
         </div>
         )
@@ -35,7 +37,10 @@ where
         //return wait for the other player
         dodrio!(bump,
         <h2 id="ws_elem" style= "color:red;">
-            {vec![text(bumpalo::format!(in bump, "Wait for player{} !", root_rendering_component.game_data.player_turn).into_bump_str())]}
+            {vec![text(bumpalo::format!(in bump, "Wait for {} {} !", 
+            unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
+            rrc.game_data.player_turn
+            ).into_bump_str())]}
         </h2>
         )
     }

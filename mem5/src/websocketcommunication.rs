@@ -105,9 +105,9 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     weak.with_component({
                         move |root| {
                             logmod::log1_str(&format!("ResponseWsUid: {}  ", your_ws_uid));
-                            let root_rendering_component =
+                            let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
-                            root_rendering_component.on_response_ws_uid(your_ws_uid);
+                            rrc.on_response_ws_uid(your_ws_uid);
                         }
                     })
                     .map_err(|_| ()),
@@ -116,23 +116,25 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
 
             WsMessage::Invite {
                 my_ws_uid,
+                my_nickname,
                 asked_folder_name,
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
-                            let root_rendering_component =
+                            let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
 
                             if let GameStatus::GameOverPlayAgainBegin
                             | GameStatus::InviteAskBegin
                             | GameStatus::InviteAsked =
-                                root_rendering_component.game_data.game_status
+                                rrc.game_data.game_status
                             {
                                 statusinviteaskbegin::on_msg_invite(
-                                    root_rendering_component,
+                                    rrc,
                                     my_ws_uid,
+                                    my_nickname,
                                     asked_folder_name,
                                 );
                                 v2.schedule_render();
@@ -142,17 +144,19 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
-            WsMessage::PlayAccept { my_ws_uid, .. } => {
+            
+            WsMessage::PlayAccept { my_ws_uid, my_nickname, .. } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
                             console::log_1(&"rcv PlayAccept".into());
-                            let root_rendering_component =
+                            let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
                             statusinviteasked::on_msg_play_accept(
-                                root_rendering_component,
+                                rrc,
                                 my_ws_uid,
+                                my_nickname
                             );
                             v2.schedule_render();
                         }
@@ -169,13 +173,13 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
-                            let root_rendering_component =
+                            let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
 
                             if let GameStatus::PlayAccepted =
-                                root_rendering_component.game_data.game_status
+                                rrc.game_data.game_status
                             {
-                                root_rendering_component.on_msg_game_data_init(
+                                rrc.on_msg_game_data_init(
                                     &card_grid_data,
                                     &game_config,
                                     &players,
@@ -199,11 +203,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         console::log_1(&"player_click".into());
                         move |root| {
-                            let root_rendering_component =
+                            let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
                             console::log_1(&"players".into());
                             statusplaybefore1stcard::on_msg_player_click_1st_card(
-                                root_rendering_component,
+                                rrc,
                                 game_status,
                                 card_grid_data.as_str(),
                                 card_index_of_first_click,
@@ -228,11 +232,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         console::log_1(&"player_click".into());
                         move |root| {
-                            let root_rendering_component =
+                            let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
                             console::log_1(&"players".into());
                             statusplaybefore2ndcard::on_msg_player_click_2nd_card(
-                                root_rendering_component,
+                                rrc,
                                 players.as_str(),
                                 game_status,
                                 card_grid_data.as_str(),
@@ -257,11 +261,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         console::log_1(&"take turn begin".into());
                         move |root| {
-                            let root_rendering_component =
+                            let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
                             console::log_1(&"players".into());
                             statustaketurnbegin::on_msg_take_turn_begin(
-                                root_rendering_component,
+                                rrc,
                                 game_status,
                                 card_grid_data.as_str(),
                                 card_index_of_first_click,
@@ -278,10 +282,10 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
-                            let root_rendering_component =
+                            let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
                             console::log_1(&"TakeTurnEnd".into());
-                            statustaketurnbegin::on_msg_take_turn_end(root_rendering_component);
+                            statustaketurnbegin::on_msg_take_turn_end(rrc);
                             v2.schedule_render();
                         }
                     })
@@ -301,11 +305,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         console::log_1(&"play again".into());
                         move |root| {
-                            let root_rendering_component =
+                            let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
                             console::log_1(&"players".into());
                             statusplaybefore2ndcard::on_msg_play_again(
-                                root_rendering_component,
+                                rrc,
                                 players.as_str(),
                                 game_status,
                                 card_grid_data.as_str(),
@@ -339,8 +343,8 @@ pub fn setup_ws_onerror(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     let v2 = weak.clone();
                     move |root| {
                         console::log_1(&"error text".into());
-                        let root_rendering_component = root.unwrap_mut::<RootRenderingComponent>();
-                        root_rendering_component.game_data.error_text = err_text;
+                        let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                        rrc.game_data.error_text = err_text;
                         v2.schedule_render();
                     }
                 })
@@ -362,9 +366,9 @@ pub fn setup_ws_onclose(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     let v2 = weak.clone();
                     move |root| {
                         console::log_1(&"spawn_local because of vdom".into());
-                        let root_rendering_component = root.unwrap_mut::<RootRenderingComponent>();
+                        let rrc = root.unwrap_mut::<RootRenderingComponent>();
                         //I want to show a reconnect button to the user
-                        root_rendering_component.game_data.is_reconnect = true;
+                        rrc.game_data.is_reconnect = true;
                         v2.schedule_render();
                     }
                 })

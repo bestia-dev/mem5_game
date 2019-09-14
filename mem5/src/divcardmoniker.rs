@@ -14,11 +14,11 @@ const GAME_TITLE: &str = "mem5";
 
 ///the header can show only the game title or two card monikers. Not everything together.
 pub fn div_grid_card_moniker<'a>(
-    root_rendering_component: &'a RootRenderingComponent,
+    rrc: &'a RootRenderingComponent,
     bump: &'a Bump,
 ) -> Node<'a> {
     //this game_data mutable reference is dropped on the end of the function
-    let game_data = &root_rendering_component.game_data;
+    let game_data = &rrc.game_data;
     //if the card_monikers are visible, than don't show GameTitle, because there is not
     //enought space on smartphones
     if game_data.card_index_of_first_click != 0 || game_data.card_index_of_second_click != 0 {
@@ -28,7 +28,7 @@ pub fn div_grid_card_moniker<'a>(
             <div class= "grid_item" style= "text-align: left;">
                 {vec![text(
                     bumpalo::format!(in bump, "{}",
-                    unwrap!(unwrap!(root_rendering_component.game_data.game_config.clone(),"root_rendering_component.game_data.game_config.clone()")
+                    unwrap!(unwrap!(rrc.game_data.game_config.clone(),"rrc.game_data.game_config.clone()")
                     .card_moniker.get(unwrap!(game_data.card_grid_data.get(game_data.card_index_of_first_click)).card_number_and_img_src)))
                     .into_bump_str(),
                 )]}
@@ -36,7 +36,7 @@ pub fn div_grid_card_moniker<'a>(
                 <div class= "grid_item" style= "text-align: right;">
                     {vec![text(
                     bumpalo::format!(in bump, "{}",
-                    unwrap!(unwrap!(root_rendering_component.game_data.game_config.clone(),"root_rendering_component.game_data.game_config.clone()")
+                    unwrap!(unwrap!(rrc.game_data.game_config.clone(),"rrc.game_data.game_config.clone()")
                     .card_moniker.get(unwrap!(game_data.card_grid_data.get(game_data.card_index_of_second_click)).card_number_and_img_src)))
                 .into_bump_str(),
                 )]}

@@ -85,7 +85,7 @@
 //! | GameOverPlayAgainBegin | div_play_again         | window.location().reload()                  | -                                    | -                  | -                  | -                            | -                                  |
 //! |  |  |  |  |  |  |  |  |
 //!  
-//! t.p. = this player,   o.p. = other players,  rrc = root_rendering_component, rcv = receive
+//! t.p. = this player,   o.p. = other players,  rrc = rrc, rcv = receive
 //! 1. Some actions can have different results. For example the condition card match or card don’t match.  
 //! 2. one action must be only for one status1. This action changes Status for this player and sends Msg to other players.  
 //! 3. on receive msg can produce only one status2.  
@@ -202,6 +202,7 @@ mod fetchmod;
 mod fetchgameconfig;
 mod gamedata;
 mod javascriptimportmod;
+mod localstoragemod;
 mod logmod;
 mod rootrenderingcomponent;
 mod statusinviteaskbegin;
@@ -268,12 +269,12 @@ pub fn run() -> Result<(), JsValue> {
     // Construct a new RootRenderingComponent.
     //I added ws_c so that I can send messages on WebSocket
 
-    let mut root_rendering_component =
+    let mut rrc =
         rootrenderingcomponent::RootRenderingComponent::new(ws_c, my_ws_uid);
-    root_rendering_component.game_data.href = location_href;
+    rrc.game_data.href = location_href;
 
     // Mount the component to the `<div id="div_for_virtual_dom">`.
-    let vdom = dodrio::Vdom::new(&div_for_virtual_dom, root_rendering_component);
+    let vdom = dodrio::Vdom::new(&div_for_virtual_dom, rrc);
 
     websocketcommunication::setup_all_ws_events(&ws, vdom.weak());
 

@@ -17,6 +17,8 @@ use typed_html::dodrio;
 pub struct PlayersAndScores {
     ///whose turn is now:  player 1 or 2
     player_turn: usize,
+    ///my nickname
+    my_nickname: String,
     ///my points
     my_points: usize,
     ///What player am I
@@ -27,10 +29,11 @@ pub struct PlayersAndScores {
 
 impl PlayersAndScores {
     ///constructor
-    pub const fn new(my_ws_uid: usize) -> Self {
+    pub fn new(my_ws_uid: usize) -> Self {
         PlayersAndScores {
             my_points: 0,
             my_player_number: 1,
+            my_nickname: "Player".to_string(),
             player_turn: 0,
             my_ws_uid,
         }
@@ -80,6 +83,10 @@ impl PlayersAndScores {
             self.my_ws_uid = game_data.my_ws_uid;
             is_invalidated = true;
         }
+        if self.my_nickname != game_data.my_nickname {
+            self.my_nickname = game_data.my_nickname.clone();
+            is_invalidated = true;
+        }
         is_invalidated
     }
 }
@@ -92,7 +99,8 @@ impl Render for PlayersAndScores {
     where
         'a: 'bump,
     {
-        let text1 = bumpalo::format!(in bump, "Player{}: {} points",
+        let text1 = bumpalo::format!(in bump, "{} {}: {} points",
+        self.my_nickname,
         self.my_player_number, self.my_points)
         .into_bump_str();
         //return

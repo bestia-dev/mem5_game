@@ -21,12 +21,11 @@ use conv::{ConvAsUtil};
 
 ///Root Render Component: the card grid struct has all the needed data for play logic and rendering
 pub struct RootRenderingComponent {
-    ///game data will be inside of Root, but reference for all other RenderingComponents
+    ///game data will be inside of Root
     pub game_data: GameData,
-    ///subComponent: score
+    ///subComponent: players and scores. The data is a cached copy of GameData.
     pub cached_players_and_scores: Cached<divplayersandscores::PlayersAndScores>,
     ///subComponent: the static parts can be cached.
-    /// I am not sure if a field in this struct is the best place to put it.
     pub cached_rules_and_description: Cached<divrulesanddescription::RulesAndDescription>,
 }
 

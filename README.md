@@ -22,6 +22,9 @@ I prepared some flows and tasks for Cargo make for the workspace.
 `cargo make doc` - build the `/target/docs` folder and copy to the `/docs` folder.  
 
 ## TODO:
+- use html5 localstorage to remember player name and unique id  
+- send in msg only what changed and not the whole grid_data
+- minimize the data over websocket. json is so verbose. csv is less.
 - sync data from player1 to others after reconnect.
 - different content for English learning: numbers (cardinal, ordinal), food, orientation, alphabet simple spelling, drinks, days/months, questions, colors, transportation, ... 
 - fullscreen from http://robnyman.github.io/fullscreen/  
@@ -29,7 +32,6 @@ I prepared some flows and tasks for Cargo make for the workspace.
 - iPhone/android webapp manifest file  
 - why/how to reset/reload the webapp in "add to homescreen" on iPhone?  
 - add server database to write points - it is not informative, but it shows how to use a database  
-- use html5 localstorage to remember player name and unique id  
 
 ## Changelog
 2019-09-13 mem4 is finished, start the mem5  
