@@ -67,7 +67,7 @@ dodrio!(bump,
     <p>
         {vec![text(
             bumpalo::format!(in bump, "{}",
-            "Save your nickname in the local browser.")
+            "Save your nickname in the local browser:")
             .into_bump_str()
         )]}
     </p>

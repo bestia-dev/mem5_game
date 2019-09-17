@@ -32,7 +32,10 @@ where
         <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
                     //show Ask Player2 to Play!
-                    bumpalo::format!(in bump, "Click here to Accept {}!", rrc.game_data.asked_folder_name)
+                    bumpalo::format!(in bump, "Click here to Accept {} from {}!", 
+                    rrc.game_data.asked_folder_name,
+                    unwrap!(rrc.game_data.players.get(0)).nickname
+                    )
                         .into_bump_str(),
                 )]}
         </h2>

@@ -28,7 +28,7 @@ where
         dodrio!(bump,
         <div >
             <h2 id= "ws_elem" style= "color:orange;">
-                {vec![text(bumpalo::format!(in bump, "Play {} {} !", 
+                {vec![text(bumpalo::format!(in bump, "Play {} (p.{}) !", 
                 unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
                 rrc.game_data.player_turn).into_bump_str())]}
             </h2>
@@ -38,7 +38,7 @@ where
         //return wait for the other player
         dodrio!(bump,
         <h2 id="ws_elem" style= "color:red;">
-            {vec![text(bumpalo::format!(in bump, "Wait for {} {} !", 
+            {vec![text(bumpalo::format!(in bump, "Wait for {} (p.{}) !", 
             unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
             rrc.game_data.player_turn
             ).into_bump_str())]}
