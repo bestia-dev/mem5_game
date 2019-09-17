@@ -62,9 +62,9 @@ script = [
     "xcopy c:\\Users\\Luciano\\rustprojects\\mem5_game\\target\\debug\\mem5_server.exe c:\\Users\\Luciano\\rustprojects\\mem5_game\\webfolder\\ /y ",
     # I cannot script the exact IP here.  
     # It must be copied from the mem5_server.exe output.
-    "start chrome http://127.0.0.1:8084", 
-    "start chrome http://127.0.0.1:8084", 
-    "start chrome http://127.0.0.1:8084", 
+    "start chrome http://127.0.0.1:8085", 
+    "start chrome http://127.0.0.1:8085", 
+    "start chrome http://127.0.0.1:8085", 
     "cd ..\\webfolder",
     "mem5_server.exe"
 ]
@@ -77,9 +77,9 @@ script = [
     # I cannot script the exact IP here.  
     # It must be copied from the mem5_server.exe output.
     "alias chrome=\"/mnt/c/Program\\ Files\\ \\(x86\\)/Google/Chrome/Application/chrome.exe\"",
-    "chrome http://127.0.0.1:8084", 
-    "chrome http://127.0.0.1:8084", 
-    "chrome http://127.0.0.1:8084", 
+    "chrome http://127.0.0.1:8085", 
+    "chrome http://127.0.0.1:8085", 
+    "chrome http://127.0.0.1:8085", 
     "cd ../webfolder",
     "sudo ./mem5_server"
 ]
