@@ -15,8 +15,8 @@ use dodrio::Node;
 use mem5_common::GameStatus;
 use typed_html::dodrio;
 //use wasm_bindgen::prelude::*;
-use wasm_bindgen::JsCast;
-//use web_sys::console; //don't remove this. It is needed for dyn_into.
+use wasm_bindgen::JsCast; //don't remove this. It is needed for dyn_into.
+//use web_sys::console; 
 
 ///fixed filename for card face down
 const SRC_FOR_CARD_FACE_DOWN: &str = "img/mem_cardfacedown.png";
@@ -31,15 +31,6 @@ pub fn div_grid_container<'a, 'bump>(
 where
     'a: 'bump,
 {
-    //if the game config is none return empty <div>
-    //or the game status is one, that does not render grid container
-    if rrc.game_data.game_config.is_none() || !rrc.game_data.is_status_for_grid_container() {
-        //return
-        dodrio!(bump,
-            <div>
-            </div>
-        )
-    } else {
         let xstyle = format!(
             "width:{}px; height:{}px;grid-template-columns: {} {} {} {};",
             max_grid_size.hor,
@@ -72,7 +63,6 @@ where
         );
         //return
         grid_container
-    }
 }
 
 ///prepare a vector<Node> for the Virtual Dom for 'css grid' item with <img>

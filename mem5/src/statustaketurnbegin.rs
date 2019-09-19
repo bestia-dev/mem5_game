@@ -60,7 +60,9 @@ where
                 }}>
             <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
-                    bumpalo::format!(in bump, "Click here to take your turn !{}", "")
+                    bumpalo::format!(in bump, "{}, click here to take your turn !", 
+                        unwrap!(rrc.game_data.players.get(rrc.game_data.my_player_number-1)).nickname
+                    )
                         .into_bump_str(),
                 )]}
             </h2>

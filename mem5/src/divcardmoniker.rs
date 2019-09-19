@@ -25,7 +25,7 @@ pub fn div_grid_card_moniker<'a>(
         //return
         dodrio!(bump,
         <div class= "grid_container_header" style={bumpalo::format!(in bump, "grid-template-columns: auto auto;{}","").into_bump_str()}>
-            <div class= "grid_item" style= "text-align: left;">
+            <div class= "grid_item" style= "text-align: left;padding-left: 5%">
                 {vec![text(
                     bumpalo::format!(in bump, "{}",
                     unwrap!(unwrap!(rrc.game_data.game_config.clone(),"rrc.game_data.game_config.clone()")
@@ -33,7 +33,7 @@ pub fn div_grid_card_moniker<'a>(
                     .into_bump_str(),
                 )]}
                 </div>
-                <div class= "grid_item" style= "text-align: right;">
+                <div class= "grid_item" style= "text-align: right;padding-right: 5%">
                     {vec![text(
                     bumpalo::format!(in bump, "{}",
                     unwrap!(unwrap!(rrc.game_data.game_config.clone(),"rrc.game_data.game_config.clone()")

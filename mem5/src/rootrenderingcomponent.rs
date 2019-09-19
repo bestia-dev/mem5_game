@@ -2,7 +2,8 @@
 
 //region: use, const
 use crate::divcardmoniker;
-use crate::divfordebugging;
+//use crate::divfordebugging;
+use crate::divfullscreen;
 use crate::divgridcontainer;
 use crate::divplayeractions;
 use crate::divplayersandscores;
@@ -23,6 +24,8 @@ use conv::{ConvAsUtil};
 pub struct RootRenderingComponent {
     ///game data will be inside of Root
     pub game_data: GameData,
+    /// text for debugging purpose
+    pub debug_text: String,
     ///subComponent: players and scores. The data is a cached copy of GameData.
     pub cached_players_and_scores: Cached<divplayersandscores::PlayersAndScores>,
     ///subComponent: the static parts can be cached.
@@ -171,10 +174,29 @@ impl Render for RootRenderingComponent {
             dodrio!(bump,
             <div class= "m_container" style={xstyle2}>
                 {vec![divcardmoniker::div_grid_card_moniker(self, bump)]}
-                {vec![divgridcontainer::div_grid_container(self,bump,&xmax_grid_size)]}
+                {
+                    if self.game_data.is_status_for_grid_container(){
+                        vec![divgridcontainer::div_grid_container(self,bump,&xmax_grid_size)]
+                    }else {
+                        vec![dodrio!(bump,
+                            <div>
+                            </div>
+                        )]
+                    }
+                }
                 {vec![divplayeractions::div_player_actions_from_game_status(self, bump)]}
-                {vec![self.cached_players_and_scores.render(bump)]}
+                {
+                    if self.game_data.is_status_for_grid_container(){
+                        vec![self.cached_players_and_scores.render(bump)]
+                    }else {
+                        vec![dodrio!(bump,
+                            <div>
+                            </div>
+                        )]
+                    }
+                }
                 {vec![divfordebugging::div_for_debugging(self, bump)]}
+                {vec![divfullscreen::div_for_fullscreen(self, bump)]}
                 {vec![self.cached_rules_and_description.render(bump)]}
             </div>
             )

@@ -8,7 +8,7 @@ export function javascriptdofullscreen() {
 
     var element = document.documentElement;
     //This is not supported on Safari for iPhone.
-    //there is a workaround: Add to Home Screen this webapp
+    //there is only one workaround: Add to Home Screen this webapp
     if (element.webkitRequestFullscreen) {
         element.webkitRequestFullscreen();
     } else if (element.requestFullscreen) {

@@ -22,7 +22,7 @@ I prepared some flows and tasks for Cargo make for the workspace.
 `cargo make doc` - build the `/target/docs` folder and copy to the `/docs` folder.  
 
 ## TODO:
-- use html5 localstorage to remember player name and unique id  
+- show the times of msg travel in the UI. Websocket looks awfully slow. 
 - send in msg only what changed and not the whole grid_data
 - minimize the data over websocket. json is so verbose. csv is less.
 - sync data from player1 to others after reconnect.

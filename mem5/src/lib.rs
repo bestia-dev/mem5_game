@@ -194,6 +194,7 @@
 //region: mod is used only in lib file. All the rest use use crate
 mod divcardmoniker;
 mod divfordebugging;
+mod divfullscreen;
 mod divgridcontainer;
 mod divplayeractions;
 mod divplayersandscores;

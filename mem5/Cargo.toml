@@ -54,6 +54,7 @@ features = [
   "HtmlImageElement",
   "HtmlAudioElement",
   "HtmlMediaElement",
+  "KeyboardEvent",
   "Location",
   "MouseEvent",
   "Navigator",

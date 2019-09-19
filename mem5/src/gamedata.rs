@@ -253,7 +253,7 @@ impl GameData {
             _ => false,
         }
     }
-    ///the only statuss for rendering the grid container
+    ///the only status for rendering the grid container
     pub fn is_status_for_grid_container(&self) -> bool {
         #[allow(clippy::wildcard_enum_match_arm)]
         match self.game_status {
