@@ -22,6 +22,8 @@ I prepared some flows and tasks for Cargo make for the workspace.
 `cargo make doc` - build the `/target/docs` folder and copy to the `/docs` folder.  
 
 ## TODO:
+Make debug div closeable for user.  
+limit the size of debug_text  
 - show the times of msg travel in the UI. Websocket looks awfully slow. 
 - send in msg only what changed and not the whole grid_data
 - minimize the data over websocket. json is so verbose. csv is less.
@@ -35,5 +37,11 @@ I prepared some flows and tasks for Cargo make for the workspace.
 
 ## Changelog
 2019-09-13 mem4 is finished, start the mem5  
+2019-09-15 having make scripts for windows and linux is too much work. I need only linux. Also VSCode will work in Linux with the extension for Remote development.  
+2019-09-16 nickname saved in the browser localstorage. The smartphones today are really personal.  
+2019-09-19 working on writing debugging text in the UI because phones don't have F12. I try to use session_storage. 
+ 
+
+
 
 

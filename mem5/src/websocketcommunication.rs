@@ -15,7 +15,7 @@ use mem5_common::GameStatus;
 use mem5_common::WsMessage;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
-use web_sys::{console, ErrorEvent, WebSocket};
+use web_sys::{ ErrorEvent, WebSocket};
 //endregion
 
 //the location_href is not consumed in this function and Clippy wants a reference instead a value
@@ -33,7 +33,7 @@ pub fn setup_ws_connection(location_href: String, client_ws_id: usize) -> WebSoc
     //send the client ws id as url_param for the first connect
     //and reconnect on lost connection
     loc_href.push_str(client_ws_id.to_string().as_str());
-    logmod::log1_str(&format!(
+    logmod::debug_write(&format!(
         "location_href {}  loc_href {} client_ws_id {}",
         location_href, loc_href, client_ws_id
     ));
@@ -47,7 +47,7 @@ pub fn setup_ws_connection(location_href: String, client_ws_id: usize) -> WebSoc
     //It looks that the first send is in some way a handshake and is part of the connection
     //it will be execute on open as a closure
     let open_handler = Box::new(move || {
-        console::log_1(&"Connection opened, sending RequestWsUid to server".into());
+        logmod::debug_write("Connection opened, sending RequestWsUid to server");
         unwrap!(
             ws_c.send_with_str(
                 &serde_json::to_string(&WsMessage::RequestWsUid {
@@ -97,14 +97,14 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
         //for changing data I put code in separate functions for easy reading.
         match msg {
             //I don't know why I need a dummy, but is entertaining to have one.
-            WsMessage::Dummy { dummy } => console::log_1(&dummy.into()),
+            WsMessage::Dummy { dummy } => logmod::debug_write(dummy.as_str()),
             //this RequestWsUid is only for the WebSocket server
-            WsMessage::RequestWsUid { test } => console::log_1(&test.into()),
+            WsMessage::RequestWsUid { test } => logmod::debug_write(test.as_str()),
             WsMessage::ResponseWsUid { your_ws_uid } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         move |root| {
-                            logmod::log1_str(&format!("ResponseWsUid: {}  ", your_ws_uid));
+                            logmod::debug_write(&format!("ResponseWsUid: {}  ", your_ws_uid));
                             let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
                             rrc.on_response_ws_uid(your_ws_uid);
@@ -150,7 +150,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
-                            console::log_1(&"rcv PlayAccept".into());
+                            logmod::debug_write("rcv PlayAccept");
                             let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
                             statusinviteasked::on_msg_play_accept(
@@ -201,11 +201,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
-                        console::log_1(&"player_click".into());
+                        logmod::debug_write("player_click");
                         move |root| {
                             let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
-                            console::log_1(&"players".into());
+                            logmod::debug_write("players");
                             statusplaybefore1stcard::on_msg_player_click_1st_card(
                                 rrc,
                                 game_status,
@@ -230,11 +230,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
-                        console::log_1(&"player_click".into());
+                        logmod::debug_write("player_click");
                         move |root| {
                             let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
-                            console::log_1(&"players".into());
+                            logmod::debug_write("players");
                             statusplaybefore2ndcard::on_msg_player_click_2nd_card(
                                 rrc,
                                 players.as_str(),
@@ -259,11 +259,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
-                        console::log_1(&"take turn begin".into());
+                        logmod::debug_write("take turn begin");
                         move |root| {
                             let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
-                            console::log_1(&"players".into());
+                            logmod::debug_write("players");
                             statustaketurnbegin::on_msg_take_turn_begin(
                                 rrc,
                                 game_status,
@@ -284,7 +284,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
-                            console::log_1(&"TakeTurnEnd".into());
+                            logmod::debug_write("TakeTurnEnd");
                             statustaketurnbegin::on_msg_take_turn_end(rrc);
                             v2.schedule_render();
                         }
@@ -303,11 +303,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
-                        console::log_1(&"play again".into());
+                        logmod::debug_write("play again");
                         move |root| {
                             let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
-                            console::log_1(&"players".into());
+                            logmod::debug_write("players");
                             statusplaybefore2ndcard::on_msg_play_again(
                                 rrc,
                                 players.as_str(),
@@ -336,13 +336,13 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
 pub fn setup_ws_onerror(ws: &WebSocket, weak: dodrio::VdomWeak) {
     let onerror_callback = Closure::wrap(Box::new(move |e: ErrorEvent| {
         let err_text = format!("error event {:?}", e);
-        logmod::log1_str(&err_text);
+        logmod::debug_write(&err_text);
         {
             wasm_bindgen_futures::spawn_local(
                 weak.with_component({
                     let v2 = weak.clone();
                     move |root| {
-                        console::log_1(&"error text".into());
+                        logmod::debug_write("error text");
                         let rrc = root.unwrap_mut::<RootRenderingComponent>();
                         rrc.game_data.error_text = err_text;
                         v2.schedule_render();
@@ -359,13 +359,13 @@ pub fn setup_ws_onerror(ws: &WebSocket, weak: dodrio::VdomWeak) {
 pub fn setup_ws_onclose(ws: &WebSocket, weak: dodrio::VdomWeak) {
     let onclose_callback = Closure::wrap(Box::new(move |e: ErrorEvent| {
         let err_text = format!("ws_onclose {:?}", e);
-        logmod::log1_str(&err_text);
+        logmod::debug_write(&err_text);
         {
             wasm_bindgen_futures::spawn_local(
                 weak.with_component({
                     let v2 = weak.clone();
                     move |root| {
-                        console::log_1(&"spawn_local because of vdom".into());
+                        logmod::debug_write("spawn_local because of vdom");
                         let rrc = root.unwrap_mut::<RootRenderingComponent>();
                         //I want to show a reconnect button to the user
                         rrc.game_data.is_reconnect = true;

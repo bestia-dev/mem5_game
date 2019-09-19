@@ -51,7 +51,7 @@ where
 
 /// on click
 pub fn on_click_1st_card(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
-    logmod::log1_str("on_click_1st_card");
+    logmod::debug_write("on_click_1st_card");
     rrc.game_data.card_index_of_first_click = this_click_card_index;
     //change card status and game status
     card_click_1st_card(rrc);
@@ -73,7 +73,7 @@ pub fn on_click_1st_card(rrc: &mut RootRenderingComponent, this_click_card_index
 
 ///on click
 pub fn card_click_1st_card(rrc: &mut RootRenderingComponent) {
-    logmod::log1_str("card_click_1st_card");
+    logmod::debug_write("card_click_1st_card");
     //flip the card up
     unwrap!(
         rrc.game_data
@@ -93,7 +93,7 @@ pub fn on_msg_player_click_1st_card(
     card_index_of_first_click: usize,
     card_index_of_second_click: usize,
 ) {
-    logmod::log1_str("on_msg_player_click_1st_card");
+    logmod::debug_write("on_msg_player_click_1st_card");
     rrc.game_data.game_status = game_status;
     rrc.game_data.card_grid_data = unwrap!(serde_json::from_str(card_grid_data));
     rrc.game_data.card_index_of_first_click = card_index_of_first_click;

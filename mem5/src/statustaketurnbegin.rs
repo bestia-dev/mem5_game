@@ -22,11 +22,11 @@ pub fn div_take_turn_begin<'a, 'bump>(
 where
     'a: 'bump,
 {
-    logmod::log1_str(&format!(
+    logmod::debug_write(&format!(
         "my_player_number {}",
         &rrc.game_data.my_player_number
     ));
-    logmod::log1_str(&format!("player_turn {}", &rrc.game_data.player_turn));
+    logmod::debug_write(&format!("player_turn {}", &rrc.game_data.player_turn));
     let next_player = if rrc.game_data.player_turn < rrc.game_data.players.len() {
         unwrap!(rrc.game_data.player_turn.checked_add(1))
     } else {
@@ -117,7 +117,7 @@ pub fn on_msg_take_turn_begin(
     card_index_of_first_click: usize,
     card_index_of_second_click: usize,
 ) {
-    logmod::log1_str("on_msg_take_turn_begin");
+    logmod::debug_write("on_msg_take_turn_begin");
     rrc.game_data.game_status = game_status;
     rrc.game_data.card_grid_data = unwrap!(serde_json::from_str(card_grid_data));
     rrc.game_data.card_index_of_first_click = card_index_of_first_click;

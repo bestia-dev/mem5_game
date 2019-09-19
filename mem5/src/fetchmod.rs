@@ -94,7 +94,7 @@ pub fn fetch_response(
                 vdom_weak
                     .with_component({
                         move |root| {
-                            logmod::log1_str(&format!("vdom.with_component: {}  ",""));
+                            logmod::debug_write(&format!("vdom.with_component: {}  ",""));
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
 
                             //and now at the end of the fetch Odyssey
@@ -111,7 +111,7 @@ pub fn fetch_response(
             );
 
             vdom_weak.schedule_render();
-            logmod::log1_str("vdom.schedule_render");
+            logmod::debug_write("vdom.schedule_render");
 
             // Send something back to JS as JsValue
             futures::future::ok(JsValue::from_str("ok"))

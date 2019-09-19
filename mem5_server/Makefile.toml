@@ -59,14 +59,15 @@ args = ["build","--release"]
 clear=true
 private=true
 script = [
-    "xcopy c:\\Users\\Luciano\\rustprojects\\mem5_game\\target\\debug\\mem5_server.exe c:\\Users\\Luciano\\rustprojects\\mem5_game\\webfolder\\ /y ",
+    "\\cp ~/rustprojects/mem5_game/target/debug/mem5_server -rf -v ~/rustprojects/mem5_game/webfolder",
     # I cannot script the exact IP here.  
     # It must be copied from the mem5_server.exe output.
-    "start chrome http://127.0.0.1:8085", 
-    "start chrome http://127.0.0.1:8085", 
-    "start chrome http://127.0.0.1:8085", 
-    "cd ..\\webfolder",
-    "mem5_server.exe"
+    "alias chrome=\"/mnt/c/Program\\ Files\\ \\(x86\\)/Google/Chrome/Application/chrome.exe\"",
+    "chrome http://127.0.0.1:8085", 
+    "chrome http://127.0.0.1:8085", 
+    "chrome http://127.0.0.1:8085", 
+    "cd ../webfolder",
+    "sudo ./mem5_server"
 ]
 
 [tasks.post_build_release]

@@ -26,7 +26,7 @@ pub fn div_invite_ask_begin<'a, 'bump>(
 where
     'a: 'bump,
 {
-    logmod::log1_str("GameStatus::InviteAskBegin");
+    logmod::debug_write("GameStatus::InviteAskBegin");
     let mut vec_of_nodes = Vec::new();
     //I don't know how to solve the lifetime problems. So I just clone the small data.
     let ff = rrc.game_data.content_folders.clone();
@@ -138,7 +138,7 @@ pub fn on_msg_invite(
     his_nickname: String,
     asked_folder_name: String,
 ) {
-    logmod::log1_str("rcv invite");
+    logmod::debug_write("rcv invite");
     rrc.reset();
     rrc.game_data.game_status = GameStatus::InviteAsked;
     //the first player is the initiator

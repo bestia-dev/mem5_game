@@ -206,6 +206,7 @@ mod javascriptimportmod;
 mod localstoragemod;
 mod logmod;
 mod rootrenderingcomponent;
+mod sessionstoragemod;
 mod statusinviteaskbegin;
 mod statusinviteasked;
 mod statusinviteasking;

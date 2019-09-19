@@ -102,7 +102,7 @@ pub fn div_grid_items<'a, 'bump>(
         }
 
         /*
-        logmod::log1_str(&format!(
+        logmod::debug_write(&format!(
             "div_grid_items: my_player_number {} start_index {} end_index {} card_grid_data.len {}",
             &rrc.game_data.my_player_number,
             start_index,
@@ -224,7 +224,7 @@ pub fn div_grid_item<'a, 'bump>(
 
 /// on click
 fn div_grid_item_on_click(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
-    logmod::log1_str("div_grid_item_on_click");
+    logmod::debug_write("div_grid_item_on_click");
     //region: audio play
     //prepare the audio element with src filename of mp3
     let audio_element = web_sys::HtmlAudioElement::new_with_src(
@@ -311,7 +311,7 @@ pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
         let mut max_grid_width = grid_width();
         let mut max_grid_height = grid_height();
         /*
-        logmod::log1_str(&format!(
+        logmod::debug_write(&format!(
             "inner_width {} inner_height {}",
             max_grid_width, max_grid_height
         ));
@@ -329,7 +329,7 @@ pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
             }
         }
         /*
-        logmod::log1_str(&format!(
+        logmod::debug_write(&format!(
             "card_width {} card_height {}",
             card_width, card_height
         ));
@@ -358,7 +358,7 @@ pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
                 unwrap!((unwrap!(max_grid_width.approx_as::<f64>()) * ratio).approx_as::<usize>());
         }
         /*
-        logmod::log1_str(&format!(
+        logmod::debug_write(&format!(
             "max_grid_width {} max_grid_height {}",
             max_grid_width, max_grid_height
         ));

@@ -21,7 +21,7 @@ where
     'a: 'bump,
 {
     // 2S Click here to Accept play!
-    logmod::log1_str("GameStatus::InviteAsked");
+    logmod::debug_write("GameStatus::InviteAsked");
     //return Click here to Accept play
     dodrio!(bump,
     <div class="div_clickable" onclick={move |root, vdom, _event| {
@@ -77,7 +77,7 @@ pub fn div_play_accepted<'a, 'bump>(
 where
     'a: 'bump,
 {
-    logmod::log1_str("GameStatus::PlayAccepted");
+    logmod::debug_write("GameStatus::PlayAccepted");
     dodrio!(bump,
     <h2 id= "ws_elem" style= "color:red;">
         {vec![text(bumpalo::format!(in bump, "Game {} accepted.", rrc.game_data.asked_folder_name).into_bump_str(),)]}

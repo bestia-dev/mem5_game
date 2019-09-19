@@ -13,18 +13,18 @@ pub fn save_nickname_to_localstorage(vdom_weak: &dodrio::VdomWeak) {
     let window = unwrap!(web_sys::window(), "window");
     let document = unwrap!(window.document(), "document");
 
-    logmod::log1_str("before get_element_by_id");
+    logmod::debug_write("before get_element_by_id");
     let input_nickname = unwrap!(document.get_element_by_id("nickname"));
-    logmod::log1_str("before dyn_into");
+    logmod::debug_write("before dyn_into");
     let input_html_element_nickname = unwrap!(
         input_nickname.dyn_into::<web_sys::HtmlInputElement>(),
         "dyn_into"
     );
-    logmod::log1_str("before value()");
+    logmod::debug_write("before value()");
     let nickname_string = input_html_element_nickname.value();
-    logmod::log1_str("before as_str");
+    logmod::debug_write("before as_str");
     let nickname = nickname_string.as_str();
-    logmod::log1_str(nickname);
+    logmod::debug_write(nickname);
 
     let ls = unwrap!(unwrap!(window.local_storage()));
     let _x = ls.set_item("nickname", nickname);

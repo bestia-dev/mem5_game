@@ -42,7 +42,7 @@ impl PlayersAndScores {
     /// internal fiels are used to render component
     pub fn update_intern_cache(&mut self, game_data: &GameData) -> bool {
         /*
-        logmod::log1_str(&format!(
+        logmod::debug_write(&format!(
             "update_intern_cache  my_player_number {}",
             &game_data.my_player_number
         ));

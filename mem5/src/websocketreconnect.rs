@@ -25,17 +25,17 @@ where
             let href = rrc.game_data.href.clone();
             //usize is Copy(), so I don't need clone()
             let my_ws_uid = rrc.game_data.my_ws_uid;
-            logmod::log1_str(&format!(
+            logmod::debug_write(&format!(
                 "href {}  my_ws_uid {}",
                 href,
                 my_ws_uid,
             ));
-            logmod::log1_str(&"before reconnect");
+            logmod::debug_write(&"before reconnect");
             let ws = websocketcommunication::setup_ws_connection(href, my_ws_uid);
             websocketcommunication::setup_all_ws_events(&ws,vdom.clone());
 
             rrc.game_data.ws=ws;
-            logmod::log1_str(&"before game_data.is_reconnect = false and schedule_render");
+            logmod::debug_write(&"before game_data.is_reconnect = false and schedule_render");
             rrc.game_data.is_reconnect = false;
             vdom.schedule_render();
         }}>

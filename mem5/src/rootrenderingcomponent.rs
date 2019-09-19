@@ -2,7 +2,7 @@
 
 //region: use, const
 use crate::divcardmoniker;
-//use crate::divfordebugging;
+use crate::divfordebugging;
 use crate::divfullscreen;
 use crate::divgridcontainer;
 use crate::divplayeractions;
@@ -24,8 +24,6 @@ use conv::{ConvAsUtil};
 pub struct RootRenderingComponent {
     ///game data will be inside of Root
     pub game_data: GameData,
-    /// text for debugging purpose
-    pub debug_text: String,
     ///subComponent: players and scores. The data is a cached copy of GameData.
     pub cached_players_and_scores: Cached<divplayersandscores::PlayersAndScores>,
     ///subComponent: the static parts can be cached.
@@ -168,7 +166,7 @@ impl Render for RootRenderingComponent {
             let xmax_grid_size = divgridcontainer::max_grid_size(self);
             let xmax_grid_size_add_two = unwrap!(xmax_grid_size.hor.checked_add(2));
             let xstyle2 = format!("width:{}px;", xmax_grid_size_add_two);
-            //logmod::log1_str(&format!("width m_container {}", xmax_grid_size_add_two));
+            //logmod::debug_write(&format!("width m_container {}", xmax_grid_size_add_two));
 
             //the main HTML render
             dodrio!(bump,

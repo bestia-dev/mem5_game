@@ -52,7 +52,7 @@ where
 
 ///on click
 pub fn on_click_2nd_card(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
-    logmod::log1_str("on_click_2nd_card");
+    logmod::debug_write("on_click_2nd_card");
     rrc.game_data.card_index_of_second_click = this_click_card_index;
     card_click_2nd_card(rrc);
 }
@@ -115,7 +115,7 @@ pub fn card_click_2nd_card(rrc: &mut RootRenderingComponent) {
         for x in &rrc.game_data.players {
             point_sum += x.points;
         }
-        logmod::log1_str(
+        logmod::debug_write(
             format!(
                 "card_grid len {}  point_sum {}",
                 rrc.game_data.card_grid_data.len(),
@@ -188,7 +188,7 @@ pub fn on_msg_player_click_2nd_card(
     card_index_of_first_click: usize,
     card_index_of_second_click: usize,
 ) {
-    logmod::log1_str("on_msg_player_click_2nd_card");
+    logmod::debug_write("on_msg_player_click_2nd_card");
     //player point has changed
     rrc.game_data.players = unwrap!(serde_json::from_str(players));
     rrc.game_data.game_status = game_status;
@@ -207,7 +207,7 @@ pub fn on_msg_play_again(
     card_index_of_first_click: usize,
     card_index_of_second_click: usize,
 ) {
-    logmod::log1_str("on_msg_play_again");
+    logmod::debug_write("on_msg_play_again");
     //player point has changed
     rrc.game_data.players = unwrap!(serde_json::from_str(players));
     rrc.game_data.game_status = game_status;

@@ -124,7 +124,7 @@ impl GameData {
         let rest =
             unwrap!(random_count.checked_sub(unwrap!(item_count_minus_one.checked_mul(multiple))));
 
-        logmod::log1_str(&format!(
+        logmod::debug_write(&format!(
             "item_count_minus_one {}  players_count {} cards_count {} random_count {} multiple {} rest {}",
             item_count_minus_one,players_count,cards_count,random_count,multiple,
             rest,
@@ -187,7 +187,7 @@ impl GameData {
         }
         //endregion
         self.card_grid_data = card_grid_data;
-        logmod::log1_str(&format!(
+        logmod::debug_write(&format!(
             "vec_of_random_numbers.len {} card_grid_data.len {}",
             vec_of_random_numbers.len(),
             self.card_grid_data.len()

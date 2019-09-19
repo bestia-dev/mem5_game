@@ -53,7 +53,7 @@ args = ["build","--release"]
 clear = true
 private = true
 description = "copy the content of readme.md into *.rs comments (for the docs)"
-script= ["..\\..\\utils\\lmake_readme.exe"]
+script= ["../../utils/lmake_readme"]
 
 [tasks.cargo-doc]
 clear = true
@@ -66,12 +66,12 @@ args=["doc","--no-deps","--document-private-items","--open"]
 clear = true
 private = true
 script = [
-    "xcopy c:\\Users\\Luciano\\rustprojects\\mem5_game\\target\\doc\\*.* c:\\Users\\Luciano\\rustprojects\\mem5_game\\docs\\ /e /i /y /s ",
+    "\\cp ~/rustprojects/mem5_game/target/doc/*.* -rf -v ~/rustprojects/mem5_game/docs",
 ]
 
 [tasks.lmake_version_from_date]
 clear = true
 private = true
 description = "in cargo.toml change version to today date"
-script= ["..\\..\\utils\\lmake_version_from_date.exe"]
+script= ["../../utils_linux/lmake_version_from_date"]
 
