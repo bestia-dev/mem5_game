@@ -50,22 +50,8 @@
 )]
 //endregion
 
-//region: extern and use statements
-extern crate ansi_term;
-extern crate clap;
-extern crate env_logger;
-extern crate futures;
-#[macro_use]
-extern crate log;
-extern crate mem5_common;
-extern crate regex;
-extern crate serde;
-extern crate serde_derive;
-extern crate serde_json;
-extern crate warp;
-#[macro_use]
-extern crate unwrap;
-
+//region: use statements
+use unwrap::unwrap;
 use clap::{App, Arg};
 use env_logger::Env;
 use futures::sync::mpsc;
@@ -79,6 +65,7 @@ use std::process::Command;
 use std::sync::{Arc, Mutex};
 use warp::ws::{Message, WebSocket};
 use warp::Filter;
+use log::info;
 //endregion
 
 //region: enum, structs, const,...

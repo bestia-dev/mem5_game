@@ -3,6 +3,7 @@ name = "mem5_server"
 version = "19.9.20" #no need for semver if it is not a library
 description = "server for the game mem5 http + WebSocket on the same port"
 authors = ["Luciano Bestia"]
+edition = "2018"
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/lucianobestia/mem5_game"

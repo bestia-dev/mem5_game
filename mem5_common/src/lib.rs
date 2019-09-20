@@ -43,14 +43,9 @@
 )]
 //endregion
 
-//region: extern and use statements
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_json;
-extern crate strum_macros;
-
+//region: use statements
 use strum_macros::{Display, AsRefStr};
+use serde_derive::{Serialize, Deserialize};
 //endregion
 
 ///`WsMessage` enum for WebSocket

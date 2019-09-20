@@ -4,6 +4,7 @@
 use crate::logmod;
 use crate::rootrenderingcomponent::RootRenderingComponent;
 
+use unwrap::unwrap;
 use wasm_bindgen::JsCast;
 use futures::Future;
 //endregion

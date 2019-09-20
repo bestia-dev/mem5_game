@@ -1,10 +1,11 @@
 //! game data - structs and methods around game data
 
-//region: extern, use,
-extern crate mem5_common;
+//region: use
 use crate::localstoragemod;
 use crate::logmod;
 
+use serde_derive::{Serialize, Deserialize};
+use unwrap::unwrap;
 use mem5_common::{GameStatus, Player};
 use rand::rngs::SmallRng;
 use rand::seq::SliceRandom;

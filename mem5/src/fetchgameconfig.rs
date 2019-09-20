@@ -4,6 +4,7 @@
 use crate::rootrenderingcomponent::RootRenderingComponent;
 use crate::fetchmod;
 
+use unwrap::unwrap;
 use web_sys::{Request, RequestInit};
 //endregion
 

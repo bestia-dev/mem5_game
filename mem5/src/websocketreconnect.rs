@@ -5,6 +5,7 @@ use crate::rootrenderingcomponent::RootRenderingComponent;
 use crate::websocketcommunication;
 use crate::logmod;
 
+use unwrap::unwrap;
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;

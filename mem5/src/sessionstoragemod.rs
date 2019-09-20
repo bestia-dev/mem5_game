@@ -2,7 +2,7 @@
 
 //region: use
 use crate::logmod;
-
+use unwrap::unwrap;
 //endregion
 
 ///add to begin of debug text
@@ -14,7 +14,7 @@ pub fn add_to_begin_of_debug_text(text: &str) {
     text, 
     get_debug_text()
     );
-    utf8_truncate(&mut debug_text,500);
+    utf8_truncate(&mut debug_text,800);
     let _x = ls.set_item("debug_text", &debug_text);
 }
 
@@ -26,7 +26,7 @@ fn utf8_truncate(input : &mut String, maxsize: usize) {
     while utf8_maxsize >= maxsize {
       utf8_maxsize = match char_iter.next_back() {
         Some((index, _)) => index,
-        _ => 0
+        None => 0
       };
     } } // Extra {} wrap to limit the immutable borrow of char_indices()
     input.truncate(utf8_maxsize);

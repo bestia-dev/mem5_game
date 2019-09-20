@@ -7,6 +7,7 @@ use crate::websocketcommunication;
 use crate::logmod;
 use mem5_common::{GameStatus, WsMessage};
 
+use unwrap::unwrap;
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;

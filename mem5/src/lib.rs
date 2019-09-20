@@ -218,22 +218,8 @@ mod websocketcommunication;
 mod websocketreconnect;
 //endregion
 
-//region: extern and use statements
-//Strum is a set of macros and traits for working with enums and strings easier in Rust.
-extern crate console_error_panic_hook;
-extern crate log;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate mem5_common;
-extern crate serde_json;
-extern crate strum;
-extern crate strum_macros;
-extern crate web_sys;
-#[macro_use]
-extern crate unwrap;
-extern crate conv;
-
+//region: use statements
+use unwrap::unwrap;
 use rand::rngs::SmallRng;
 use rand::FromEntropy;
 use rand::Rng;

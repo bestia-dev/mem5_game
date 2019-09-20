@@ -4,6 +4,7 @@
 use crate::rootrenderingcomponent::RootRenderingComponent;
 use crate::javascriptimportmod;
 
+use unwrap::unwrap;
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;

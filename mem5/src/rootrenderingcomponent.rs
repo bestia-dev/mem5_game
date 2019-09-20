@@ -11,6 +11,7 @@ use crate::divrulesanddescription;
 use crate::gamedata::GameData;
 //use crate::logmod;
 
+use unwrap::unwrap;
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::{Cached, Node, Render};

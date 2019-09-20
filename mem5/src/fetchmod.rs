@@ -53,6 +53,7 @@
 use crate::logmod;
 use crate::rootrenderingcomponent::RootRenderingComponent;
 
+use unwrap::unwrap;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::JsCast;
 use web_sys::{Response};
