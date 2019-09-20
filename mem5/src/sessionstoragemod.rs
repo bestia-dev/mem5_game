@@ -9,13 +9,13 @@ use crate::logmod;
 pub fn add_to_begin_of_debug_text(text: &str) {
     let window = unwrap!(web_sys::window(), "window");
     let ls = unwrap!(unwrap!(window.session_storage()));
-    let mut sss = format!("{}: {}\n{}", 
+    let mut debug_text = format!("{}: {}\n{}", 
     logmod::now_string(),
     text, 
     get_debug_text()
     );
-    utf8_truncate(&mut sss,500);
-    let _x = ls.set_item("debug_text", sss.as_str());
+    utf8_truncate(&mut debug_text,500);
+    let _x = ls.set_item("debug_text", &debug_text);
 }
 
 ///utf8 truncate
