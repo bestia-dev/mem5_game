@@ -62,9 +62,9 @@ where
         //return wait for the other player
         dodrio!(bump,
         <h2 id="ws_elem" style= "color:red;">
-            {vec![text(bumpalo::format!(in bump, "Wait for {} (p.{}) !", 
+            {vec![text(bumpalo::format!(in bump, "Wait for {} {} !", 
             unwrap!(rrc.game_data.players.get(next_player-1)).nickname,
-            next_player
+            crate::ordinal_numbers(next_player)
             ).into_bump_str())]}
         </h2>
         )

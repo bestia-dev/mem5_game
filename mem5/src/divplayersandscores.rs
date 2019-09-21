@@ -102,7 +102,8 @@ impl Render for PlayersAndScores {
     {
         let text1 = bumpalo::format!(in bump, "{} {}: {} points",
         self.my_nickname,
-        self.my_player_number, self.my_points)
+        crate::ordinal_numbers(self.my_player_number),
+        self.my_points)
         .into_bump_str();
         //return
         dodrio!(bump,
