@@ -2,7 +2,7 @@
 
 //region: use
 use crate::rootrenderingcomponent::RootRenderingComponent;
-//use crate::websocketcommunication;
+use crate::websocketcommunication;
 use mem5_common::{GameStatus, WsMessage};
 use crate::gamedata::{CardStatusCardFace};
 use crate::logmod;
@@ -23,11 +23,7 @@ pub fn div_take_turn_begin<'a, 'bump>(
 where
     'a: 'bump,
 {
-    logmod::debug_write(&format!(
-        "my_player_number {}",
-        &rrc.game_data.my_player_number
-    ));
-    logmod::debug_write(&format!("player_turn {}", &rrc.game_data.player_turn));
+    logmod::debug_write(&format!("player_turn {}  my_player_number {}", &rrc.game_data.player_turn,&rrc.game_data.my_player_number));
     let next_player = if rrc.game_data.player_turn < rrc.game_data.players.len() {
         unwrap!(rrc.game_data.player_turn.checked_add(1))
     } else {
@@ -40,20 +36,13 @@ where
                         root.unwrap_mut::<RootRenderingComponent>();
                     //this game_data mutable reference is dropped on the end of the function
                     //region: send WsMessage over WebSocket
-                    unwrap!(rrc
-                        .game_data
-                        .ws
-                        .send_with_str(
-                            &serde_json::to_string(&WsMessage::TakeTurnEnd {
-                                my_ws_uid: rrc.game_data.my_ws_uid,
-                                players: unwrap!(serde_json::to_string(
-                                    &rrc.game_data.players,
-                                )
-                                ,"serde_json::to_string(&rrc.game_data.players)"),
-                            })
-                            .expect("error sending TakeTurnEnd"),
-                        )
-                        ,"Failed to send TakeTurnEnd");
+                    websocketcommunication::ws_send_msg(
+                        &rrc.game_data.ws,
+                        &WsMessage::TakeTurnEnd {
+                            my_ws_uid: rrc.game_data.my_ws_uid,
+                            players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
+                        },
+                    );
                     //endregion
                     take_turn_end(rrc);
                     // Finally, re-render the component on the next animation frame.

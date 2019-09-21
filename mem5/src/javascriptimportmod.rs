@@ -6,6 +6,7 @@ use wasm_bindgen::prelude::*;
 ///in the block extern "C" are the descriptions of imported javascript
 #[wasm_bindgen(module = "/js/javascriptdofullscreen.js")]
 extern "C" {
+    ///the name of the extern javascript function
     fn javascriptdofullscreen();
 
 }

@@ -2,6 +2,8 @@
 
 //region: use
 use crate::rootrenderingcomponent::RootRenderingComponent;
+use crate::websocketcommunication;
+use crate::logmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -26,23 +28,17 @@ where
                         root.unwrap_mut::<RootRenderingComponent>();
                     //region: send WsMessage over WebSocket
                     rrc.game_data_init();
-
-                    unwrap!(rrc
-                        .game_data
-                        .ws
-                        .send_with_str(
-                            &serde_json::to_string(&WsMessage::GameDataInit {
-        card_grid_data: unwrap!(serde_json::to_string(&rrc.game_data.card_grid_data)
-                    ,"serde_json::to_string(&self.game_data.card_grid_data)"),
-        players: unwrap!(serde_json::to_string(&rrc.game_data.players)
-                    ,"serde_json::to_string(&self.game_data.players)"),
-        game_config: unwrap!(serde_json::to_string(&rrc.game_data.game_config)
-                    ,"serde_json::to_string(&self.game_data.game_config)"),
-                })
-                .expect("error sending Invite"),
-            )
-            ,"Failed to send Invite");
-
+                    logmod::debug_write(&format!("GameDataInit send {}",rrc.game_data.players_ws_uid));
+                    websocketcommunication::ws_send_msg(
+                        &rrc.game_data.ws,
+                        &WsMessage::GameDataInit {
+                            my_ws_uid: rrc.game_data.my_ws_uid,
+                            players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
+                            players: unwrap!(serde_json::to_string(&rrc.game_data.players)),
+                            card_grid_data: unwrap!(serde_json::to_string(&rrc.game_data.card_grid_data)),
+                            game_config: unwrap!(serde_json::to_string(&rrc.game_data.game_config)),
+                        },
+                    );
         //endregion
         vdom.schedule_render();
         }}>

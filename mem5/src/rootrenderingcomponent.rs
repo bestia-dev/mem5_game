@@ -8,7 +8,8 @@ use crate::divgridcontainer;
 use crate::divplayeractions;
 use crate::divplayersandscores;
 use crate::divrulesanddescription;
-use crate::gamedata::GameData;
+use crate::gamedata;
+use crate::logmod;
 //use crate::logmod;
 
 use unwrap::unwrap;
@@ -24,7 +25,7 @@ use conv::{ConvAsUtil};
 ///Root Render Component: the card grid struct has all the needed data for play logic and rendering
 pub struct RootRenderingComponent {
     ///game data will be inside of Root
-    pub game_data: GameData,
+    pub game_data: gamedata::GameData,
     ///subComponent: players and scores. The data is a cached copy of GameData.
     pub cached_players_and_scores: Cached<divplayersandscores::PlayersAndScores>,
     ///subComponent: the static parts can be cached.
@@ -39,7 +40,7 @@ pub struct RootRenderingComponent {
 impl RootRenderingComponent {
     /// Construct a new `RootRenderingComponent` component. Only once at the beginning.
     pub fn new(ws: WebSocket, my_ws_uid: usize) -> Self {
-        let game_data = GameData::new(ws, my_ws_uid);
+        let game_data = gamedata::GameData::new(ws, my_ws_uid);
 
         let game_rule_01 = divrulesanddescription::RulesAndDescription {};
         let cached_rules_and_description = Cached::new(game_rule_01);
@@ -71,7 +72,7 @@ impl RootRenderingComponent {
     }
     ///reset the data to replay the game
     pub fn reset(&mut self) {
-        self.game_data.card_grid_data = GameData::prepare_for_empty();
+        self.game_data.card_grid_data = gamedata::GameData::prepare_for_empty();
         self.game_data.card_index_of_first_click = 0;
         self.game_data.card_index_of_second_click = 0;
         self.game_data.players.clear();
@@ -102,6 +103,7 @@ impl RootRenderingComponent {
         game_config: &str,
         players: &str,
     ) {
+        logmod::debug_write(&format!("on_msg_game_data_init {}", players));
         self.game_data.content_folder_name = self.game_data.asked_folder_name.clone();
         self.game_data.game_status = GameStatus::PlayBefore1stCard;
         self.game_data.player_turn = 1;
@@ -119,6 +121,8 @@ impl RootRenderingComponent {
             serde_json::from_str(players),
             "error serde_json::from_str(players)"
         );
+
+        self.game_data.players_ws_uid = gamedata::prepare_players_ws_uid(&self.game_data.players);
 
         //find my player number
         for index in 0..self.game_data.players.len() {

@@ -4,6 +4,7 @@
 use crate::rootrenderingcomponent::RootRenderingComponent;
 use crate::websocketcommunication;
 use crate::logmod;
+use crate::gamedata;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -21,8 +22,6 @@ pub fn div_invite_asked<'a, 'bump>(
 where
     'a: 'bump,
 {
-    // 2S Click here to Accept play!
-    logmod::debug_write("GameStatus::InviteAsked");
     //return Click here to Accept play
     dodrio!(bump,
     <div class="div_clickable" onclick={move |root, vdom, _event| {
@@ -47,25 +46,27 @@ where
 /// on click
 pub fn div_invite_asked_on_click(rrc: &mut RootRenderingComponent) {
     rrc.game_data.game_status = GameStatus::PlayAccepted;
-
+    logmod::debug_write(&format!("PlayAccepted send {}",rrc.game_data.players_ws_uid));
     websocketcommunication::ws_send_msg(
         &rrc.game_data.ws,
         &WsMessage::PlayAccept {
             my_ws_uid: rrc.game_data.my_ws_uid,
+            players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
             my_nickname: rrc.game_data.my_nickname.clone(),
-            players: unwrap!(serde_json::to_string(&rrc.game_data.players)),
         },
     );
 }
 
 ///msg accept play
 pub fn on_msg_play_accept(rrc: &mut RootRenderingComponent, his_ws_uid: usize, his_nickname: String) {
+    logmod::debug_write(&format!("on_msg_play_accept {}",his_ws_uid));
     if rrc.game_data.my_player_number == 1 {
         rrc.game_data.players.push(Player {
             ws_uid: his_ws_uid,
             nickname: his_nickname,
             points: 0,
         });
+        rrc.game_data.players_ws_uid = gamedata::prepare_players_ws_uid(&rrc.game_data.players);
         rrc.check_invalidate_for_all_components();
     }
 }
@@ -78,7 +79,6 @@ pub fn div_play_accepted<'a, 'bump>(
 where
     'a: 'bump,
 {
-    logmod::debug_write("GameStatus::PlayAccepted");
     dodrio!(bump,
     <h2 id= "ws_elem" style= "color:red;">
         {vec![text(bumpalo::format!(in bump, "Game {} accepted.", rrc.game_data.asked_folder_name).into_bump_str(),)]}

@@ -69,6 +69,7 @@ pub fn setup_ws_connection(location_href: String, client_ws_id: usize) -> WebSoc
 }
 
 /// receive WebSocket msg callback. I don't understand this much. Too much future and promises.
+#[allow(clippy::unneeded_field_pattern)]
 pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
     //Player1 on machine1 have a button Ask player to play! before he starts to play.
     //Click and it sends the WsMessage invite. Player1 waits for the reply and cannot play.
@@ -146,12 +147,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             
-            WsMessage::PlayAccept { my_ws_uid, my_nickname, .. } => {
+            WsMessage::PlayAccept { my_ws_uid, players_ws_uid:_,  my_nickname } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
-                            logmod::debug_write("rcv PlayAccept");
                             let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
                             statusinviteasked::on_msg_play_accept(
@@ -166,6 +166,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             WsMessage::GameDataInit {
+                my_ws_uid:_,
+                players_ws_uid:_,
                 card_grid_data,
                 game_config,
                 players,
@@ -193,20 +195,18 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             WsMessage::PlayerClick1stCard {
+                my_ws_uid:_,
+                players_ws_uid:_,
                 card_grid_data,
                 game_status,
                 card_index_of_first_click,
                 card_index_of_second_click,
-                ..
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
-                        logmod::debug_write("player_click");
                         move |root| {
-                            let rrc =
-                                root.unwrap_mut::<RootRenderingComponent>();
-                            logmod::debug_write("players");
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusplaybefore1stcard::on_msg_player_click_1st_card(
                                 rrc,
                                 game_status,
@@ -221,21 +221,19 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             WsMessage::PlayerClick2ndCard {
+                my_ws_uid:_,
+                players_ws_uid:_,
                 players,
                 card_grid_data,
                 game_status,
                 card_index_of_first_click,
                 card_index_of_second_click,
-                ..
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
-                        logmod::debug_write("player_click");
                         move |root| {
-                            let rrc =
-                                root.unwrap_mut::<RootRenderingComponent>();
-                            logmod::debug_write("players");
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusplaybefore2ndcard::on_msg_player_click_2nd_card(
                                 rrc,
                                 players.as_str(),
@@ -251,20 +249,18 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             WsMessage::TakeTurnBegin {
+                my_ws_uid:_,
+                players_ws_uid:_,
                 card_grid_data,
                 game_status,
                 card_index_of_first_click,
                 card_index_of_second_click,
-                ..
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
-                        logmod::debug_write("take turn begin");
                         move |root| {
-                            let rrc =
-                                root.unwrap_mut::<RootRenderingComponent>();
-                            logmod::debug_write("players");
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statustaketurnbegin::on_msg_take_turn_begin(
                                 rrc,
                                 game_status,
@@ -278,14 +274,12 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
-            WsMessage::TakeTurnEnd { .. } => {
+            WsMessage::TakeTurnEnd { my_ws_uid:_,players_ws_uid:_ } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
-                            let rrc =
-                                root.unwrap_mut::<RootRenderingComponent>();
-                            logmod::debug_write("TakeTurnEnd");
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statustaketurnbegin::on_msg_take_turn_end(rrc);
                             v2.schedule_render();
                         }
@@ -294,21 +288,19 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             WsMessage::GameOverPlayAgainBegin {
+                my_ws_uid:_,
+                players_ws_uid:_,
                 players,
                 card_grid_data,
                 game_status,
                 card_index_of_first_click,
                 card_index_of_second_click,
-                ..
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
-                        logmod::debug_write("play again");
                         move |root| {
-                            let rrc =
-                                root.unwrap_mut::<RootRenderingComponent>();
-                            logmod::debug_write("players");
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusplaybefore2ndcard::on_msg_play_again(
                                 rrc,
                                 players.as_str(),
@@ -343,7 +335,6 @@ pub fn setup_ws_onerror(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 weak.with_component({
                     let v2 = weak.clone();
                     move |root| {
-                        logmod::debug_write("error text");
                         let rrc = root.unwrap_mut::<RootRenderingComponent>();
                         rrc.game_data.error_text = err_text;
                         v2.schedule_render();
@@ -358,15 +349,15 @@ pub fn setup_ws_onerror(ws: &WebSocket, weak: dodrio::VdomWeak) {
 }
 /// on close WebSocket connection
 pub fn setup_ws_onclose(ws: &WebSocket, weak: dodrio::VdomWeak) {
+    
     let onclose_callback = Closure::wrap(Box::new(move |e: ErrorEvent| {
         let err_text = format!("ws_onclose {:?}", e);
-        logmod::debug_write(&err_text);
+        logmod::debug_write(&format!("onclose_callback {}",&err_text));
         {
             wasm_bindgen_futures::spawn_local(
                 weak.with_component({
                     let v2 = weak.clone();
                     move |root| {
-                        logmod::debug_write("spawn_local because of vdom");
                         let rrc = root.unwrap_mut::<RootRenderingComponent>();
                         //I want to show a reconnect button to the user
                         rrc.game_data.is_reconnect = true;

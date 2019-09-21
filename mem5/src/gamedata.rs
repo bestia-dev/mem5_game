@@ -74,8 +74,10 @@ pub struct GameData {
     pub my_player_number: usize,
     ///web socket. used it to send message onclick.
     pub ws: WebSocket,
-    ///players
+    ///players data as vector of player struct
     pub players: Vec<Player>,
+    ///the json string for the ws server to send msgs to other players only
+    pub players_ws_uid: String,
     ///game status: InviteAskBegin,InviteAsking,InviteAsked,Player1,Player2
     pub game_status: GameStatus,
     ///vector of cards
@@ -211,14 +213,14 @@ impl GameData {
     }
     ///constructor of game data
     pub fn new(ws: WebSocket, my_ws_uid: usize) -> Self {
-        
+        let my_nickname = localstoragemod::load_nickname();
         let mut players = Vec::new();
         players.push(Player {
             ws_uid: 0,
-            nickname: "Player".to_string(),
+            nickname: my_nickname.to_string(),
             points: 0,
         });
-        let my_nickname = localstoragemod::load_nickname();
+        let players_ws_uid = prepare_players_ws_uid(&players);
 
         //return from constructor
         GameData {
@@ -229,6 +231,7 @@ impl GameData {
             my_ws_uid,
             my_nickname,
             players,
+            players_ws_uid,
             game_status: GameStatus::InviteAskBegin,
             content_folder_name: "alphabet".to_string(),
             asked_folder_name: "".to_string(),
@@ -266,4 +269,14 @@ impl GameData {
             _ => false,
         }
     }
+}
+///from the vector of players prepare a json string for the ws server
+/// so that it can send the msgs only to the players
+pub fn prepare_players_ws_uid(players:&[Player]) -> String {
+    let mut players_ws_uid = Vec::new();
+    for pl in players {
+        players_ws_uid.push(pl.ws_uid);
+    }
+    //return
+    unwrap!(serde_json::to_string(&players_ws_uid))
 }

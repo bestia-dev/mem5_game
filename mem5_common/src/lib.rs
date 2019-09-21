@@ -79,27 +79,31 @@ pub enum WsMessage {
     PlayAccept {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
+        ///json of vector of players for the server to know whom to send msg
+        players_ws_uid: String,
         /// my nickname
         my_nickname: String,
-        ///json of vector of players
-        players: String,
     },
     /// player1 initialize the game data and sends it to all players
     /// I will send json string to not confuse the server with vectors
     GameDataInit {
+        ///ws client instance unique id. To not listen the echo to yourself.
+        my_ws_uid: usize,
+        ///json of vector of players for the server to know whom to send msg
+        players_ws_uid: String,
+        ///json of vector of players with nicknames and order data
+        players: String,
         ///vector of cards status
         card_grid_data: String,
         ///json of game_config
         game_config: String,
-        ///json of vector of players
-        players: String,
     },
     ///player click
     PlayerClick1stCard {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
-        ///all players
-        players: String,
+        ///all players for the server to know whom to send msg
+        players_ws_uid: String,
         ///vector of cards status
         card_grid_data: String,
         ///game status PlayerBefore1stCard or PlayerBefore2ndCard
@@ -113,7 +117,9 @@ pub enum WsMessage {
     PlayerClick2ndCard {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
-        ///all players
+        ///all players for the server to know whom to send msg
+        players_ws_uid: String,
+        ///json of vector of players with nicknames and order data
         players: String,
         ///vector of cards status
         card_grid_data: String,
@@ -128,8 +134,8 @@ pub enum WsMessage {
     TakeTurnBegin {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
-        ///all players
-        players: String,
+        ///all players for the server to know whom to send msg
+        players_ws_uid: String,
         ///vector of cards status
         card_grid_data: String,
         ///game status PlayerBefore1stCard or PlayerBefore2ndCard
@@ -143,7 +149,9 @@ pub enum WsMessage {
     GameOverPlayAgainBegin {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
-        ///all players
+        ///all players for the server to know whom to send msg
+        players_ws_uid: String,
+        ///json of vector of players with nicknames and order data
         players: String,
         ///vector of cards status
         card_grid_data: String,
@@ -158,8 +166,8 @@ pub enum WsMessage {
     TakeTurnEnd {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
-        ///all players
-        players: String,
+        ///all players for the server to know whom to send msg
+        players_ws_uid: String,
     },
 }
 

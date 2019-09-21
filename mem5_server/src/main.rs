@@ -56,7 +56,7 @@ use clap::{App, Arg};
 use env_logger::Env;
 use futures::sync::mpsc;
 use futures::{Future, Stream};
-use mem5_common::{Player, WsMessage};
+use mem5_common::{ WsMessage};
 use regex::Regex;
 use std::collections::HashMap;
 use std::net::SocketAddr;
@@ -339,14 +339,14 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         */
         WsMessage::Invite { .. } => broadcast(users, ws_uid_of_message, &new_msg),
         WsMessage::ResponseWsUid { .. } => info!("ResponseWsUid: {}", ""),
-        WsMessage::PlayAccept { players, .. }
-        | WsMessage::PlayerClick1stCard { players, .. }
-        | WsMessage::PlayerClick2ndCard { players, .. }
-        | WsMessage::GameDataInit { players, .. }
-        | WsMessage::TakeTurnBegin { players, .. }
-        | WsMessage::TakeTurnEnd { players, .. }
-        | WsMessage::GameOverPlayAgainBegin { players, .. } => {
-            send_to_other_players(users, ws_uid_of_message, &new_msg, &players)
+        WsMessage::PlayAccept { players_ws_uid, .. }
+        | WsMessage::PlayerClick1stCard { players_ws_uid, .. }
+        | WsMessage::PlayerClick2ndCard { players_ws_uid, .. }
+        | WsMessage::GameDataInit { players_ws_uid, .. }
+        | WsMessage::TakeTurnBegin { players_ws_uid, .. }
+        | WsMessage::TakeTurnEnd { players_ws_uid, .. }
+        | WsMessage::GameOverPlayAgainBegin { players_ws_uid, .. } => {
+            send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
     }
 }
@@ -356,18 +356,17 @@ fn send_to_other_players(
     users: &Users,
     ws_uid_of_message: usize,
     new_msg: &str,
-    string_players: &str,
+    players_ws_uid: &str,
 ) {
     //info!("send_to_other_players: {}", new_msg);
 
-    let players: Vec<Player> =
-        serde_json::from_str(string_players).expect("error serde_json::from_str(string_players)");
+    let vec_players_ws_uid: Vec<usize> = unwrap!(serde_json::from_str(players_ws_uid));
 
     for (&uid, tx) in users.lock().expect("error users.lock()").iter() {
         let mut is_player;
         is_player = false;
-        for pl in &players {
-            if pl.ws_uid == uid {
+        for &pl_ws_uid in &vec_players_ws_uid {
+            if pl_ws_uid == uid {
                 is_player = true;
             }
         }

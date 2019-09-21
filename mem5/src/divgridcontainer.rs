@@ -6,7 +6,7 @@ use crate::gamedata::{CardStatusCardFace, Size2d};
 use crate::rootrenderingcomponent::RootRenderingComponent;
 use crate::statusplaybefore1stcard;
 use crate::statusplaybefore2ndcard;
-use crate::logmod;
+//use crate::logmod;
 use crate::rootrenderingcomponent;
 
 use unwrap::unwrap;
@@ -17,7 +17,7 @@ use mem5_common::GameStatus;
 use typed_html::dodrio;
 //use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast; //don't remove this. It is needed for dyn_into.
-//use web_sys::console; 
+                          //use web_sys::console;
 
 ///fixed filename for card face down
 const SRC_FOR_CARD_FACE_DOWN: &str = "img/mem_cardfacedown.png";
@@ -32,38 +32,38 @@ pub fn div_grid_container<'a, 'bump>(
 where
     'a: 'bump,
 {
-        let xstyle = format!(
-            "width:{}px; height:{}px;grid-template-columns: {} {} {} {};",
-            max_grid_size.hor,
-            max_grid_size.ver,
-            if unwrap!(rrc.game_data.game_config.as_ref()).grid_items_hor >= 1 {
-                "auto"
-            } else {
-                ""
-            },
-            if unwrap!(rrc.game_data.game_config.as_ref()).grid_items_hor >= 2 {
-                "auto"
-            } else {
-                ""
-            },
-            if unwrap!(rrc.game_data.game_config.as_ref()).grid_items_hor >= 3 {
-                "auto"
-            } else {
-                ""
-            },
-            if unwrap!(rrc.game_data.game_config.as_ref()).grid_items_hor >= 4 {
-                "auto"
-            } else {
-                ""
-            },
-        );
-        let grid_container = dodrio!(bump,
-            <div class= "grid_container" style={xstyle}>
-                {div_grid_items(rrc, bump)}
-            </div>
-        );
-        //return
-        grid_container
+    let xstyle = format!(
+        "width:{}px; height:{}px;grid-template-columns: {} {} {} {};",
+        max_grid_size.hor,
+        max_grid_size.ver,
+        if unwrap!(rrc.game_data.game_config.as_ref()).grid_items_hor >= 1 {
+            "auto"
+        } else {
+            ""
+        },
+        if unwrap!(rrc.game_data.game_config.as_ref()).grid_items_hor >= 2 {
+            "auto"
+        } else {
+            ""
+        },
+        if unwrap!(rrc.game_data.game_config.as_ref()).grid_items_hor >= 3 {
+            "auto"
+        } else {
+            ""
+        },
+        if unwrap!(rrc.game_data.game_config.as_ref()).grid_items_hor >= 4 {
+            "auto"
+        } else {
+            ""
+        },
+    );
+    let grid_container = dodrio!(bump,
+        <div class= "grid_container" style={xstyle}>
+            {div_grid_items(rrc, bump)}
+        </div>
+    );
+    //return
+    grid_container
 }
 
 ///prepare a vector<Node> for the Virtual Dom for 'css grid' item with <img>
@@ -103,14 +103,14 @@ pub fn div_grid_items<'a, 'bump>(
         }
 
         /*
-        logmod::debug_write(&format!(
-            "div_grid_items: my_player_number {} start_index {} end_index {} card_grid_data.len {}",
-            &rrc.game_data.my_player_number,
-            start_index,
-            end_index,
-            game_data.card_grid_data.len()
-        ));
-*/
+                logmod::debug_write(&format!(
+                    "div_grid_items: my_player_number {} start_index {} end_index {} card_grid_data.len {}",
+                    &rrc.game_data.my_player_number,
+                    start_index,
+                    end_index,
+                    game_data.card_grid_data.len()
+                ));
+        */
 
         for x in start_index..=end_index {
             let index: usize = x;
@@ -159,8 +159,7 @@ pub fn div_grid_items<'a, 'bump>(
             //endregion
 
             //creating grid_width*grid_height <div> in loop
-            let grid_item_bump =
-                div_grid_item(rrc, bump, img_src, img_id, opacity);
+            let grid_item_bump = div_grid_item(rrc, bump, img_src, img_id, opacity);
             vec_grid_items.push(grid_item_bump);
         }
     }
@@ -225,7 +224,6 @@ pub fn div_grid_item<'a, 'bump>(
 
 /// on click
 fn div_grid_item_on_click(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
-    logmod::debug_write("div_grid_item_on_click");
     //region: audio play
     //prepare the audio element with src filename of mp3
     let audio_element = web_sys::HtmlAudioElement::new_with_src(
@@ -323,10 +321,8 @@ pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
         match &rrc.game_data.game_config {
             None => (),
             Some(_x) => {
-                card_width =
-                    unwrap!(rrc.game_data.game_config.clone()).card_width;
-                card_height =
-                    unwrap!(rrc.game_data.game_config.clone()).card_height;
+                card_width = unwrap!(rrc.game_data.game_config.clone()).card_width;
+                card_height = unwrap!(rrc.game_data.game_config.clone()).card_height;
             }
         }
         /*
@@ -337,17 +333,13 @@ pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
         */
         //ratio between width and height must stay the same
         let ratio = (unwrap!(card_height.approx_as::<f64>())
-            * unwrap!(
-                unwrap!(rrc.game_data.game_config.as_ref())
-                    .grid_items_ver
-                    .approx_as::<f64>()
-            ))
+            * unwrap!(unwrap!(rrc.game_data.game_config.as_ref())
+                .grid_items_ver
+                .approx_as::<f64>()))
             / (unwrap!(card_width.approx_as::<f64>())
-                * unwrap!(
-                    unwrap!(rrc.game_data.game_config.as_ref())
-                        .grid_items_hor
-                        .approx_as::<f64>()
-                ));
+                * unwrap!(unwrap!(rrc.game_data.game_config.as_ref())
+                    .grid_items_hor
+                    .approx_as::<f64>()));
 
         if unwrap!(max_grid_width.approx_as::<f64>()) * ratio
             > unwrap!(max_grid_height.approx_as::<f64>())

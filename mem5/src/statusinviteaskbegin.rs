@@ -6,6 +6,7 @@ use crate::websocketcommunication;
 use crate::logmod;
 use crate::fetchgameconfig;
 use crate::localstoragemod;
+use crate::gamedata;
 
 //use unwrap::unwrap;
 use dodrio::builder::text;
@@ -14,7 +15,7 @@ use dodrio::Node;
 use mem5_common::{GameStatus, Player, WsMessage};
 use typed_html::dodrio;
 use wasm_bindgen::JsCast; //don't remove this. It is needed for dyn_into.
-//endregion
+                          //endregion
 
 /// The key code for the enter key.
 pub const ENTER: u32 = 13;
@@ -27,7 +28,6 @@ pub fn div_invite_ask_begin<'a, 'bump>(
 where
     'a: 'bump,
 {
-    logmod::debug_write("GameStatus::InviteAskBegin");
     let mut vec_of_nodes = Vec::new();
     //I don't know how to solve the lifetime problems. So I just clone the small data.
     let ff = rrc.game_data.content_folders.clone();
@@ -67,39 +67,39 @@ pub fn div_nickname_input<'a, 'bump>(
 where
     'a: 'bump,
 {
-dodrio!(bump,
-<div>
-    <h4>
-        {vec![text(
-            bumpalo::format!(in bump, "{}",
-            "Write your nickname and press Enter:")
-            .into_bump_str()
-        )]}
-    </h4>
-    <div style="margin-left: auto ;margin-right: auto ;text-align: center" >
-        <input 
-        id="nickname" 
-        name="nickname" 
-        style= "border: none;margin:auto;display:inline-block;text-align: center; background-color: #212121;color: #6AFF4D;" 
-        value={bumpalo::format!(in bump, "{}",
-            rrc.game_data.my_nickname)
-            .into_bump_str()
-        } 
-        onkeydown={ move |root, vdom_weak, event| {
-            let event: web_sys::KeyboardEvent = event.dyn_into().unwrap();
-
-            match event.key_code() {
-                ENTER => {
-                    let v2 = vdom_weak.clone();
-                    localstoragemod::save_nickname_to_localstorage(&v2);
-                    }
-                _ => {}
+    dodrio!(bump,
+    <div>
+        <h4>
+            {vec![text(
+                bumpalo::format!(in bump, "{}",
+                "Write your nickname and press Enter:")
+                .into_bump_str()
+            )]}
+        </h4>
+        <div style="margin-left: auto ;margin-right: auto ;text-align: center" >
+            <input
+            id="nickname"
+            name="nickname"
+            style= "border: none;margin:auto;display:inline-block;text-align: center; background-color: #212121;color: #6AFF4D;"
+            value={bumpalo::format!(in bump, "{}",
+                rrc.game_data.my_nickname)
+                .into_bump_str()
             }
-        }}>
-        </input>
+            onkeydown={ move |root, vdom_weak, event| {
+                let event: web_sys::KeyboardEvent = event.dyn_into().unwrap();
+
+                match event.key_code() {
+                    ENTER => {
+                        let v2 = vdom_weak.clone();
+                        localstoragemod::save_nickname_to_localstorage(&v2);
+                        }
+                    _ => {}
+                }
+            }}>
+            </input>
+        </div>
     </div>
-</div>
-)
+    )
 }
 
 /// on click updates some data and sends msgs
@@ -122,6 +122,7 @@ pub fn div_invite_ask_begin_on_click(
     //async fetch_response() for gameconfig.json
     fetchgameconfig::fetch_game_config_request(rrc, vdom_weak);
     //send the msg Invite
+    logmod::debug_write(&format!("Invite send {}", rrc.game_data.my_ws_uid));
     websocketcommunication::ws_send_msg(
         &rrc.game_data.ws,
         &WsMessage::Invite {
@@ -139,7 +140,7 @@ pub fn on_msg_invite(
     his_nickname: String,
     asked_folder_name: String,
 ) {
-    logmod::debug_write("rcv invite");
+    logmod::debug_write(&format!("on_msg_invite {}", his_ws_uid));
     rrc.reset();
     rrc.game_data.game_status = GameStatus::InviteAsked;
     //the first player is the initiator
@@ -155,4 +156,6 @@ pub fn on_msg_invite(
     });
     rrc.game_data.my_player_number = 2; //temporary number
     rrc.game_data.asked_folder_name = asked_folder_name;
+    //always generate the json string for the server
+    rrc.game_data.players_ws_uid = gamedata::prepare_players_ws_uid(&rrc.game_data.players);
 }
