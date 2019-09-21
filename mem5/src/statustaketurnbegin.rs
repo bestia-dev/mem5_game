@@ -50,8 +50,9 @@ where
                 }}>
             <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
-                    bumpalo::format!(in bump, "{}, click here to take your turn !", 
-                        unwrap!(rrc.game_data.players.get(rrc.game_data.my_player_number-1)).nickname
+                    bumpalo::format!(in bump, "{} {}, click here to take your turn !", 
+                        unwrap!(rrc.game_data.players.get(rrc.game_data.my_player_number-1)).nickname,
+                        crate::ordinal_numbers(rrc.game_data.my_player_number)
                     )
                         .into_bump_str(),
                 )]}
