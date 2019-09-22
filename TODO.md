@@ -1,10 +1,8 @@
 # mem5 TODO
 
-Make debug div closeable for user.  
-limit the size of debug_text  
-
-- show the times of msg travel in the UI. Websocket looks awfully slow.  
 - send in msg only what changed and not the whole grid_data
+- Make debug div closeable for user.  
+- show the times of msg travel in the UI. Websocket looks awfully slow.  
 - minimize the data over websocket. json is so verbose. csv is less.
 - sync data from player1 to others after reconnect.
 - different content for English learning: numbers (cardinal, ordinal), food, orientation, alphabet simple spelling, drinks, days/months, questions, colors, transportation, ...  

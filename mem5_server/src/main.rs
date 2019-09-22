@@ -280,20 +280,20 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
     //info!("msg: {}", new_msg);
 
     //There are different messages coming from the mem5 wasm app
-    //Invite must be broadcasted to all users
+    //MsgInvite must be broadcasted to all users
     //all others must be forwarded to exactly the other player.
 
-    let msg: WsMessage = serde_json::from_str(&new_msg).unwrap_or_else(|_x| WsMessage::Dummy {
+    let msg: WsMessage = serde_json::from_str(&new_msg).unwrap_or_else(|_x| WsMessage::MsgDummy {
         dummy: String::from("error"),
     });
 
     match msg {
-        WsMessage::Dummy { dummy } => info!("Dummy: {}", dummy),
-        WsMessage::RequestWsUid { test } => {
-            info!("RequestWsUid: {}", test);
-            let j = serde_json::to_string(&WsMessage::ResponseWsUid { your_ws_uid: ws_uid_of_message })
-                .expect("serde_json::to_string(&WsMessage::ResponseWsUid { your_ws_uid: ws_uid_of_message })");
-            info!("send ResponseWsUid: {}", j);
+        WsMessage::MsgDummy { dummy } => info!("MsgDummy: {}", dummy),
+        WsMessage::MsgRequestWsUid { test } => {
+            info!("MsgRequestWsUid: {}", test);
+            let j = serde_json::to_string(&WsMessage::MsgResponseWsUid { your_ws_uid: ws_uid_of_message })
+                .expect("serde_json::to_string(&WsMessage::MsgResponseWsUid { your_ws_uid: ws_uid_of_message })");
+            info!("send MsgResponseWsUid: {}", j);
             match users
                 .lock()
                 .expect("error users.lock()")
@@ -337,15 +337,15 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
             }
         }
         */
-        WsMessage::Invite { .. } => broadcast(users, ws_uid_of_message, &new_msg),
-        WsMessage::ResponseWsUid { .. } => info!("ResponseWsUid: {}", ""),
-        WsMessage::PlayAccept { players_ws_uid, .. }
-        | WsMessage::PlayerClick1stCard { players_ws_uid, .. }
-        | WsMessage::PlayerClick2ndCard { players_ws_uid, .. }
-        | WsMessage::GameDataInit { players_ws_uid, .. }
-        | WsMessage::TakeTurnBegin { players_ws_uid, .. }
-        | WsMessage::TakeTurnEnd { players_ws_uid, .. }
-        | WsMessage::GameOverPlayAgainBegin { players_ws_uid, .. } => {
+        WsMessage::MsgInvite { .. } => broadcast(users, ws_uid_of_message, &new_msg),
+        WsMessage::MsgResponseWsUid { .. } => info!("MsgResponseWsUid: {}", ""),
+        WsMessage::MsgPlayAccept { players_ws_uid, .. }
+        | WsMessage::MsgPlayerClick1stCard { players_ws_uid, .. }
+        | WsMessage::MsgPlayerClick2ndCardPoint { players_ws_uid, .. }
+        | WsMessage::MsgGameDataInit { players_ws_uid, .. }
+        | WsMessage::MsgPlayerClick2ndCardTakeTurnBegin { players_ws_uid, .. }
+        | WsMessage::StatusTakeTurnEnd { players_ws_uid, .. }
+        | WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin { players_ws_uid, .. } => {
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
     }

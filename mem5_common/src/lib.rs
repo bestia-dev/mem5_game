@@ -51,23 +51,23 @@ use serde_derive::{Serialize, Deserialize};
 ///`WsMessage` enum for WebSocket
 #[derive(Serialize, Deserialize)]
 pub enum WsMessage {
-    ///Dummy
-    Dummy {
+    ///MsgDummy
+    MsgDummy {
         ///anything
         dummy: String,
     },
     ///Request WebSocket Uid - first message to WebSocket server
-    RequestWsUid {
+    MsgRequestWsUid {
         ///anything
         test: String,
     },
     ///response from WebSocket server for first message
-    ResponseWsUid {
+    MsgResponseWsUid {
         ///WebSocket Uid
         your_ws_uid: usize,
     },
     ///invite
-    Invite {
+    MsgInvite {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
         /// my nickname
@@ -76,7 +76,7 @@ pub enum WsMessage {
         asked_folder_name: String,
     },
     /// accept play
-    PlayAccept {
+    MsgPlayAccept {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
         ///json of vector of players for the server to know whom to send msg
@@ -86,7 +86,7 @@ pub enum WsMessage {
     },
     /// player1 initialize the game data and sends it to all players
     /// I will send json string to not confuse the server with vectors
-    GameDataInit {
+    MsgGameDataInit {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
         ///json of vector of players for the server to know whom to send msg
@@ -99,71 +99,41 @@ pub enum WsMessage {
         game_config: String,
     },
     ///player click
-    PlayerClick1stCard {
+    MsgPlayerClick1stCard {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
         players_ws_uid: String,
-        ///vector of cards status
-        card_grid_data: String,
-        ///game status PlayerBefore1stCard or PlayerBefore2ndCard
-        game_status: GameStatus,
         ///have to send all the state of the game
         card_index_of_first_click: usize,
-        ///have to send all the state of the game
-        card_index_of_second_click: usize,
     },
-    ///player click
-    PlayerClick2ndCard {
+    ///player click success
+    MsgPlayerClick2ndCardPoint {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
         players_ws_uid: String,
-        ///json of vector of players with nicknames and order data
-        players: String,
-        ///vector of cards status
-        card_grid_data: String,
-        ///game status PlayerBefore1stCard or PlayerBefore2ndCard
-        game_status: GameStatus,
-        ///have to send all the state of the game
-        card_index_of_first_click: usize,
         ///have to send all the state of the game
         card_index_of_second_click: usize,
     },
     ///take turn begin
-    TakeTurnBegin {
+    MsgPlayerClick2ndCardTakeTurnBegin {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
         players_ws_uid: String,
-        ///vector of cards status
-        card_grid_data: String,
-        ///game status PlayerBefore1stCard or PlayerBefore2ndCard
-        game_status: GameStatus,
-        ///have to send all the state of the game
-        card_index_of_first_click: usize,
         ///have to send all the state of the game
         card_index_of_second_click: usize,
     },
     ///Play Again
-    GameOverPlayAgainBegin {
+    MsgPlayerClick2ndCardGameOverPlayAgainBegin {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
         players_ws_uid: String,
-        ///json of vector of players with nicknames and order data
-        players: String,
-        ///vector of cards status
-        card_grid_data: String,
-        ///game status PlayerBefore1stCard or PlayerBefore2ndCard
-        game_status: GameStatus,
-        ///have to send all the state of the game
-        card_index_of_first_click: usize,
-        ///have to send all the state of the game
-        card_index_of_second_click: usize,
     },
     ///player change
-    TakeTurnEnd {
+    StatusTakeTurnEnd {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
@@ -174,27 +144,28 @@ pub enum WsMessage {
 ///the game can be in various statuses and that differentiate the UI and actions
 /// all players have the same game status
 #[derive(Display, AsRefStr, Serialize, Deserialize, Clone)]
+#[allow(clippy::pub_enum_variant_names)]
 pub enum GameStatus {
     /// invite ask begin
-    InviteAskBegin,
-    ///Player1 Invite Asking
-    InviteAsking,
-    ///Player2 Invite Asked
-    InviteAsked,
-    ///PlayAccepted
-    PlayAccepted,
+    StatusInviteAskBegin,
+    ///Player1 MsgInvite Asking
+    StatusInviteAsking,
+    ///Player2 MsgInvite Asked
+    StatusInviteAsked,
+    ///StatusPlayAccepted
+    StatusPlayAccepted,
     ///Play before first card
-    PlayBefore1stCard,
+    StatusPlayBefore1stCard,
     ///Play before second card
-    PlayBefore2ndCard,
+    StatusPlayBefore2ndCard,
     ///take turn begin
-    TakeTurnBegin,
+    StatusTakeTurnBegin,
     ///take turn end
-    TakeTurnEnd,
+    StatusTakeTurnEnd,
     ///end game
-    GameOverPlayAgainBegin,
-    ///Reconnect after a lost connection
-    Reconnect,
+    StatusGameOverPlayAgainBegin,
+    ///StatusReconnect after a lost connection
+    StatusReconnect,
 }
 
 ///data for one player

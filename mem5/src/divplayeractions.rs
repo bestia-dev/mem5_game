@@ -32,21 +32,21 @@ where
     {
         //ready_state: 0	CONNECTING, 1	OPEN, 2	CLOSING, 3	CLOSED
         websocketreconnect::div_reconnect(rrc, bump)
-    } else if let GameStatus::InviteAskBegin = rrc.game_data.game_status {
+    } else if let GameStatus::StatusInviteAskBegin = rrc.game_data.game_status {
         statusinviteaskbegin::div_invite_ask_begin(rrc, bump)
-    } else if let GameStatus::InviteAsked = rrc.game_data.game_status {
+    } else if let GameStatus::StatusInviteAsked = rrc.game_data.game_status {
         statusinviteasked::div_invite_asked(rrc, bump)
-    } else if let GameStatus::InviteAsking = rrc.game_data.game_status {
+    } else if let GameStatus::StatusInviteAsking = rrc.game_data.game_status {
         statusinviteasking::div_invite_asking(rrc, bump)
-    } else if let GameStatus::PlayAccepted = rrc.game_data.game_status {
+    } else if let GameStatus::StatusPlayAccepted = rrc.game_data.game_status {
         statusinviteasked::div_play_accepted(rrc, bump)
-    } else if let GameStatus::PlayBefore1stCard = rrc.game_data.game_status {
+    } else if let GameStatus::StatusPlayBefore1stCard = rrc.game_data.game_status {
         statusplaybefore1stcard::div_click_1st_card(rrc, bump)
-    } else if let GameStatus::PlayBefore2ndCard = rrc.game_data.game_status {
+    } else if let GameStatus::StatusPlayBefore2ndCard = rrc.game_data.game_status {
         statusplaybefore2ndcard::div_click_2nd_card(rrc, bump)
-    } else if let GameStatus::TakeTurnBegin = rrc.game_data.game_status {
+    } else if let GameStatus::StatusTakeTurnBegin = rrc.game_data.game_status {
         statustaketurnbegin::div_take_turn_begin(rrc, bump)
-    } else if let GameStatus::GameOverPlayAgainBegin = rrc.game_data.game_status {
+    } else if let GameStatus::StatusGameOverPlayAgainBegin = rrc.game_data.game_status {
         statusplayagain::div_play_again(rrc, bump)
     } else {
         div_unpredicted(rrc, bump)

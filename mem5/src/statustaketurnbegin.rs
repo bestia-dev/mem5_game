@@ -38,7 +38,7 @@ where
                     //region: send WsMessage over WebSocket
                     websocketcommunication::ws_send_msg(
                         &rrc.game_data.ws,
-                        &WsMessage::TakeTurnEnd {
+                        &WsMessage::StatusTakeTurnEnd {
                             my_ws_uid: rrc.game_data.my_ws_uid,
                             players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
                         },
@@ -95,7 +95,7 @@ pub fn take_turn_end(rrc: &mut RootRenderingComponent) {
     .status = CardStatusCardFace::Down;
     rrc.game_data.card_index_of_first_click = 0;
     rrc.game_data.card_index_of_second_click = 0;
-    rrc.game_data.game_status = GameStatus::PlayBefore1stCard;
+    rrc.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
 
     rrc.check_invalidate_for_all_components();
 }
@@ -103,16 +103,19 @@ pub fn take_turn_end(rrc: &mut RootRenderingComponent) {
 ///on msg take turn begin
 pub fn on_msg_take_turn_begin(
     rrc: &mut RootRenderingComponent,
-    game_status: GameStatus,
-    card_grid_data: &str,
-    card_index_of_first_click: usize,
     card_index_of_second_click: usize,
 ) {
     logmod::debug_write("on_msg_take_turn_begin");
-    rrc.game_data.game_status = game_status;
-    rrc.game_data.card_grid_data = unwrap!(serde_json::from_str(card_grid_data));
-    rrc.game_data.card_index_of_first_click = card_index_of_first_click;
     rrc.game_data.card_index_of_second_click = card_index_of_second_click;
+    //flip the card up
+    unwrap!(
+        rrc.game_data
+            .card_grid_data
+            .get_mut(rrc.game_data.card_index_of_second_click),
+        "error this_click_card_index"
+    )
+    .status = CardStatusCardFace::UpTemporary;
+    rrc.game_data.game_status = GameStatus::StatusTakeTurnBegin;
     rrc.check_invalidate_for_all_components();
 }
 

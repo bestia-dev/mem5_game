@@ -42,8 +42,8 @@ where
         }}>
             <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
-                //Reconnect?
-                bumpalo::format!(in bump, "Reconnect?{}", "").into_bump_str(),
+                //StatusReconnect?
+                bumpalo::format!(in bump, "StatusReconnect?{}", "").into_bump_str(),
                 )]}
             </h2>
         </div>

@@ -78,7 +78,7 @@ pub struct GameData {
     pub players: Vec<Player>,
     ///the json string for the ws server to send msgs to other players only
     pub players_ws_uid: String,
-    ///game status: InviteAskBegin,InviteAsking,InviteAsked,Player1,Player2
+    ///game status: StatusInviteAskBegin,StatusInviteAsking,StatusInviteAsked,Player1,Player2
     pub game_status: GameStatus,
     ///vector of cards
     pub card_grid_data: Vec<Card>,
@@ -198,7 +198,7 @@ impl GameData {
     }
     ///asociated function: before Accept, there are not random numbers, just default cards.
     pub fn prepare_for_empty() -> Vec<Card> {
-        //prepare 32 empty cards. The random is calculated only on PlayAccept.
+        //prepare 32 empty cards. The random is calculated only on MsgPlayAccept.
         let mut card_grid_data = Vec::new();
         //I must prepare the 0 index, but then I don't use it ever.
         for i in 0..=32 {
@@ -232,7 +232,7 @@ impl GameData {
             my_nickname,
             players,
             players_ws_uid,
-            game_status: GameStatus::InviteAskBegin,
+            game_status: GameStatus::StatusInviteAskBegin,
             content_folder_name: "alphabet".to_string(),
             asked_folder_name: "".to_string(),
             my_player_number: 1,
@@ -249,11 +249,11 @@ impl GameData {
             is_reconnect: false,
         }
     }
-    ///check only if status InviteAskBegin
+    ///check only if status StatusInviteAskBegin
     pub fn is_status_invite_ask_begin(&self) -> bool {
         #[allow(clippy::wildcard_enum_match_arm)]
         match self.game_status {
-            GameStatus::InviteAskBegin => true,
+            GameStatus::StatusInviteAskBegin => true,
             _ => false,
         }
     }
@@ -261,11 +261,11 @@ impl GameData {
     pub fn is_status_for_grid_container(&self) -> bool {
         #[allow(clippy::wildcard_enum_match_arm)]
         match self.game_status {
-            GameStatus::PlayBefore1stCard
-            | GameStatus::PlayBefore2ndCard
-            | GameStatus::TakeTurnBegin
-            | GameStatus::TakeTurnEnd
-            | GameStatus::GameOverPlayAgainBegin => true,
+            GameStatus::StatusPlayBefore1stCard
+            | GameStatus::StatusPlayBefore2ndCard
+            | GameStatus::StatusTakeTurnBegin
+            | GameStatus::StatusTakeTurnEnd
+            | GameStatus::StatusGameOverPlayAgainBegin => true,
             _ => false,
         }
     }

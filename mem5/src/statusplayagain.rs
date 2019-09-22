@@ -35,3 +35,15 @@ where
     </div>
     )
 }
+
+
+///msg player click
+pub fn on_msg_play_again(
+    rrc: &mut RootRenderingComponent
+) {
+    logmod::debug_write("on_msg_play_again");
+    //The game is over and the question Play again?
+    rrc.game_data.game_status = GameStatus::StatusGameOverPlayAgainBegin;
+    rrc.check_invalidate_for_all_components();
+}
+

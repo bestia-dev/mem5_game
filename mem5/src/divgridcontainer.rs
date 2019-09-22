@@ -186,8 +186,8 @@ pub fn div_grid_item<'a, 'bump>(
         //The method render will later use that for rendering the new html.
         let rrc = root.unwrap_mut::<RootRenderingComponent>();
         //only if the gamestatus is play (1 or 2)
-        if rrc.game_data.game_status.as_ref() == GameStatus::PlayBefore1stCard.as_ref()
-        || rrc.game_data.game_status.as_ref() == GameStatus::PlayBefore2ndCard.as_ref() {
+        if rrc.game_data.game_status.as_ref() == GameStatus::StatusPlayBefore1stCard.as_ref()
+        || rrc.game_data.game_status.as_ref() == GameStatus::StatusPlayBefore2ndCard.as_ref() {
             // If the event's target is our image...
             let img = match event
                 .target()
@@ -252,9 +252,9 @@ fn div_grid_item_on_click(rrc: &mut RootRenderingComponent, this_click_card_inde
 
     let game_status = rrc.game_data.game_status.clone();
 
-    if game_status.as_ref() == GameStatus::PlayBefore1stCard.as_ref() {
+    if game_status.as_ref() == GameStatus::StatusPlayBefore1stCard.as_ref() {
         statusplaybefore1stcard::on_click_1st_card(rrc, this_click_card_index)
-    } else if game_status.as_ref() == GameStatus::PlayBefore2ndCard.as_ref() {
+    } else if game_status.as_ref() == GameStatus::StatusPlayBefore2ndCard.as_ref() {
         statusplaybefore2ndcard::on_click_2nd_card(rrc, this_click_card_index)
     } else {
         panic!("this else must never be reached!");

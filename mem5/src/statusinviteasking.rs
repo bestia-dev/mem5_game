@@ -28,10 +28,10 @@ where
                         root.unwrap_mut::<RootRenderingComponent>();
                     //region: send WsMessage over WebSocket
                     rrc.game_data_init();
-                    logmod::debug_write(&format!("GameDataInit send {}",rrc.game_data.players_ws_uid));
+                    logmod::debug_write(&format!("MsgGameDataInit send {}",rrc.game_data.players_ws_uid));
                     websocketcommunication::ws_send_msg(
                         &rrc.game_data.ws,
-                        &WsMessage::GameDataInit {
+                        &WsMessage::MsgGameDataInit {
                             my_ws_uid: rrc.game_data.my_ws_uid,
                             players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
                             players: unwrap!(serde_json::to_string(&rrc.game_data.players)),

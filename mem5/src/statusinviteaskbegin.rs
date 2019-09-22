@@ -44,7 +44,7 @@ where
             <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
                 //show Ask Player2 to Play!
-                bumpalo::format!(in bump, "Invite for {} !", folder_name_clone2)
+                bumpalo::format!(in bump, "MsgInvite for {} !", folder_name_clone2)
                     .into_bump_str(),
                 )]}
             </h2>
@@ -116,16 +116,16 @@ pub fn div_invite_ask_begin_on_click(
         nickname: rrc.game_data.my_nickname.clone(),
         points: 0,
     });
-    rrc.game_data.game_status = GameStatus::InviteAsking;
+    rrc.game_data.game_status = GameStatus::StatusInviteAsking;
     rrc.game_data.asked_folder_name = folder_name.to_string();
 
     //async fetch_response() for gameconfig.json
     fetchgameconfig::fetch_game_config_request(rrc, vdom_weak);
-    //send the msg Invite
-    logmod::debug_write(&format!("Invite send {}", rrc.game_data.my_ws_uid));
+    //send the msg MsgInvite
+    logmod::debug_write(&format!("MsgInvite send {}", rrc.game_data.my_ws_uid));
     websocketcommunication::ws_send_msg(
         &rrc.game_data.ws,
-        &WsMessage::Invite {
+        &WsMessage::MsgInvite {
             my_ws_uid: rrc.game_data.my_ws_uid,
             my_nickname: rrc.game_data.my_nickname.clone(),
             asked_folder_name: folder_name.to_string(),
@@ -142,7 +142,7 @@ pub fn on_msg_invite(
 ) {
     logmod::debug_write(&format!("on_msg_invite {}", his_ws_uid));
     rrc.reset();
-    rrc.game_data.game_status = GameStatus::InviteAsked;
+    rrc.game_data.game_status = GameStatus::StatusInviteAsked;
     //the first player is the initiator
     rrc.game_data.players.push(Player {
         ws_uid: his_ws_uid,

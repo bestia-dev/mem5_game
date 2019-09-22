@@ -67,7 +67,7 @@ impl RootRenderingComponent {
     pub fn game_data_init(&mut self) {
         self.game_data.content_folder_name = self.game_data.asked_folder_name.clone();
         self.game_data.prepare_random_data();
-        self.game_data.game_status = GameStatus::PlayBefore1stCard;
+        self.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
         self.game_data.player_turn = 1;
     }
     ///reset the data to replay the game
@@ -76,7 +76,7 @@ impl RootRenderingComponent {
         self.game_data.card_index_of_first_click = 0;
         self.game_data.card_index_of_second_click = 0;
         self.game_data.players.clear();
-        self.game_data.game_status = GameStatus::InviteAskBegin;
+        self.game_data.game_status = GameStatus::StatusInviteAskBegin;
         self.game_data.content_folder_name = "alphabet".to_string();
         self.game_data.asked_folder_name = "".to_string();
         self.game_data.my_player_number = 1;
@@ -105,7 +105,7 @@ impl RootRenderingComponent {
     ) {
         logmod::debug_write(&format!("on_msg_game_data_init {}", players));
         self.game_data.content_folder_name = self.game_data.asked_folder_name.clone();
-        self.game_data.game_status = GameStatus::PlayBefore1stCard;
+        self.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
         self.game_data.player_turn = 1;
         self.game_data.card_grid_data = unwrap!(
             serde_json::from_str(card_grid_data),

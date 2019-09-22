@@ -46,11 +46,11 @@ where
 
 /// on click
 pub fn div_invite_asked_on_click(rrc: &mut RootRenderingComponent) {
-    rrc.game_data.game_status = GameStatus::PlayAccepted;
-    logmod::debug_write(&format!("PlayAccepted send {}",rrc.game_data.players_ws_uid));
+    rrc.game_data.game_status = GameStatus::StatusPlayAccepted;
+    logmod::debug_write(&format!("StatusPlayAccepted send {}",rrc.game_data.players_ws_uid));
     websocketcommunication::ws_send_msg(
         &rrc.game_data.ws,
-        &WsMessage::PlayAccept {
+        &WsMessage::MsgPlayAccept {
             my_ws_uid: rrc.game_data.my_ws_uid,
             players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
             my_nickname: rrc.game_data.my_nickname.clone(),
