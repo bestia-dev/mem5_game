@@ -1,13 +1,13 @@
-//! divgridcontainer.rs - renders the grid container with the images
+//! divgridcontainermod.rs - renders the grid container with the images
 //! and most important the on click event
 
 //region: use, const
-use crate::gamedata::{CardStatusCardFace, Size2d};
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::statusplaybefore1stcard;
-use crate::statusplaybefore2ndcard;
+use crate::gamedatamod::{CardStatusCardFace, Size2d};
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::statusplaybefore1stcardmod;
+use crate::statusplaybefore2ndcardmod;
 //use crate::logmod;
-use crate::rootrenderingcomponent;
+use crate::rootrenderingcomponentmod;
 
 use unwrap::unwrap;
 use conv::{ConvUtil};
@@ -253,9 +253,9 @@ fn div_grid_item_on_click(rrc: &mut RootRenderingComponent, this_click_card_inde
     let game_status = rrc.game_data.game_status.clone();
 
     if game_status.as_ref() == GameStatus::StatusPlayBefore1stCard.as_ref() {
-        statusplaybefore1stcard::on_click_1st_card(rrc, this_click_card_index)
+        statusplaybefore1stcardmod::on_click_1st_card(rrc, this_click_card_index)
     } else if game_status.as_ref() == GameStatus::StatusPlayBefore2ndCard.as_ref() {
-        statusplaybefore2ndcard::on_click_2nd_card(rrc, this_click_card_index)
+        statusplaybefore2ndcardmod::on_click_2nd_card(rrc, this_click_card_index)
     } else {
         panic!("this else must never be reached!");
     }
@@ -264,7 +264,7 @@ fn div_grid_item_on_click(rrc: &mut RootRenderingComponent, this_click_card_inde
 ///grid width in pixels
 pub fn grid_width() -> usize {
     //the size of  the visible part of the window
-    let usize_inner_width = rootrenderingcomponent::usize_window_inner_width();
+    let usize_inner_width = rootrenderingcomponentmod::usize_window_inner_width();
     //width min: 300px, max: 600 px in between width=visible width
     //3 columnsdelimiter 5px wide
     let grid_width: usize;
@@ -281,7 +281,7 @@ pub fn grid_width() -> usize {
 ///grid height in pixels
 pub fn grid_height() -> usize {
     //the size of  the visible part of the window
-    let usize_inner_height = rootrenderingcomponent::usize_window_inner_height();
+    let usize_inner_height = rootrenderingcomponentmod::usize_window_inner_height();
 
     //height minimum 300, max 1000, else 0.8*visible height
     //3 row separetors 5px wide
@@ -302,8 +302,8 @@ pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
     //if the game_config is None, then return full screen
     if rrc.game_data.game_config.is_none() {
         Size2d {
-            hor: rootrenderingcomponent::usize_window_inner_width_but_max_600(),
-            ver: rootrenderingcomponent::usize_window_inner_height(),
+            hor: rootrenderingcomponentmod::usize_window_inner_width_but_max_600(),
+            ver: rootrenderingcomponentmod::usize_window_inner_height(),
         }
     } else {
         //grid_container width and height

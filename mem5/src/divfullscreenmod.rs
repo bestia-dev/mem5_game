@@ -1,7 +1,7 @@
-//! divfullscreen.rs - instruction and button for fullscreen
+//! divfullscreenmod.rs - instruction and button for fullscreen
 
 //region: use, const
-use crate::rootrenderingcomponent::RootRenderingComponent;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::javascriptimportmod;
 
 use unwrap::unwrap;

@@ -1,10 +1,10 @@
-//! statusinviteasked.rs - code flow from this status
+//! statusinviteaskedmod.rs - code flow from this status
 
 //region: use
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::websocketcommunication;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::websocketcommunicationmod;
 use crate::logmod;
-use crate::gamedata;
+use crate::gamedatamod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -48,7 +48,7 @@ where
 pub fn div_invite_asked_on_click(rrc: &mut RootRenderingComponent) {
     rrc.game_data.game_status = GameStatus::StatusPlayAccepted;
     logmod::debug_write(&format!("StatusPlayAccepted send {}",rrc.game_data.players_ws_uid));
-    websocketcommunication::ws_send_msg(
+    websocketcommunicationmod::ws_send_msg(
         &rrc.game_data.ws,
         &WsMessage::MsgPlayAccept {
             my_ws_uid: rrc.game_data.my_ws_uid,
@@ -67,7 +67,7 @@ pub fn on_msg_play_accept(rrc: &mut RootRenderingComponent, his_ws_uid: usize, h
             nickname: his_nickname,
             points: 0,
         });
-        rrc.game_data.players_ws_uid = gamedata::prepare_players_ws_uid(&rrc.game_data.players);
+        rrc.game_data.players_ws_uid = gamedatamod::prepare_players_ws_uid(&rrc.game_data.players);
         rrc.check_invalidate_for_all_components();
     }
 }

@@ -1,7 +1,7 @@
-//! divfordebugging.rs - information for debugging
+//! divfordebuggingmod.rs - information for debugging
 
 //region: use, const
-use crate::rootrenderingcomponent::RootRenderingComponent;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::sessionstoragemod;
 
 use dodrio::builder::text;

@@ -192,30 +192,30 @@
 //endregion
 
 //region: mod is used only in lib file. All the rest use use crate
-mod divcardmoniker;
-mod divfordebugging;
-mod divfullscreen;
-mod divgridcontainer;
-mod divplayeractions;
-mod divplayersandscores;
-mod divrulesanddescription;
+mod divcardmonikermod;
+mod divfordebuggingmod;
+mod divfullscreenmod;
+mod divgridcontainermod;
+mod divplayeractionsmod;
+mod divplayersandscoresmod;
+mod divrulesanddescriptionmod;
 mod fetchmod;
-mod fetchgameconfig;
-mod gamedata;
+mod fetchgameconfigmod;
+mod gamedatamod;
 mod javascriptimportmod;
 mod localstoragemod;
 mod logmod;
-mod rootrenderingcomponent;
+mod rootrenderingcomponentmod;
 mod sessionstoragemod;
-mod statusinviteaskbegin;
-mod statusinviteasked;
-mod statusinviteasking;
-mod statusplayagain;
-mod statusplaybefore1stcard;
-mod statusplaybefore2ndcard;
-mod statustaketurnbegin;
-mod websocketcommunication;
-mod websocketreconnect;
+mod statusinviteaskbeginmod;
+mod statusinviteaskedmod;
+mod statusinviteaskingmod;
+mod statusplayagainmod;
+mod statusplaybefore1stcardmod;
+mod statusplaybefore2ndcardmod;
+mod statustaketurnbeginmod;
+mod websocketcommunicationmod;
+mod websocketreconnectmod;
 //endregion
 
 //region: use statements
@@ -250,7 +250,7 @@ pub fn run() -> Result<(), JsValue> {
     let location_href = unwrap!(window.location().href(), "href not known");
 
     //WebSocket connection
-    let ws = websocketcommunication::setup_ws_connection(location_href.clone(), my_ws_uid);
+    let ws = websocketcommunicationmod::setup_ws_connection(location_href.clone(), my_ws_uid);
     //I don't know why is needed to clone the WebSocket connection
     let ws_c = ws.clone();
 
@@ -258,13 +258,13 @@ pub fn run() -> Result<(), JsValue> {
     //I added ws_c so that I can send messages on WebSocket
 
     let mut rrc =
-        rootrenderingcomponent::RootRenderingComponent::new(ws_c, my_ws_uid);
+        rootrenderingcomponentmod::RootRenderingComponent::new(ws_c, my_ws_uid);
     rrc.game_data.href = location_href;
 
     // Mount the component to the `<div id="div_for_virtual_dom">`.
     let vdom = dodrio::Vdom::new(&div_for_virtual_dom, rrc);
 
-    websocketcommunication::setup_all_ws_events(&ws, vdom.weak());
+    websocketcommunicationmod::setup_all_ws_events(&ws, vdom.weak());
 
     // Run the component forever. Forget to drop the memory.
     vdom.forget();

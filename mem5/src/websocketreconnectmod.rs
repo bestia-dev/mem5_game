@@ -1,8 +1,8 @@
-//! websocketreconnect.rs - reconnection for websocket must be part of the application.
+//! websocketreconnectmod.rs - reconnection for websocket must be part of the application.
 
 //region: use
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::websocketcommunication;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::websocketcommunicationmod;
 use crate::logmod;
 
 use unwrap::unwrap;
@@ -32,8 +32,8 @@ where
                 my_ws_uid,
             ));
             logmod::debug_write(&"before reconnect");
-            let ws = websocketcommunication::setup_ws_connection(href, my_ws_uid);
-            websocketcommunication::setup_all_ws_events(&ws,vdom.clone());
+            let ws = websocketcommunicationmod::setup_ws_connection(href, my_ws_uid);
+            websocketcommunicationmod::setup_all_ws_events(&ws,vdom.clone());
 
             rrc.game_data.ws=ws;
             logmod::debug_write(&"before game_data.is_reconnect = false and schedule_render");

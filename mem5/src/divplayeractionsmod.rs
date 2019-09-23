@@ -1,16 +1,16 @@
-//! divplayeractions.rs - renders the div to inform player what to do next
+//! divplayeractionsmod.rs - renders the div to inform player what to do next
 //! and get a click action from the user
 
 //region: use
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::statusplayagain;
-use crate::statusplaybefore1stcard;
-use crate::statusplaybefore2ndcard;
-use crate::statustaketurnbegin;
-use crate::statusinviteaskbegin;
-use crate::statusinviteasked;
-use crate::statusinviteasking;
-use crate::websocketreconnect;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::statusplayagainmod;
+use crate::statusplaybefore1stcardmod;
+use crate::statusplaybefore2ndcardmod;
+use crate::statustaketurnbeginmod;
+use crate::statusinviteaskbeginmod;
+use crate::statusinviteaskedmod;
+use crate::statusinviteaskingmod;
+use crate::websocketreconnectmod;
 
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
@@ -31,23 +31,23 @@ where
         && (rrc.game_data.is_reconnect || rrc.game_data.ws.ready_state() != 1)
     {
         //ready_state: 0	CONNECTING, 1	OPEN, 2	CLOSING, 3	CLOSED
-        websocketreconnect::div_reconnect(rrc, bump)
+        websocketreconnectmod::div_reconnect(rrc, bump)
     } else if let GameStatus::StatusInviteAskBegin = rrc.game_data.game_status {
-        statusinviteaskbegin::div_invite_ask_begin(rrc, bump)
+        statusinviteaskbeginmod::div_invite_ask_begin(rrc, bump)
     } else if let GameStatus::StatusInviteAsked = rrc.game_data.game_status {
-        statusinviteasked::div_invite_asked(rrc, bump)
+        statusinviteaskedmod::div_invite_asked(rrc, bump)
     } else if let GameStatus::StatusInviteAsking = rrc.game_data.game_status {
-        statusinviteasking::div_invite_asking(rrc, bump)
+        statusinviteaskingmod::div_invite_asking(rrc, bump)
     } else if let GameStatus::StatusPlayAccepted = rrc.game_data.game_status {
-        statusinviteasked::div_play_accepted(rrc, bump)
+        statusinviteaskedmod::div_play_accepted(rrc, bump)
     } else if let GameStatus::StatusPlayBefore1stCard = rrc.game_data.game_status {
-        statusplaybefore1stcard::div_click_1st_card(rrc, bump)
+        statusplaybefore1stcardmod::div_click_1st_card(rrc, bump)
     } else if let GameStatus::StatusPlayBefore2ndCard = rrc.game_data.game_status {
-        statusplaybefore2ndcard::div_click_2nd_card(rrc, bump)
+        statusplaybefore2ndcardmod::div_click_2nd_card(rrc, bump)
     } else if let GameStatus::StatusTakeTurnBegin = rrc.game_data.game_status {
-        statustaketurnbegin::div_take_turn_begin(rrc, bump)
+        statustaketurnbeginmod::div_take_turn_begin(rrc, bump)
     } else if let GameStatus::StatusGameOverPlayAgainBegin = rrc.game_data.game_status {
-        statusplayagain::div_play_again(rrc, bump)
+        statusplayagainmod::div_play_again(rrc, bump)
     } else {
         div_unpredicted(rrc, bump)
     }

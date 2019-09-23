@@ -1,4 +1,4 @@
-//! divrulesanddescription.rs - renders the div that shows rules and descriptions
+//! divrulesanddescriptionmod.rs - renders the div that shows rules and descriptions
 //! All is a static content. Great for implementing dodrio cache.
 
 //region: use

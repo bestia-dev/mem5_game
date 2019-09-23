@@ -1,13 +1,14 @@
 //! WebSocketcommunication.rs  - module that cares about WebSocket communication
 
 //region: use
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::statusinviteasked;
-use crate::statusinviteaskbegin;
-use crate::statusplaybefore1stcard;
-use crate::statusplaybefore2ndcard;
-use crate::statustaketurnbegin;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::statusinviteaskedmod;
+use crate::statusinviteaskbeginmod;
+use crate::statusplaybefore1stcardmod;
+use crate::statusplaybefore2ndcardmod;
+use crate::statustaketurnbeginmod;
 use crate::logmod;
+use crate::statusplayagainmod;
 
 use unwrap::unwrap;
 use futures::Future;
@@ -133,7 +134,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                             | GameStatus::StatusInviteAsked =
                                 rrc.game_data.game_status
                             {
-                                statusinviteaskbegin::on_msg_invite(
+                                statusinviteaskbeginmod::on_msg_invite(
                                     rrc,
                                     my_ws_uid,
                                     my_nickname,
@@ -154,7 +155,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc =
                                 root.unwrap_mut::<RootRenderingComponent>();
-                            statusinviteasked::on_msg_play_accept(
+                            statusinviteaskedmod::on_msg_play_accept(
                                 rrc,
                                 my_ws_uid,
                                 my_nickname
@@ -204,7 +205,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statusplaybefore1stcard::on_msg_player_click_1st_card(
+                            statusplaybefore1stcardmod::on_msg_player_click_1st_card(
                                 rrc,
                                 card_index_of_first_click,
                             );
@@ -224,7 +225,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statusplaybefore2ndcard::on_msg_player_click_2nd_card_point(
+                            statusplaybefore2ndcardmod::on_msg_player_click_2nd_card_point(
                                 rrc,
                                 card_index_of_second_click,
                             );
@@ -244,7 +245,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statustaketurnbegin::on_msg_take_turn_begin(
+                            statustaketurnbeginmod::on_msg_take_turn_begin(
                                 rrc,
                                 card_index_of_second_click,
                             );
@@ -260,7 +261,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statustaketurnbegin::on_msg_take_turn_end(rrc);
+                            statustaketurnbeginmod::on_msg_take_turn_end(rrc);
                             v2.schedule_render();
                         }
                     })
@@ -276,7 +277,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statusplaybefore2ndcard::on_msg_play_again(
+                            statusplayagainmod::on_msg_play_again(
                                 rrc
                             );
                             v2.schedule_render();

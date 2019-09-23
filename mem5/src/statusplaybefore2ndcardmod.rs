@@ -1,13 +1,13 @@
-//! statusplaybefore2ndcard.rs - code flow from this status
+//! statusplaybefore2ndcardmod.rs - code flow from this status
 
 //region: use
-use crate::gamedata::CardStatusCardFace;
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::websocketcommunication;
-use crate::logmod;
+use crate::gamedatamod::CardStatusCardFace;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::websocketcommunicationmod;
+use crate::statustaketurnbeginmod;
+use crate::statusplayagainmod;
+
 use mem5_common::{GameStatus, WsMessage};
-use crate::statustaketurnbegin;
-use crate::statusplayagain;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -25,13 +25,11 @@ pub fn div_click_2nd_card<'a, 'bump>(
 where
     'a: 'bump,
 {
-    if rrc.game_data.my_player_number
-        == rrc.game_data.player_turn
-    {
+    if rrc.game_data.my_player_number == rrc.game_data.player_turn {
         dodrio!(bump,
         <div >
             <h2 id= "ws_elem" style= "color:orange;">
-                {vec![text(bumpalo::format!(in bump, "Play {} {} !", 
+                {vec![text(bumpalo::format!(in bump, "Play {} {} !",
                 unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
                 crate::ordinal_numbers(rrc.game_data.player_turn)
                 ).into_bump_str())]}
@@ -42,7 +40,7 @@ where
         //return wait for the other player
         dodrio!(bump,
         <h2 id="ws_elem" style= "color:red;">
-            {vec![text(bumpalo::format!(in bump, "Wait for {} {} !", 
+            {vec![text(bumpalo::format!(in bump, "Wait for {} {} !",
             unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
             crate::ordinal_numbers(rrc.game_data.player_turn)
             ).into_bump_str())]}
@@ -51,11 +49,11 @@ where
     }
 }
 
-//div_grid_container() is in divgridcontainer.rs
+//div_grid_container() is in divgridcontainermod.rs
 
 ///on click
 pub fn on_click_2nd_card(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
-    card_click_2nd_card(rrc,this_click_card_index);
+    card_click_2nd_card(rrc, this_click_card_index);
 }
 
 ///on second click
@@ -68,22 +66,20 @@ pub fn card_click_2nd_card(rrc: &mut RootRenderingComponent, this_click_card_ind
     //3 possible outcomes: 1) same player, 2) Next Player 3) end game/play again
     //that changes: game status,CardStatusCardFace, points or/and player_turn
     //if the cards match, player get one point and continues another turn
-    if unwrap!(
-        rrc.game_data
-            .card_grid_data
-            .get(rrc.game_data.card_index_of_first_click)
-    )
+    if unwrap!(rrc
+        .game_data
+        .card_grid_data
+        .get(rrc.game_data.card_index_of_first_click))
     .card_number_and_img_src
-        == unwrap!(
-            rrc.game_data
-                .card_grid_data
-                .get(rrc.game_data.card_index_of_second_click)
-        )
+        == unwrap!(rrc
+            .game_data
+            .card_grid_data
+            .get(rrc.game_data.card_index_of_second_click))
         .card_number_and_img_src
     {
-        on_msg_player_click_2nd_card_point(rrc,this_click_card_index);
+        on_msg_player_click_2nd_card_point(rrc, this_click_card_index);
         //region: send WsMessage over WebSocket
-        websocketcommunication::ws_send_msg(
+        websocketcommunicationmod::ws_send_msg(
             &rrc.game_data.ws,
             &WsMessage::MsgPlayerClick2ndCardPoint {
                 my_ws_uid: rrc.game_data.my_ws_uid,
@@ -96,33 +92,33 @@ pub fn card_click_2nd_card(rrc: &mut RootRenderingComponent, this_click_card_ind
         //if all the cards are permanenty up, this is the end of the game
         let mut all_permanently = true;
         //the zero element is exceptional, but the iterator uses it
-        unwrap!(rrc.game_data.card_grid_data.get(0)).status=CardStatusCardFace::UpPermanently;
-        for  in &rrc.game_data.card_grid_data{
-            match x.status{
-                CardStatusCardFace::UpPermanently => {
-                    all_permanently=false;
+        unwrap!(rrc.game_data.card_grid_data.get_mut(0)).status = CardStatusCardFace::UpPermanently;
+
+        for x in &rrc.game_data.card_grid_data {
+            match x.status {
+                CardStatusCardFace::UpPermanently => {}
+                _ => {
+                    all_permanently = false;
                     break;
                 }
-                _ => {}
             }
         }
-        if all_permanently==true {
-            statusplayagain::on_msg_play_again(rrc);
-            
+        if all_permanently == true {
+            statusplayagainmod::on_msg_play_again(rrc);
             //send message
-            websocketcommunication::ws_send_msg(
+            websocketcommunicationmod::ws_send_msg(
                 &rrc.game_data.ws,
                 &WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin {
                     my_ws_uid: rrc.game_data.my_ws_uid,
                     players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
-                }
+                },
             );
         }
     } else {
-        statustaketurnbegin::on_msg_take_turn_begin(rrc,this_click_card_index);
+        statustaketurnbeginmod::on_msg_take_turn_begin(rrc, this_click_card_index);
 
         //region: send WsMessage over WebSocket
-        websocketcommunication::ws_send_msg(
+        websocketcommunicationmod::ws_send_msg(
             &rrc.game_data.ws,
             &WsMessage::MsgPlayerClick2ndCardTakeTurnBegin {
                 my_ws_uid: rrc.game_data.my_ws_uid,
@@ -150,24 +146,17 @@ pub fn on_msg_player_click_2nd_card_point(
     .status = CardStatusCardFace::UpTemporary;
 
     //give points
-    unwrap!(
-        rrc.game_data
-            .players
-            .get_mut(unwrap!(rrc.game_data.player_turn.checked_sub(1)))
-    )
+    unwrap!(rrc
+        .game_data
+        .players
+        .get_mut(unwrap!(rrc.game_data.player_turn.checked_sub(1))))
     .points += 1;
 
     // the two cards matches. make them permanent FaceUp
     let x1 = rrc.game_data.card_index_of_first_click;
     let x2 = rrc.game_data.card_index_of_second_click;
-    unwrap!(
-        rrc.game_data.card_grid_data.get_mut(x1)
-    )
-    .status = CardStatusCardFace::UpPermanently;
-    unwrap!(
-        rrc.game_data.card_grid_data.get_mut(x2)
-    )
-    .status = CardStatusCardFace::UpPermanently;
+    unwrap!(rrc.game_data.card_grid_data.get_mut(x1)).status = CardStatusCardFace::UpPermanently;
+    unwrap!(rrc.game_data.card_grid_data.get_mut(x2)).status = CardStatusCardFace::UpPermanently;
     //the same player continues to play
     rrc.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
     rrc.check_invalidate_for_all_components();

@@ -1,7 +1,7 @@
-//! divplayersandscores.rs - renders the div that shows players and scores
+//! divplayersandscoresmod.rs - renders the div that shows players and scores
 
 //region: use
-use crate::gamedata::GameData;
+use crate::gamedatamod::GameData;
 //use crate::logmod;
 
 use unwrap::unwrap;

@@ -1,10 +1,10 @@
-//! statustaketurnbegin.rs - code flow from this status
+//! statustaketurnbeginmod.rs - code flow from this status
 
 //region: use
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::websocketcommunication;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::websocketcommunicationmod;
 use mem5_common::{GameStatus, WsMessage};
-use crate::gamedata::{CardStatusCardFace};
+use crate::gamedatamod::{CardStatusCardFace};
 use crate::logmod;
 
 use unwrap::unwrap;
@@ -36,7 +36,7 @@ where
                         root.unwrap_mut::<RootRenderingComponent>();
                     //this game_data mutable reference is dropped on the end of the function
                     //region: send WsMessage over WebSocket
-                    websocketcommunication::ws_send_msg(
+                    websocketcommunicationmod::ws_send_msg(
                         &rrc.game_data.ws,
                         &WsMessage::StatusTakeTurnEnd {
                             my_ws_uid: rrc.game_data.my_ws_uid,

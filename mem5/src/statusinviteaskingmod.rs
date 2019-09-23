@@ -1,8 +1,8 @@
-//! statusinviteasking.rs - code flow from this status
+//! statusinviteaskingmod.rs - code flow from this status
 
 //region: use
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::websocketcommunication;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::websocketcommunicationmod;
 use crate::logmod;
 
 use unwrap::unwrap;
@@ -29,7 +29,7 @@ where
                     //region: send WsMessage over WebSocket
                     rrc.game_data_init();
                     logmod::debug_write(&format!("MsgGameDataInit send {}",rrc.game_data.players_ws_uid));
-                    websocketcommunication::ws_send_msg(
+                    websocketcommunicationmod::ws_send_msg(
                         &rrc.game_data.ws,
                         &WsMessage::MsgGameDataInit {
                             my_ws_uid: rrc.game_data.my_ws_uid,

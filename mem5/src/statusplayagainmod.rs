@@ -1,7 +1,9 @@
-//! statusplayagain.rs - code flow from this status
+//! statusplayagainmod.rs - code flow from this status
 
 //region: use
-use crate::rootrenderingcomponent::RootRenderingComponent;
+use mem5_common::GameStatus;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::logmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -35,7 +37,6 @@ where
     </div>
     )
 }
-
 
 ///msg player click
 pub fn on_msg_play_again(

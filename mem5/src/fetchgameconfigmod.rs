@@ -1,7 +1,7 @@
-//! statusinviteaskbegin.rs - code flow from this status
+//! statusinviteaskbeginmod.rs - code flow from this status
 
 //region: use
-use crate::rootrenderingcomponent::RootRenderingComponent;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::fetchmod;
 
 use unwrap::unwrap;

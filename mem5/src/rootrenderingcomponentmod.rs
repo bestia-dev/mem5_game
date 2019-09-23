@@ -1,14 +1,14 @@
-//! rootrenderingcomponent.rs - renders the web page
+//! rootrenderingcomponentmod.rs - renders the web page
 
 //region: use, const
-use crate::divcardmoniker;
-use crate::divfordebugging;
-use crate::divfullscreen;
-use crate::divgridcontainer;
-use crate::divplayeractions;
-use crate::divplayersandscores;
-use crate::divrulesanddescription;
-use crate::gamedata;
+use crate::divcardmonikermod;
+use crate::divfordebuggingmod;
+use crate::divfullscreenmod;
+use crate::divgridcontainermod;
+use crate::divplayeractionsmod;
+use crate::divplayersandscoresmod;
+use crate::divrulesanddescriptionmod;
+use crate::gamedatamod;
 use crate::logmod;
 //use crate::logmod;
 
@@ -25,11 +25,11 @@ use conv::{ConvAsUtil};
 ///Root Render Component: the card grid struct has all the needed data for play logic and rendering
 pub struct RootRenderingComponent {
     ///game data will be inside of Root
-    pub game_data: gamedata::GameData,
+    pub game_data: gamedatamod::GameData,
     ///subComponent: players and scores. The data is a cached copy of GameData.
-    pub cached_players_and_scores: Cached<divplayersandscores::PlayersAndScores>,
+    pub cached_players_and_scores: Cached<divplayersandscoresmod::PlayersAndScores>,
     ///subComponent: the static parts can be cached.
-    pub cached_rules_and_description: Cached<divrulesanddescription::RulesAndDescription>,
+    pub cached_rules_and_description: Cached<divrulesanddescriptionmod::RulesAndDescription>,
 }
 
 //region:RootRenderingComponent struct is the only persistent data we have in Rust Virtual Dom.dodrio
@@ -40,12 +40,12 @@ pub struct RootRenderingComponent {
 impl RootRenderingComponent {
     /// Construct a new `RootRenderingComponent` component. Only once at the beginning.
     pub fn new(ws: WebSocket, my_ws_uid: usize) -> Self {
-        let game_data = gamedata::GameData::new(ws, my_ws_uid);
+        let game_data = gamedatamod::GameData::new(ws, my_ws_uid);
 
-        let game_rule_01 = divrulesanddescription::RulesAndDescription {};
+        let game_rule_01 = divrulesanddescriptionmod::RulesAndDescription {};
         let cached_rules_and_description = Cached::new(game_rule_01);
         let cached_players_and_scores =
-            Cached::new(divplayersandscores::PlayersAndScores::new(my_ws_uid));
+            Cached::new(divplayersandscoresmod::PlayersAndScores::new(my_ws_uid));
 
         RootRenderingComponent {
             game_data,
@@ -72,7 +72,7 @@ impl RootRenderingComponent {
     }
     ///reset the data to replay the game
     pub fn reset(&mut self) {
-        self.game_data.card_grid_data = gamedata::GameData::prepare_for_empty();
+        self.game_data.card_grid_data = gamedatamod::GameData::prepare_for_empty();
         self.game_data.card_index_of_first_click = 0;
         self.game_data.card_index_of_second_click = 0;
         self.game_data.players.clear();
@@ -122,7 +122,7 @@ impl RootRenderingComponent {
             "error serde_json::from_str(players)"
         );
 
-        self.game_data.players_ws_uid = gamedata::prepare_players_ws_uid(&self.game_data.players);
+        self.game_data.players_ws_uid = gamedatamod::prepare_players_ws_uid(&self.game_data.players);
 
         //find my player number
         for index in 0..self.game_data.players.len() {
@@ -168,7 +168,7 @@ impl Render for RootRenderingComponent {
         //region: create the whole virtual dom. The verbose stuff is in private functions
 
         if self.game_data.error_text == "" {
-            let xmax_grid_size = divgridcontainer::max_grid_size(self);
+            let xmax_grid_size = divgridcontainermod::max_grid_size(self);
             let xmax_grid_size_add_two = unwrap!(xmax_grid_size.hor.checked_add(2));
             let xstyle2 = format!("width:{}px;", xmax_grid_size_add_two);
             //logmod::debug_write(&format!("width m_container {}", xmax_grid_size_add_two));
@@ -176,10 +176,10 @@ impl Render for RootRenderingComponent {
             //the main HTML render
             dodrio!(bump,
             <div class= "m_container" style={xstyle2}>
-                {vec![divcardmoniker::div_grid_card_moniker(self, bump)]}
+                {vec![divcardmonikermod::div_grid_card_moniker(self, bump)]}
                 {
                     if self.game_data.is_status_for_grid_container(){
-                        vec![divgridcontainer::div_grid_container(self,bump,&xmax_grid_size)]
+                        vec![divgridcontainermod::div_grid_container(self,bump,&xmax_grid_size)]
                     }else {
                         vec![dodrio!(bump,
                             <div>
@@ -187,7 +187,7 @@ impl Render for RootRenderingComponent {
                         )]
                     }
                 }
-                {vec![divplayeractions::div_player_actions_from_game_status(self, bump)]}
+                {vec![divplayeractionsmod::div_player_actions_from_game_status(self, bump)]}
                 {
                     if self.game_data.is_status_for_grid_container(){
                         vec![self.cached_players_and_scores.render(bump)]
@@ -198,8 +198,8 @@ impl Render for RootRenderingComponent {
                         )]
                     }
                 }
-                {vec![divfordebugging::div_for_debugging(self, bump)]}
-                {vec![divfullscreen::div_for_fullscreen(self, bump)]}
+                {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
+                {vec![divfullscreenmod::div_for_fullscreen(self, bump)]}
                 {vec![self.cached_rules_and_description.render(bump)]}
             </div>
             )

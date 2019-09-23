@@ -51,7 +51,7 @@
 
 //region: use
 //use crate::logmod;
-use crate::rootrenderingcomponent::RootRenderingComponent;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
 
 use unwrap::unwrap;
 use wasm_bindgen::JsValue;

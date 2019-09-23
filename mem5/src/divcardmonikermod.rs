@@ -1,7 +1,7 @@
-//! divcardmoniker.rs - renders the card moniker (card name/title)
+//! divcardmonikermod.rs - renders the card moniker (card name/title)
 
 //region: use, const
-use crate::rootrenderingcomponent::RootRenderingComponent;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
 
 use unwrap::unwrap;
 use dodrio::builder::text;

@@ -1,12 +1,12 @@
-//! statusinviteaskbegin.rs - code flow from this status
+//! statusinviteaskbeginmod.rs - code flow from this status
 
 //region: use
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::websocketcommunication;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::websocketcommunicationmod;
 use crate::logmod;
-use crate::fetchgameconfig;
+use crate::fetchgameconfigmod;
 use crate::localstoragemod;
-use crate::gamedata;
+use crate::gamedatamod;
 
 //use unwrap::unwrap;
 use dodrio::builder::text;
@@ -120,10 +120,10 @@ pub fn div_invite_ask_begin_on_click(
     rrc.game_data.asked_folder_name = folder_name.to_string();
 
     //async fetch_response() for gameconfig.json
-    fetchgameconfig::fetch_game_config_request(rrc, vdom_weak);
+    fetchgameconfigmod::fetch_game_config_request(rrc, vdom_weak);
     //send the msg MsgInvite
     logmod::debug_write(&format!("MsgInvite send {}", rrc.game_data.my_ws_uid));
-    websocketcommunication::ws_send_msg(
+    websocketcommunicationmod::ws_send_msg(
         &rrc.game_data.ws,
         &WsMessage::MsgInvite {
             my_ws_uid: rrc.game_data.my_ws_uid,
@@ -157,5 +157,5 @@ pub fn on_msg_invite(
     rrc.game_data.my_player_number = 2; //temporary number
     rrc.game_data.asked_folder_name = asked_folder_name;
     //always generate the json string for the server
-    rrc.game_data.players_ws_uid = gamedata::prepare_players_ws_uid(&rrc.game_data.players);
+    rrc.game_data.players_ws_uid = gamedatamod::prepare_players_ws_uid(&rrc.game_data.players);
 }

@@ -1,9 +1,9 @@
-//! statusplaybefore1stcard.rs - code flow from this status
+//! statusplaybefore1stcardmod.rs - code flow from this status
 
 //region: use
-use crate::gamedata::CardStatusCardFace;
-use crate::rootrenderingcomponent::RootRenderingComponent;
-use crate::websocketcommunication;
+use crate::gamedatamod::CardStatusCardFace;
+use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::websocketcommunicationmod;
 use crate::logmod;
 use mem5_common::{GameStatus, WsMessage};
 
@@ -47,14 +47,14 @@ where
     }
 }
 
-//div_grid_container() is in divgridcontainer.rs
+//div_grid_container() is in divgridcontainermod.rs
 
 /// on click
 pub fn on_click_1st_card(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
     //change card status and game status
     on_msg_player_click_1st_card(rrc,this_click_card_index);
     //region: send WsMessage over WebSocket
-    websocketcommunication::ws_send_msg(
+    websocketcommunicationmod::ws_send_msg(
         &rrc.game_data.ws,
         &WsMessage::MsgPlayerClick1stCard {
             my_ws_uid: rrc.game_data.my_ws_uid,
