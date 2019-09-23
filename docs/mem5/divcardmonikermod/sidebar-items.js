@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["GAME_TITLE","game title"]],"fn":[["div_grid_card_moniker","the header can show only the game title or two card monikers. Not everything together."]]});

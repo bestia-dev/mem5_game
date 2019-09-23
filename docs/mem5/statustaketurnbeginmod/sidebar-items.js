@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["div_take_turn_begin","render take turn"],["on_msg_take_turn_begin","on msg take turn begin"],["on_msg_take_turn_end","msg player change"],["take_turn_end","fn on change for both click and we msg."]]});

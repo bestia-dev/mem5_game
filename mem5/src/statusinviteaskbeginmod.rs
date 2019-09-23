@@ -44,7 +44,7 @@ where
             <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
                 //show Ask Player2 to Play!
-                bumpalo::format!(in bump, "MsgInvite for {} !", folder_name_clone2)
+                bumpalo::format!(in bump, "Invite for {} !", folder_name_clone2)
                     .into_bump_str(),
                 )]}
             </h2>

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["button_for_fullscreen","render a fullscreen button on android, but not for iphone"],["div_for_fullscreen","information for fullscreen"],["is_iphone","detect iphone"]]});

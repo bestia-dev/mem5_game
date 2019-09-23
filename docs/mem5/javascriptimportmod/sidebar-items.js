@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["do_fullscreen","do full screen function imported from javascript"],["javascriptdofullscreen","the name of the extern javascript function"]]});

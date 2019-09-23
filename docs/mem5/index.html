@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `mem5` crate."><meta name="keywords" content="rust, rustlang, rust-lang, mem5"><title>mem5 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../mem5/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><p class='location'>Crate mem5</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all mem5's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'mem5', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/mem5/lib.rs.html#2-334' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>mem5</a></span></h1><div class='docblock'><h1 id="mem5" class="section-header"><a href="#mem5">mem5</a></h1>
+<p>mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio and WebSocket communication</p>
+<p>version: 19.9.23<br />
+Look also at the workspace readme on <a href="https://github.com/LucianoBestia/mem5_game">https://github.com/LucianoBestia/mem5_game</a></p>
+<h2 id="idea" class="section-header"><a href="#idea">Idea</a></h2>
+<p>Playing the memory game alone is boring.<br />
+Playing it with friends is better.<br />
+But if all friends just stare in their smartphones, it is still boring.<br />
+What makes memory games (and other board games) entertaining is the company of friends.<br />
+There must be many friends around the table watching one another and stealing moves and laughing and screaming at each other.<br />
+Today I assume everybody has a decent smartphone. If all friends open the mem5 game and put their smartphones on the center of the table one near the other so that everybody can see them and touch them, this is the closest it gets to a classic board game.<br />
+All the phones will have a small card grid (ex. 3x3). But the combined card grid from all these phones together is not so small anymore. It is now much more interesting to play for the players.<br />
+It can be played with as many friends as there are: 3,4,5,...<br />
+More friends - more fun.</p>
+<h2 id="rust-and-wasmwebassembly" class="section-header"><a href="#rust-and-wasmwebassembly">Rust and Wasm/WebAssembly</a></h2>
+<p>Rust is a pretty new language created by Mozilla for really low level programming.<br />
+It is a step forward from the C language with functionality and features that are best practice today.<br />
+It is pretty hard to learn. Some concepts are so different from other languages it makes it
+hard for beginners. Lifetimes are the strangest and most confusing concept.<br />
+The Rust language has been made from the ground up with an ecosystem that makes it productive.<br />
+The language and most of the libraries are Open Source. That is good and bad, but mostly good.<br />
+Rust is the best language today to compile into Wasm/WebAssembly.<br />
+That compiled code works inside a browser directly with the JavaScript engine.<br />
+So finally no need for JavaScript to make cross-platform applications inside browsers.<br />
+I have a lot of hope here.</p>
+<h2 id="virtual-dom" class="section-header"><a href="#virtual-dom">Virtual DOM</a></h2>
+<p>Constructing a HTML page with Virtual DOM (vdom) is easier<br />
+because it is rendered completely on every tick (animation frame).<br />
+Sometimes is hard for the developer to think what should change in the UI when some data changes.<br />
+The data can change from many different events and very chaotically (asynchronously).<br />
+It is easier to think how to render the complete DOM for the given data.<br />
+The Rust Dodrio library has ticks, time intervals when it do something.<br />
+If a rendering is scheduled, it will be done on the next tick.<br />
+If a rendering is not scheduled I believe nothing happens.<br />
+This enables asynchronous changing of data and rendering. They cannot happen theoretically in the
+same exact moment. So, no data race here.<br />
+When GameData change and we know it will affect the DOM, then rendering must be scheduled.<br />
+The main component of the Dodrio Virtual Dom is the root rendering component.<br />
+It is the component that renders the complete user interface (HTML).<br />
+The root rendering component is easily splitted  into sub-components.<br />
+<img src="https://github.com/LucianoBestia/mem5_game/raw/master/docs/img/subcomponents.png" alt="subcomponents" /><br />
+Some subcomponents don't need any extra data and can be coded as simple functions.<br />
+The subcomponent &quot;players and scores&quot; has its own data. This data is cached from the GameData.<br />
+When this data does not match, invalidation is called to cache them.
+That also schedules the rendering of the subcomponent.<br />
+If no data has changed, the cached subcomponent Node is used. This is more efficient and performant.</p>
+<h2 id="gamedata" class="section-header"><a href="#gamedata">GameData</a></h2>
+<p>All the game data are in this simple struct.</p>
+<h2 id="websocket-communication" class="section-header"><a href="#websocket-communication">WebSocket communication</a></h2>
+<p>HTML5 has finally bring a true stateful bidirectional communication.<br />
+Most of the programming problems are more easily and effectively solved this way.<br />
+The old unidirectional stateless communication is very good for static html pages,<br />
+but is terrible for any dynamic page. The WebSocket is very rudimental and often the<br />
+communication breaks for many different reasons. The programmer must deal with it inside the application.<br />
+The protocol has nothing that can be used to deal with reconnections.<br />
+I send simple structs text messages in json format between the players.<br />
+They are all in the WsMsg enum and therefore interchangeable.<br />
+The WebSocket server is coded especially for this game and recognizes 3 types of msg:</p>
+<ul>
+<li>msg to broadcast to every other player</li>
+<li>msg to send only to the actual game players</li>
+</ul>
+<h2 id="ws-reconnect" class="section-header"><a href="#ws-reconnect">WS reconnect</a></h2>
+<p>TODO: It looks that plain web sockets have often connection problems and they disconnect here and there. Creating a good reconnect is pretty challenging.</p>
+<h2 id="the-game-flow" class="section-header"><a href="#the-game-flow">The game flow</a></h2>
+<p>In a few words: Status1 - User action - Status2, Status1 - WsMessage - Status2
+In one moment the game is in a certain Game Status. The user then makes an action.
+This action changes the GameData and the GameStatus.<br />
+Then a message is sent to other players so they can also change their local GameData and GameStatus.<br />
+The rendering is scheduled and it will happen shortly (async).</p>
+<table><thead><tr><th>Game Status1</th><th>Render</th><th>User action</th><th>Condition</th><th>GameStatus2 t.p.</th><th>Sends Msg</th><th>On rcv Msg o.p.</th><th>GameStatus2 o.p.</th></tr></thead><tbody>
+<tr><td>StatusInviteAskBegin</td><td>div_invite_ask_begin</td><td>div_invite_ask_begin_on_click</td><td>-</td><td>StatusInviteAsking</td><td>MsgInvite</td><td>on_msg_invite</td><td>StatusInviteAsked</td></tr>
+<tr><td>StatusInviteAsked</td><td>div_invite_asked, div_play_accepted</td><td>div_invite_asked_on_click</td><td>-</td><td>StatusPlayAccepted</td><td>MsgPlayAccept</td><td>on_msg_play_accept</td><td>-</td></tr>
+<tr><td>StatusInviteAsking</td><td>div_invite_asking</td><td>game_data_init</td><td>-</td><td>StatusPlayBefore1stCard</td><td>MsgGameDataInit</td><td>on_msg_game_data_init</td><td>StatusPlayBefore1stCard</td></tr>
+<tr><td>StatusPlayBefore1stCard</td><td>div_grid_container</td><td>div_grid_item_on_click, on_click_1st_card();</td><td>-</td><td>StatusPlayBefore2ndCard</td><td>MsgPlayerClick1stCard</td><td>on_msg_player_click_1st_card</td><td>StatusPlayBefore2ndCard</td></tr>
+<tr><td>StatusPlayBefore2ndCard</td><td>div_grid_container</td><td>div_grid_item_on_click, on_click_2nd_card();</td><td>If card match and points&lt;all point</td><td>StatusPlayBefore1stCard</td><td>MsgPlayerClick2ndCardPoint</td><td>on_msg_player_click_2nd_card</td><td>StatusPlayBefore1stCard</td></tr>
+<tr><td>-II-</td><td>-II-</td><td>-II-</td><td>If card match and points=&gt;all points</td><td>StatusGameOverPlayAgainBegin</td><td>StatusGameOverPlayAgainBegin</td><td>on_msg_play_again</td><td>StatusGameOverPlayAgainBegin</td></tr>
+<tr><td>-II-</td><td>-II-</td><td>-II-</td><td>else</td><td>MsgPlayerClick2ndCardTakeTurnBegin</td><td>MsgPlayerClick2ndCardTakeTurnBegin</td><td>on_msg_take_turn</td><td>MsgPlayerClick2ndCardTakeTurnBegin</td></tr>
+<tr><td>MsgPlayerClick2ndCardTakeTurnBegin</td><td>div_take_turn_begin</td><td>div_take_turn_begin_on_click</td><td>-</td><td>StatusPlayBefore1stCard</td><td>StatusTakeTurnEnd</td><td>on_msg_take_turn_end</td><td>StatusPlayBefore1stCard, the next player</td></tr>
+<tr><td>StatusGameOverPlayAgainBegin</td><td>div_play_again</td><td>window.location().reload()</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table>
+<p>t.p. = this player,   o.p. = other players,  rrc = rrc, rcv = receive</p>
+<ol>
+<li>Some actions can have different results. For example the condition card match or card don’t match.</li>
+<li>one action must be only for one status1. This action changes Status for this player and sends Msg to other players.</li>
+<li>on receive msg can produce only one status2.</li>
+<li>in this table I ignore msgs for the server like GetConfig</li>
+</ol>
+<h2 id="futures-and-promises-rust-and-javascript" class="section-header"><a href="#futures-and-promises-rust-and-javascript">Futures and Promises, Rust and JavaScript</a></h2>
+<p>JavaScript is all asynchronous. Wasm is nothing else then a shortcut to the JavaScript engine.<br />
+So everything is asynchronous too. This is pretty hard to grasp. Everything is Promises and Futures.<br />
+There is a constant jumping from thinking in Rust to thinking is JavaScript and back. That is pretty confusing.<br />
+JavaScript does not have a good idea of Rust datatypes. All there is is a generic JSValue type.<br />
+The library <code>wasm-bindgen</code> has made a fantastic job of giving Rust the ability to call
+anything JavaScript can call, but the way of doing it is sometimes very hard to understand.</p>
+<h2 id="typed-html" class="section-header"><a href="#typed-html">Typed html</a></h2>
+<p>Writing html inside Rust code is much easier with the macro <code>html!</code> from the <code>crate typed-html</code><br />
+<a href="https://github.com/bodil/typed-html">https://github.com/bodil/typed-html</a><br />
+It has also a macro <code>dodrio!</code> created exclusively for the dodrio vdom.<br />
+Everything is done in compile time, so the runtime is nothing slower.</p>
+<h2 id="browser-console" class="section-header"><a href="#browser-console">Browser console</a></h2>
+<p>At least in modern browsers (Firefox and Chrome) we have the developer tools F12 and there is a
+console we can output to. So we can debug what is going on with our Wasm program.
+But not on smartphones that are the only target for this app.</p>
+<h2 id="safari-on-ios-and-fullscreen" class="section-header"><a href="#safari-on-ios-and-fullscreen">Safari on iOS and FullScreen</a></h2>
+<p>Apple is very restrictive and does not allow fullscreen Safari on iPhones.<br />
+The workaround is to make a shortcut for the webapp on the homescreen.</p>
+<h2 id="mem5-as-webapp-on-homescreen" class="section-header"><a href="#mem5-as-webapp-on-homescreen">mem5 as webapp on HomeScreen</a></h2>
+<p>On both android and iPhone is possible to &quot;Add to homescreen&quot; the webapp.<br />
+Then it will open in fullscreen and be beautiful.<br />
+In safari the share icon (a square with arrow up) has &quot;Add to home screen&quot;.
+<a href="https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html">https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html</a></p>
+<h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<p>Rust code is splitted into modules. They are not exactly like classes, but can be similar.<br />
+Rust has much more freedom to group code in different ways. So that is best suits the problem.<br />
+I splitted the rendering into sub-components.<br />
+And then I splitted the User Actions by the Status1 to easy follow the flow of the game.</p>
+<h2 id="clippy" class="section-header"><a href="#clippy">Clippy</a></h2>
+<p>Clippy is very useful to teach us how to program in a better way.<br />
+These are not syntax errors, but hints how to do it in a more Rusty way (idiomatic).<br />
+Some lints are problematic and they are explicitly allowed here.</p>
+<h2 id="cargo-make" class="section-header"><a href="#cargo-make">Cargo make</a></h2>
+<p>I prepared some flows and tasks for Cargo make.<br />
+<code>cargo make</code> - lists the possible available/public flows/tasks<br />
+<code>cargo make dev</code> - builds the development version and runs the server and the browser<br />
+<code>cargo make release</code> - builds the release version and runs the server and the browser<br />
+<code>cargo make doc</code> - build the <code>/target/doc</code> folder and copy to the <code>../docs</code> folder.  </p>
+</div><h2 id='modules-1' class='section-header'><a href="#modules-1">Modules</a></h2>
+<table><tr class='module-item'><td><a class="mod" href="divcardmonikermod/index.html" title='mem5::divcardmonikermod mod'>divcardmonikermod</a></td><td class='docblock-short'><p>divcardmonikermod.rs - renders the card moniker (card name/title)</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="divfordebuggingmod/index.html" title='mem5::divfordebuggingmod mod'>divfordebuggingmod</a></td><td class='docblock-short'><p>divfordebuggingmod.rs - information for debugging</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="divfullscreenmod/index.html" title='mem5::divfullscreenmod mod'>divfullscreenmod</a></td><td class='docblock-short'><p>divfullscreenmod.rs - instruction and button for fullscreen</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="divgridcontainermod/index.html" title='mem5::divgridcontainermod mod'>divgridcontainermod</a></td><td class='docblock-short'><p>divgridcontainermod.rs - renders the grid container with the images
+and most important the on click event</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="divplayeractionsmod/index.html" title='mem5::divplayeractionsmod mod'>divplayeractionsmod</a></td><td class='docblock-short'><p>divplayeractionsmod.rs - renders the div to inform player what to do next
+and get a click action from the user</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="divplayersandscoresmod/index.html" title='mem5::divplayersandscoresmod mod'>divplayersandscoresmod</a></td><td class='docblock-short'><p>divplayersandscoresmod.rs - renders the div that shows players and scores</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="divrulesanddescriptionmod/index.html" title='mem5::divrulesanddescriptionmod mod'>divrulesanddescriptionmod</a></td><td class='docblock-short'><p>divrulesanddescriptionmod.rs - renders the div that shows rules and descriptions
+All is a static content. Great for implementing dodrio cache.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="fetchgameconfigmod/index.html" title='mem5::fetchgameconfigmod mod'>fetchgameconfigmod</a></td><td class='docblock-short'><p>statusinviteaskbeginmod.rs - code flow from this status</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="fetchmod/index.html" title='mem5::fetchmod mod'>fetchmod</a></td><td class='docblock-short'><p><strong>fetchmod - isolate/encapsulate fetch api in a module because it is all async</strong></p>
+</td></tr><tr class='module-item'><td><a class="mod" href="gamedatamod/index.html" title='mem5::gamedatamod mod'>gamedatamod</a></td><td class='docblock-short'><p>game data - structs and methods around game data</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="javascriptimportmod/index.html" title='mem5::javascriptimportmod mod'>javascriptimportmod</a></td><td class='docblock-short'><p>jaascriptimport.rs - one single module to import javascript functions and objects
+this are examples how to call a javascript function from rust</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="localstoragemod/index.html" title='mem5::localstoragemod mod'>localstoragemod</a></td><td class='docblock-short'><p><strong>localstoragemod.rs - the player nickname is saved in the LocalStorage of the browser</strong>  </p>
+</td></tr><tr class='module-item'><td><a class="mod" href="logmod/index.html" title='mem5::logmod mod'>logmod</a></td><td class='docblock-short'><p>logmod.rs - logging in wasm</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="rootrenderingcomponentmod/index.html" title='mem5::rootrenderingcomponentmod mod'>rootrenderingcomponentmod</a></td><td class='docblock-short'><p>rootrenderingcomponentmod.rs - renders the web page</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="sessionstoragemod/index.html" title='mem5::sessionstoragemod mod'>sessionstoragemod</a></td><td class='docblock-short'><p><strong>sessionstoragemod.rs - for debugging texts accessible everywhere</strong>  </p>
+</td></tr><tr class='module-item'><td><a class="mod" href="statusinviteaskbeginmod/index.html" title='mem5::statusinviteaskbeginmod mod'>statusinviteaskbeginmod</a></td><td class='docblock-short'><p>statusinviteaskbeginmod.rs - code flow from this status</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="statusinviteaskedmod/index.html" title='mem5::statusinviteaskedmod mod'>statusinviteaskedmod</a></td><td class='docblock-short'><p>statusinviteaskedmod.rs - code flow from this status</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="statusinviteaskingmod/index.html" title='mem5::statusinviteaskingmod mod'>statusinviteaskingmod</a></td><td class='docblock-short'><p>statusinviteaskingmod.rs - code flow from this status</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="statusplayagainmod/index.html" title='mem5::statusplayagainmod mod'>statusplayagainmod</a></td><td class='docblock-short'><p>statusplayagainmod.rs - code flow from this status</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="statusplaybefore1stcardmod/index.html" title='mem5::statusplaybefore1stcardmod mod'>statusplaybefore1stcardmod</a></td><td class='docblock-short'><p>statusplaybefore1stcardmod.rs - code flow from this status</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="statusplaybefore2ndcardmod/index.html" title='mem5::statusplaybefore2ndcardmod mod'>statusplaybefore2ndcardmod</a></td><td class='docblock-short'><p>statusplaybefore2ndcardmod.rs - code flow from this status</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="statustaketurnbeginmod/index.html" title='mem5::statustaketurnbeginmod mod'>statustaketurnbeginmod</a></td><td class='docblock-short'><p>statustaketurnbeginmod.rs - code flow from this status</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="websocketcommunicationmod/index.html" title='mem5::websocketcommunicationmod mod'>websocketcommunicationmod</a></td><td class='docblock-short'><p>WebSocketcommunication.rs  - module that cares about WebSocket communication</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="websocketreconnectmod/index.html" title='mem5::websocketreconnectmod mod'>websocketreconnectmod</a></td><td class='docblock-short'><p>websocketreconnectmod.rs - reconnection for websocket must be part of the application.</p>
+</td></tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table><tr class='module-item'><td><a class="fn" href="fn.ordinal_numbers.html" title='mem5::ordinal_numbers fn'>ordinal_numbers</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="fn" href="fn.run.html" title='mem5::run fn'>run</a></td><td class='docblock-short'><p>To start the Wasm application, wasm_bindgen runs this functions</p>
+</td></tr><tr class='module-item'><td><a class="fn" href="fn.session_storage.html" title='mem5::session_storage fn'>session_storage</a></td><td class='docblock-short'><p>Get the top-level window's session storage.
+TODO: to save user preferences maybe?</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "mem5";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

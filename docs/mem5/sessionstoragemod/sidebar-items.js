@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["add_to_begin_of_debug_text","add to begin of debug text"],["get_debug_text","get debug text from session storage"],["utf8_truncate","utf8 truncate"]]});

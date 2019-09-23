@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["div_click_1st_card","render Play or Wait"],["on_click_1st_card","on click"],["on_msg_player_click_1st_card","msg player click"]]});
