@@ -2,7 +2,6 @@
 
 //region: use
 use crate::localstoragemod;
-use crate::logmod;
 
 use serde_derive::{Serialize, Deserialize};
 use unwrap::unwrap;
@@ -127,12 +126,13 @@ impl GameData {
         let rest =
             unwrap!(random_count.checked_sub(unwrap!(item_count_minus_one.checked_mul(multiple))));
 
-        logmod::debug_write(&format!(
-            "item_count_minus_one {}  players_count {} cards_count {} random_count {} multiple {} rest {}",
-            item_count_minus_one,players_count,cards_count,random_count,multiple,
-            rest,
-        ));
-
+        /*
+                logmod::debug_write(&format!(
+                    "item_count_minus_one {}  players_count {} cards_count {} random_count {} multiple {} rest {}",
+                    item_count_minus_one,players_count,cards_count,random_count,multiple,
+                    rest,
+                ));
+        */
         //region: find random numbers between 1 and item_count
         //vec_of_random_numbers is 0 based
         let mut vec_of_random_numbers = Vec::new();
@@ -190,11 +190,13 @@ impl GameData {
         }
         //endregion
         self.card_grid_data = card_grid_data;
+        /*
         logmod::debug_write(&format!(
             "vec_of_random_numbers.len {} card_grid_data.len {}",
             vec_of_random_numbers.len(),
             self.card_grid_data.len()
         ));
+        */
     }
     ///asociated function: before Accept, there are not random numbers, just default cards.
     pub fn prepare_for_empty() -> Vec<Card> {
@@ -264,7 +266,7 @@ impl GameData {
             GameStatus::StatusPlayBefore1stCard
             | GameStatus::StatusPlayBefore2ndCard
             | GameStatus::StatusTakeTurnBegin
-            | GameStatus::StatusTakeTurnEnd
+            | GameStatus::MsgTakeTurnEnd
             | GameStatus::StatusGameOverPlayAgainBegin => true,
             _ => false,
         }
@@ -272,7 +274,7 @@ impl GameData {
 }
 ///from the vector of players prepare a json string for the ws server
 /// so that it can send the msgs only to the players
-pub fn prepare_players_ws_uid(players:&[Player]) -> String {
+pub fn prepare_players_ws_uid(players: &[Player]) -> String {
     let mut players_ws_uid = Vec::new();
     for pl in players {
         players_ws_uid.push(pl.ws_uid);

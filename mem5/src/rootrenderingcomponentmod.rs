@@ -9,8 +9,6 @@ use crate::divplayeractionsmod;
 use crate::divplayersandscoresmod;
 use crate::divrulesanddescriptionmod;
 use crate::gamedatamod;
-use crate::logmod;
-//use crate::logmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -103,7 +101,7 @@ impl RootRenderingComponent {
         game_config: &str,
         players: &str,
     ) {
-        logmod::debug_write(&format!("on_msg_game_data_init {}", players));
+        //logmod::debug_write(&format!("on_msg_game_data_init {}", players));
         self.game_data.content_folder_name = self.game_data.asked_folder_name.clone();
         self.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
         self.game_data.player_turn = 1;
@@ -122,7 +120,8 @@ impl RootRenderingComponent {
             "error serde_json::from_str(players)"
         );
 
-        self.game_data.players_ws_uid = gamedatamod::prepare_players_ws_uid(&self.game_data.players);
+        self.game_data.players_ws_uid =
+            gamedatamod::prepare_players_ws_uid(&self.game_data.players);
 
         //find my player number
         for index in 0..self.game_data.players.len() {

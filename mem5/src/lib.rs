@@ -94,7 +94,7 @@
 //! | StatusPlayBefore2ndCard  | div_grid_container         | div_grid_item_on_click, on_click_2nd_card();| If card match and points<all point   | StatusPlayBefore1stCard  | MsgPlayerClick2ndCardPoint | on_msg_player_click_2nd_card | StatusPlayBefore1stCard                  |
 //! | -II-               | -II-                       | -II-                                        | If card match and points=>all points | StatusGameOverPlayAgainBegin | StatusGameOverPlayAgainBegin  | on_msg_play_again   | StatusGameOverPlayAgainBegin             |
 //! | -II-               | -II-                       | -II-                                        | else                                 | MsgPlayerClick2ndCardTakeTurnBegin      | MsgPlayerClick2ndCardTakeTurnBegin      | on_msg_take_turn             | MsgPlayerClick2ndCardTakeTurnBegin                      |
-//! | MsgPlayerClick2ndCardTakeTurnBegin      | div_take_turn_begin        | div_take_turn_begin_on_click                | -                                    | StatusPlayBefore1stCard  | StatusTakeTurnEnd        | on_msg_take_turn_end         | StatusPlayBefore1stCard, the next player |
+//! | MsgPlayerClick2ndCardTakeTurnBegin      | div_take_turn_begin        | div_take_turn_begin_on_click                | -                                    | StatusPlayBefore1stCard  | MsgTakeTurnEnd        | on_msg_take_turn_end         | StatusPlayBefore1stCard, the next player |
 //! | StatusGameOverPlayAgainBegin | div_play_again         | window.location().reload()                  | -                                    | -                  | -                  | -                            | -                                  |
 //! |  |  |  |  |  |  |  |  |
 //! 
@@ -310,7 +310,7 @@ pub fn session_storage() -> web_sys::Storage {
 }
 //endregion
 
-//format ordinal numbers as string 1st, 2nd,3rd,...
+///format ordinal numbers as string 1st, 2nd,3rd,...
 pub fn ordinal_numbers(number:usize)->String{
     //these are only ascii characters, so no problem with utf_8
     let mut ord_str = format!("{}",number);

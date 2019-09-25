@@ -49,6 +49,7 @@ use serde_derive::{Serialize, Deserialize};
 //endregion
 
 ///`WsMessage` enum for WebSocket
+#[allow(clippy::pub_enum_variant_names)]
 #[derive(Serialize, Deserialize)]
 pub enum WsMessage {
     ///MsgDummy
@@ -133,7 +134,7 @@ pub enum WsMessage {
         players_ws_uid: String,
     },
     ///player change
-    StatusTakeTurnEnd {
+    MsgTakeTurnEnd {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
@@ -161,7 +162,7 @@ pub enum GameStatus {
     ///take turn begin
     StatusTakeTurnBegin,
     ///take turn end
-    StatusTakeTurnEnd,
+    MsgTakeTurnEnd,
     ///end game
     StatusGameOverPlayAgainBegin,
     ///StatusReconnect after a lost connection

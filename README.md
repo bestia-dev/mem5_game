@@ -26,7 +26,10 @@ I prepared some flows and tasks for Cargo make for the workspace.
 `cargo make` - lists the possible available/public flows/tasks  
 `cargo make dev` - builds the development version and runs the server and the browser  
 `cargo make release` - builds the release version and runs the server and the browser  
-`cargo make doc` - build the `/target/docs` folder and copy to the `/docs` folder.  
+`cargo make doc` - build the `/target/docs` folder and copy to the `/docs` folder  
+`cargo make sshadd` - adds identity to ssh-agent for git and publish operations  
+`cargo make gitpush` - push the commits to github  
+`cargo make publish` - publish the webfolder to google vm  
 
 ## TODO and CHANGELOG
 

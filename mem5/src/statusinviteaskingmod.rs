@@ -3,7 +3,6 @@
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
-use crate::logmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -28,7 +27,7 @@ where
                         root.unwrap_mut::<RootRenderingComponent>();
                     //region: send WsMessage over WebSocket
                     rrc.game_data_init();
-                    logmod::debug_write(&format!("MsgGameDataInit send {}",rrc.game_data.players_ws_uid));
+                    //logmod::debug_write(&format!("MsgGameDataInit send {}",rrc.game_data.players_ws_uid));
                     websocketcommunicationmod::ws_send_msg(
                         &rrc.game_data.ws,
                         &WsMessage::MsgGameDataInit {

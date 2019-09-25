@@ -5,7 +5,6 @@ use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
 use mem5_common::{GameStatus, WsMessage};
 use crate::gamedatamod::{CardStatusCardFace};
-use crate::logmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -23,7 +22,7 @@ pub fn div_take_turn_begin<'a, 'bump>(
 where
     'a: 'bump,
 {
-    logmod::debug_write(&format!("player_turn {}  my_player_number {}", &rrc.game_data.player_turn,&rrc.game_data.my_player_number));
+    //logmod::debug_write(&format!("player_turn {}  my_player_number {}", &rrc.game_data.player_turn,&rrc.game_data.my_player_number));
     let next_player = if rrc.game_data.player_turn < rrc.game_data.players.len() {
         unwrap!(rrc.game_data.player_turn.checked_add(1))
     } else {
@@ -38,7 +37,7 @@ where
                     //region: send WsMessage over WebSocket
                     websocketcommunicationmod::ws_send_msg(
                         &rrc.game_data.ws,
-                        &WsMessage::StatusTakeTurnEnd {
+                        &WsMessage::MsgTakeTurnEnd {
                             my_ws_uid: rrc.game_data.my_ws_uid,
                             players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
                         },
@@ -50,7 +49,7 @@ where
                 }}>
             <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
-                    bumpalo::format!(in bump, "{} {}, click here to take your turn !", 
+                    bumpalo::format!(in bump, "{} {}, click here to take your turn !",
                         unwrap!(rrc.game_data.players.get(rrc.game_data.my_player_number-1)).nickname,
                         crate::ordinal_numbers(rrc.game_data.my_player_number)
                     )
@@ -63,7 +62,7 @@ where
         //return wait for the other player
         dodrio!(bump,
         <h2 id="ws_elem" style= "color:red;">
-            {vec![text(bumpalo::format!(in bump, "Wait for {} {} !", 
+            {vec![text(bumpalo::format!(in bump, "Wait for {} {} !",
             unwrap!(rrc.game_data.players.get(next_player-1)).nickname,
             crate::ordinal_numbers(next_player)
             ).into_bump_str())]}
@@ -101,11 +100,8 @@ pub fn take_turn_end(rrc: &mut RootRenderingComponent) {
 }
 
 ///on msg take turn begin
-pub fn on_msg_take_turn_begin(
-    rrc: &mut RootRenderingComponent,
-    card_index_of_second_click: usize,
-) {
-    logmod::debug_write("on_msg_take_turn_begin");
+pub fn on_msg_take_turn_begin(rrc: &mut RootRenderingComponent, card_index_of_second_click: usize) {
+    //logmod::debug_write("on_msg_take_turn_begin");
     rrc.game_data.card_index_of_second_click = card_index_of_second_click;
     //flip the card up
     unwrap!(

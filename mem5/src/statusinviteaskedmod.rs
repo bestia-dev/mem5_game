@@ -3,7 +3,6 @@
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
-use crate::logmod;
 use crate::gamedatamod;
 
 use unwrap::unwrap;
@@ -32,7 +31,7 @@ where
         <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
                     //show Ask Player2 to Play!
-                    bumpalo::format!(in bump, "{}, click here to Accept {} from {}!", 
+                    bumpalo::format!(in bump, "{}, click here to Accept {} from {}!",
                     rrc.game_data.my_nickname,
                     rrc.game_data.asked_folder_name,
                     unwrap!(rrc.game_data.players.get(0)).nickname
@@ -47,7 +46,7 @@ where
 /// on click
 pub fn div_invite_asked_on_click(rrc: &mut RootRenderingComponent) {
     rrc.game_data.game_status = GameStatus::StatusPlayAccepted;
-    logmod::debug_write(&format!("StatusPlayAccepted send {}",rrc.game_data.players_ws_uid));
+    //logmod::debug_write(&format!("StatusPlayAccepted send {}",rrc.game_data.players_ws_uid));
     websocketcommunicationmod::ws_send_msg(
         &rrc.game_data.ws,
         &WsMessage::MsgPlayAccept {
@@ -59,8 +58,12 @@ pub fn div_invite_asked_on_click(rrc: &mut RootRenderingComponent) {
 }
 
 ///msg accept play
-pub fn on_msg_play_accept(rrc: &mut RootRenderingComponent, his_ws_uid: usize, his_nickname: String) {
-    logmod::debug_write(&format!("on_msg_play_accept {}",his_ws_uid));
+pub fn on_msg_play_accept(
+    rrc: &mut RootRenderingComponent,
+    his_ws_uid: usize,
+    his_nickname: String,
+) {
+    //logmod::debug_write(&format!("on_msg_play_accept {}",his_ws_uid));
     if rrc.game_data.my_player_number == 1 {
         rrc.game_data.players.push(Player {
             ws_uid: his_ws_uid,

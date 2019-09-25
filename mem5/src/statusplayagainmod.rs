@@ -3,7 +3,6 @@
 //region: use
 use mem5_common::GameStatus;
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
-use crate::logmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -13,10 +12,7 @@ use typed_html::dodrio;
 //endregion
 
 ///play again
-pub fn div_play_again<'a, 'bump>(
-    _rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
-) -> Node<'bump>
+pub fn div_play_again<'a, 'bump>(_rrc: &'a RootRenderingComponent, bump: &'bump Bump) -> Node<'bump>
 where
     'a: 'bump,
 {
@@ -39,12 +35,9 @@ where
 }
 
 ///msg player click
-pub fn on_msg_play_again(
-    rrc: &mut RootRenderingComponent
-) {
-    logmod::debug_write("on_msg_play_again");
+pub fn on_msg_play_again(rrc: &mut RootRenderingComponent) {
+    //logmod::debug_write("on_msg_play_again");
     //The game is over and the question Play again?
     rrc.game_data.game_status = GameStatus::StatusGameOverPlayAgainBegin;
     rrc.check_invalidate_for_all_components();
 }
-

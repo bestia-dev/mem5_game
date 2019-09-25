@@ -90,20 +90,20 @@ pub fn card_click_2nd_card(rrc: &mut RootRenderingComponent, this_click_card_ind
         //endregion
 
         //if all the cards are permanenty up, this is the end of the game
-        let mut all_permanently = true;
+        let mut is_all_permanently = true;
         //the zero element is exceptional, but the iterator uses it
         unwrap!(rrc.game_data.card_grid_data.get_mut(0)).status = CardStatusCardFace::UpPermanently;
 
         for x in &rrc.game_data.card_grid_data {
             match x.status {
                 CardStatusCardFace::UpPermanently => {}
-                _ => {
-                    all_permanently = false;
+                CardStatusCardFace::Down | CardStatusCardFace::UpTemporary => {
+                    is_all_permanently = false;
                     break;
                 }
             }
         }
-        if all_permanently == true {
+        if is_all_permanently {
             statusplayagainmod::on_msg_play_again(rrc);
             //send message
             websocketcommunicationmod::ws_send_msg(

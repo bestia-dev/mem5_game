@@ -3,7 +3,6 @@
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
-use crate::logmod;
 use crate::fetchgameconfigmod;
 use crate::localstoragemod;
 use crate::gamedatamod;
@@ -122,7 +121,7 @@ pub fn div_invite_ask_begin_on_click(
     //async fetch_response() for gameconfig.json
     fetchgameconfigmod::fetch_game_config_request(rrc, vdom_weak);
     //send the msg MsgInvite
-    logmod::debug_write(&format!("MsgInvite send {}", rrc.game_data.my_ws_uid));
+    //logmod::debug_write(&format!("MsgInvite send {}", rrc.game_data.my_ws_uid));
     websocketcommunicationmod::ws_send_msg(
         &rrc.game_data.ws,
         &WsMessage::MsgInvite {
@@ -140,7 +139,7 @@ pub fn on_msg_invite(
     his_nickname: String,
     asked_folder_name: String,
 ) {
-    logmod::debug_write(&format!("on_msg_invite {}", his_ws_uid));
+    //logmod::debug_write(&format!("on_msg_invite {}", his_ws_uid));
     rrc.reset();
     rrc.game_data.game_status = GameStatus::StatusInviteAsked;
     //the first player is the initiator

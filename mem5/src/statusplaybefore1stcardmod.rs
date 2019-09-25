@@ -4,7 +4,6 @@
 use crate::gamedatamod::CardStatusCardFace;
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
-use crate::logmod;
 use mem5_common::{GameStatus, WsMessage};
 
 use unwrap::unwrap;
@@ -52,7 +51,7 @@ where
 /// on click
 pub fn on_click_1st_card(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
     //change card status and game status
-    on_msg_player_click_1st_card(rrc,this_click_card_index);
+    on_msg_player_click_1st_card(rrc, this_click_card_index);
     //region: send WsMessage over WebSocket
     websocketcommunicationmod::ws_send_msg(
         &rrc.game_data.ws,
@@ -70,7 +69,7 @@ pub fn on_msg_player_click_1st_card(
     rrc: &mut RootRenderingComponent,
     card_index_of_first_click: usize,
 ) {
-    logmod::debug_write("on_msg_player_click_1st_card");
+    //logmod::debug_write("on_msg_player_click_1st_card");
     rrc.game_data.card_index_of_first_click = card_index_of_first_click;
     //flip the card up
     unwrap!(rrc
