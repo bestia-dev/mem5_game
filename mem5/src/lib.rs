@@ -229,6 +229,7 @@ mod divplayeractionsmod;
 mod divplayersandscoresmod;
 mod divrulesanddescriptionmod;
 mod fetchmod;
+mod fetchgamesmod;
 mod fetchgameconfigmod;
 mod gamedatamod;
 mod javascriptimportmod;
@@ -288,12 +289,16 @@ pub fn run() -> Result<(), JsValue> {
 
     let mut rrc =
         rootrenderingcomponentmod::RootRenderingComponent::new(ws_c, my_ws_uid);
-    rrc.game_data.href = location_href;
+    rrc.game_data.href = location_href.to_string();
 
     // Mount the component to the `<div id="div_for_virtual_dom">`.
     let vdom = dodrio::Vdom::new(&div_for_virtual_dom, rrc);
 
     websocketcommunicationmod::setup_all_ws_events(&ws, vdom.weak());
+
+    //async fetch_response() for gamesmetadata.json
+    let v2 = vdom.weak();
+    fetchgamesmod::fetch_games_metadata_request(location_href, v2);
 
     // Run the component forever. Forget to drop the memory.
     vdom.forget();
@@ -311,6 +316,10 @@ pub fn session_storage() -> web_sys::Storage {
 //endregion
 
 ///format ordinal numbers as string 1st, 2nd,3rd,...
+#[allow(
+    clippy::indexing_slicing,  
+    clippy::integer_arithmetic
+    )]
 pub fn ordinal_numbers(number:usize)->String{
     //these are only ascii characters, so no problem with utf_8
     let mut ord_str = format!("{}",number);

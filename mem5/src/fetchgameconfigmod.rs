@@ -1,4 +1,4 @@
-//! statusinviteaskbeginmod.rs - code flow from this status
+//! fetchgameconfigmod.rs - fetch game_config
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

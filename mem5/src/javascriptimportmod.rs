@@ -5,9 +5,9 @@ use wasm_bindgen::prelude::*;
 
 ///in the block extern "C" are the descriptions of imported javascript
 #[wasm_bindgen(module = "/js/javascriptdofullscreen.js")]
-#[allow(clippy::missing_docs_in_private_items)]
 extern "C" {
     /// the name of the extern javascript function
+    #[allow(clippy::missing_docs_in_private_items)]
     fn javascriptdofullscreen();
 
 }

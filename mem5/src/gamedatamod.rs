@@ -23,6 +23,24 @@ pub struct Size2d {
     ///vertical
     pub ver: usize,
 }
+///game metadata (for the vector)
+#[derive(Serialize, Deserialize, Clone)]
+pub struct Gamemetadata {
+    ///folder
+    pub folder: String,
+    ///name
+    pub name: String,
+    ///description
+    pub description: String,
+}
+
+///games metadata vector
+#[derive(Serialize, Deserialize, Clone)]
+pub struct Gamesmetadata {
+    ///vec game_metadata
+    pub vec_game_metadata: Vec<Gamemetadata>,
+}
+
 ///game config
 #[derive(Serialize, Deserialize, Clone)]
 pub struct GameConfig {
@@ -94,6 +112,8 @@ pub struct GameData {
     pub player_turn: usize,
     ///content folders vector
     pub content_folders: Vec<String>,
+    ///games meta data
+    pub games_metadata: Option<Gamesmetadata>,
     ///game_configs
     pub game_config: Option<GameConfig>,
     ///error text
@@ -241,11 +261,9 @@ impl GameData {
             player_turn: 0,
             content_folders: vec![
                 String::from("alphabet"),
-                String::from("animals"),
-                String::from("playingcards"),
-                String::from("triestine"),
             ],
             game_config: None,
+            games_metadata:None,
             error_text: "".to_string(),
             href: "".to_string(),
             is_reconnect: false,
