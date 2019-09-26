@@ -162,7 +162,7 @@ pub enum GameStatus {
     ///take turn begin
     StatusTakeTurnBegin,
     ///take turn end
-    MsgTakeTurnEnd,
+    StatusTakeTurnEnd,
     ///end game
     StatusGameOverPlayAgainBegin,
     ///StatusReconnect after a lost connection
