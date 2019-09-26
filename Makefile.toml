@@ -55,8 +55,10 @@ script = [
 description = "Copy the content of /mem5_game/webfolder to google vm. Use the sshagent."
 workspace = false
 clear = true
+# backslash is the escape character for all other special characters.
+# and then another time I have to escape the backslash. So 4 backslash for one backslash.
 script = [
-    "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@34.87.17.103 screen -dr mem5-8085 -X stuff $'\\003'",
+    "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@34.87.17.103 screen -dr mem5-8085 -X stuff $'\\\\003'",
     "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@34.87.17.103 screen -dr mem5-8085 -X stuff 'cd\\ \\/var\\/www\\/webapps\\/mem5_game\\\\n'",
     "rsync -e ssh -avz --delete-after /home/luciano/rustprojects/mem5_game/webfolder/ luciano_bestia@34.87.17.103:/var/www/webapps/mem5_game/",
     "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@34.87.17.103 screen -dr mem5-8085 -X stuff 'chmod\\ \\+x\\ mem5_server\\\\n'",

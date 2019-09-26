@@ -340,9 +340,9 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         WsMessage::MsgInvite { .. } => broadcast(users, ws_uid_of_message, &new_msg),
         WsMessage::MsgResponseWsUid { .. } => info!("MsgResponseWsUid: {}", ""),
         WsMessage::MsgPlayAccept { players_ws_uid, .. }
+        | WsMessage::MsgGameDataInit { players_ws_uid, .. }
         | WsMessage::MsgPlayerClick1stCard { players_ws_uid, .. }
         | WsMessage::MsgPlayerClick2ndCardPoint { players_ws_uid, .. }
-        | WsMessage::MsgGameDataInit { players_ws_uid, .. }
         | WsMessage::MsgPlayerClick2ndCardTakeTurnBegin { players_ws_uid, .. }
         | WsMessage::MsgTakeTurnEnd { players_ws_uid, .. }
         | WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin { players_ws_uid, .. } => {

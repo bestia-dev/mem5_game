@@ -25,7 +25,7 @@ pub struct Size2d {
 }
 ///game metadata (for the vector)
 #[derive(Serialize, Deserialize, Clone)]
-pub struct Gamemetadata {
+pub struct GameMetadata {
     ///folder
     pub folder: String,
     ///name
@@ -36,9 +36,9 @@ pub struct Gamemetadata {
 
 ///games metadata vector
 #[derive(Serialize, Deserialize, Clone)]
-pub struct Gamesmetadata {
+pub struct GamesMetadata {
     ///vec game_metadata
-    pub vec_game_metadata: Vec<Gamemetadata>,
+    pub vec_game_metadata: Vec<GameMetadata>,
 }
 
 ///game config
@@ -113,7 +113,7 @@ pub struct GameData {
     ///content folders vector
     pub content_folders: Vec<String>,
     ///games meta data
-    pub games_metadata: Option<Gamesmetadata>,
+    pub games_metadata: Option<GamesMetadata>,
     ///game_configs
     pub game_config: Option<GameConfig>,
     ///error text

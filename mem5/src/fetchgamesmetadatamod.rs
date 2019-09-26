@@ -1,4 +1,4 @@
-//! fetchgamesmod.rs - fetch the names of all games
+//! fetchgamesmetadatamod.rs - fetch the names of all games
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
@@ -38,7 +38,7 @@ pub fn create_webrequest(url: &str) -> web_sys::Request {
 pub fn set_game_metadata_from_json(rrc: &mut RootRenderingComponent, respbody: String) {
     //respbody is json.
     //logmod::debug_write(format!("respbody: {}", respbody).as_str());
-    let v: gamedatamod::Gamesmetadata =unwrap!(serde_json::from_str(respbody.as_str()));
+    let v: gamedatamod::GamesMetadata =unwrap!(serde_json::from_str(respbody.as_str()));
     rrc.game_data.games_metadata = Some(v.clone());
     //fill the vector
     rrc.game_data.content_folders.clear();

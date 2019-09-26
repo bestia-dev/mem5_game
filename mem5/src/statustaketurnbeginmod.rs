@@ -5,6 +5,7 @@ use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
 use mem5_common::{GameStatus, WsMessage};
 use crate::gamedatamod::{CardStatusCardFace};
+use crate::logmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -22,7 +23,10 @@ pub fn div_take_turn_begin<'a, 'bump>(
 where
     'a: 'bump,
 {
-    //logmod::debug_write(&format!("player_turn {}  my_player_number {}", &rrc.game_data.player_turn,&rrc.game_data.my_player_number));
+    logmod::debug_write(&format!(
+        "div_take_turn_begin: player_turn {}  my_player_number {}",
+        &rrc.game_data.player_turn, &rrc.game_data.my_player_number
+    ));
     let next_player = if rrc.game_data.player_turn < rrc.game_data.players.len() {
         unwrap!(rrc.game_data.player_turn.checked_add(1))
     } else {
@@ -35,12 +39,14 @@ where
                         root.unwrap_mut::<RootRenderingComponent>();
                     //this game_data mutable reference is dropped on the end of the function
                     //region: send WsMessage over WebSocket
+                        logmod::debug_write(&format!("ws_send_msg: MsgTakeTurnEnd {}", ""));
+
                     websocketcommunicationmod::ws_send_msg(
                         &rrc.game_data.ws,
                         &WsMessage::MsgTakeTurnEnd {
                             my_ws_uid: rrc.game_data.my_ws_uid,
                             players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
-                        },
+                        }
                     );
                     //endregion
                     take_turn_end(rrc);
@@ -73,6 +79,11 @@ where
 
 ///fn on change for both click and we msg.
 pub fn take_turn_end(rrc: &mut RootRenderingComponent) {
+    logmod::debug_write(&format!(
+        "take_turn_end: player_turn {}  my_player_number {}",
+        &rrc.game_data.player_turn, &rrc.game_data.my_player_number
+    ));
+
     rrc.game_data.player_turn = if rrc.game_data.player_turn < rrc.game_data.players.len() {
         unwrap!(rrc.game_data.player_turn.checked_add(1))
     } else {
@@ -101,7 +112,7 @@ pub fn take_turn_end(rrc: &mut RootRenderingComponent) {
 
 ///on msg take turn begin
 pub fn on_msg_take_turn_begin(rrc: &mut RootRenderingComponent, card_index_of_second_click: usize) {
-    //logmod::debug_write("on_msg_take_turn_begin");
+    logmod::debug_write("on_msg_take_turn_begin");
     rrc.game_data.card_index_of_second_click = card_index_of_second_click;
     //flip the card up
     unwrap!(

@@ -229,7 +229,7 @@ mod divplayeractionsmod;
 mod divplayersandscoresmod;
 mod divrulesanddescriptionmod;
 mod fetchmod;
-mod fetchgamesmod;
+mod fetchgamesmetadatamod;
 mod fetchgameconfigmod;
 mod gamedatamod;
 mod javascriptimportmod;
@@ -298,7 +298,7 @@ pub fn run() -> Result<(), JsValue> {
 
     //async fetch_response() for gamesmetadata.json
     let v2 = vdom.weak();
-    fetchgamesmod::fetch_games_metadata_request(location_href, v2);
+    fetchgamesmetadatamod::fetch_games_metadata_request(location_href, v2);
 
     // Run the component forever. Forget to drop the memory.
     vdom.forget();
