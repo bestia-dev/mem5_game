@@ -96,7 +96,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
             WsMessage::MsgDummy { dummy } => logmod::debug_write(dummy.as_str()),
             //this MsgRequestWsUid is only for the WebSocket server
             WsMessage::MsgRequestWsUid { test } => logmod::debug_write(test.as_str()),
-            WsMessage::MsgResponseWsUid { your_ws_uid } => {
+            WsMessage::MsgResponseWsUid { your_ws_uid,server_version:_ } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         move |root| {

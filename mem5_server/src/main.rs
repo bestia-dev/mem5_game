@@ -109,9 +109,9 @@ fn main() {
 
     //region: cmdline parameters
     let matches = App::new("mem5_server")
-        .version("1.0.0")
-        .author("Luciano Bestia")
-        .about("server http and WebSocket for mem5 game")
+        .version(env!("CARGO_PKG_VERSION"))
+        .author(env!("CARGO_PKG_AUTHORS"))
+        .about(env!("CARGO_PKG_DESCRIPTION"))
         .arg(
             Arg::with_name("prm_ip")
                 .value_name("ip")
@@ -291,7 +291,11 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         WsMessage::MsgDummy { dummy } => info!("MsgDummy: {}", dummy),
         WsMessage::MsgRequestWsUid { test } => {
             info!("MsgRequestWsUid: {}", test);
-            let j = serde_json::to_string(&WsMessage::MsgResponseWsUid { your_ws_uid: ws_uid_of_message })
+            let j = serde_json::to_string(
+                &WsMessage::MsgResponseWsUid { 
+                    your_ws_uid: ws_uid_of_message,
+                    server_version: env!("CARGO_PKG_VERSION").to_string(),
+                     })
                 .expect("serde_json::to_string(&WsMessage::MsgResponseWsUid { your_ws_uid: ws_uid_of_message })");
             info!("send MsgResponseWsUid: {}", j);
             match users

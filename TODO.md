@@ -1,9 +1,7 @@
 # mem5 TODO
-
-- send in msg only what changed and not the whole grid_data
+- monikers are too long and wrap. They must be always in one line width 50%. 
+Still no good. the size of the cell must be exactly half screen fixed. 
 - Make debug div closeable for user.  
-- show the times of msg travel in the UI. Websocket looks awfully slow.  
-- minimize the data over websocket. json is so verbose. csv is less.
 - sync data from player1 to others after reconnect.
 - different content for English learning: numbers (cardinal, ordinal), food, orientation, alphabet simple spelling, drinks, days/months, questions, colors, transportation, ...  
 - fullscreen from <http://robnyman.github.io/fullscreen/>  

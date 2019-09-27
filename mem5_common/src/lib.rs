@@ -66,6 +66,8 @@ pub enum WsMessage {
     MsgResponseWsUid {
         ///WebSocket Uid
         your_ws_uid: usize,
+        ///server version
+        server_version: String,
     },
     ///invite
     MsgInvite {

@@ -1,7 +1,7 @@
 [workspace]
 
 members = [
+    "mem5_common",
     "mem5",
     "mem5_server",
-    "mem5_common",
 ]
