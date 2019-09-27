@@ -5,3 +5,7 @@ members = [
     "mem5",
     "mem5_server",
 ]
+
+[profile.release]
+panic = "abort"
+

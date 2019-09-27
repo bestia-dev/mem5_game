@@ -50,7 +50,7 @@ pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump
             bumpalo::format!(in bump, "font-size:{}px;", right_fontsize).into_bump_str();
         //return
         dodrio!(bump,
-        <div class= "grid_container_header" style="grid-template-columns: auto auto;min-height: 60px;">
+        <div class= "grid_container_header" style="grid-template-columns: 50% 50%;min-height: 60px;">
             <div class= "grid_item card_moniker_left" style={left_style_string} >
                 {vec![text(bumpalo::format!(in bump, "{}",left_text).into_bump_str())]}
             </div>
