@@ -79,10 +79,13 @@ pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump
 ///when the lenght is bigger, the fontsize get smaller
 ///if the len is 10 the fontsize is 40, if the len is 20 the fontsize is 20
 ///this means that the 400 is constant:  10*40=400 20*20=400
+#[allow(clippy::integer_arithmetic,
+    clippy::integer_division
+)]
 fn calc_font_size(text_len: usize) -> usize {
     if text_len < 10 {
         40
     } else {
-        400 / text_len
+        350 / text_len
     }
 }

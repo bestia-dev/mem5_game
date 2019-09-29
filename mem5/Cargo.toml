@@ -1,6 +1,6 @@
 [package]
 name = "mem5"
-version = "19.9.27-21.51" #no need for semver if it is not a public library
+version = "19.9.29-23.26" #no need for semver if it is not a public library
 authors = ["Luciano Furlan <Luciano.Bestia@gmail.com>"]
 edition = "2018"
 description = "Learning Rust Wasm/WebAssembly with Virtual Dom Dodrio"
@@ -19,23 +19,25 @@ crate-type = ["cdylib"]
 unwrap = "1.2.1"
 mem5_common = { path = "../mem5_common" }
 dodrio = "0.1.0"
-wasm-bindgen = { version = "0.2.43", features = ["serde-serialize"] }
+wasm-bindgen = { version = "0.2.51", features = ["serde-serialize"] }
 console_error_panic_hook = "0.1.6"
+#newer version of rand dont have smallring
 rand = { version = "0.6", features = ["wasm-bindgen"] }
 js-sys = "0.3"
-serde = "1.0.91"
-serde_derive = "1.0.91"
+serde = "1.0.101"
+serde_derive = "1.0.101"
 serde_json = "1.0"
-futures = "0.1.26"
+futures = "0.1.29"
+# newer futures have unstable .await
 wasm-bindgen-futures = "0.3.20"
-log = "0.4.6"
-strum = "0.15.0"
-strum_macros = "0.15.0"
-typed-html = {version="0.2.0", features = ["dodrio_macro"]}
+log = "0.4.8"
+strum = "0.16.0"
+strum_macros = "0.16.0"
+typed-html = {version="0.2.1", features = ["dodrio_macro"]}
 conv = "0.3.3"
 
 [dependencies.web-sys]
-version = "0.3.20"
+version = "0.3.28"
 features = [
   "AbortController",
   "console",

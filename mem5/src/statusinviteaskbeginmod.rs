@@ -6,6 +6,7 @@ use crate::websocketcommunicationmod;
 use crate::fetchgameconfigmod;
 use crate::localstoragemod;
 use crate::gamedatamod;
+use crate::divfullscreenmod;
 
 //use unwrap::unwrap;
 use dodrio::builder::text;
@@ -43,7 +44,7 @@ where
             <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
                 //show Ask Player2 to Play!
-                bumpalo::format!(in bump, "Invite for {} !", folder_name_clone2)
+                bumpalo::format!(in bump, "Invite for {}", folder_name_clone2)
                     .into_bump_str(),
                 )]}
             </h2>
@@ -54,6 +55,7 @@ where
     <div>
         {vec_of_nodes}
         {vec![div_nickname_input(rrc,bump)]}
+        {divfullscreenmod::div_fullscreen(rrc,bump)}
     </div>
     )
 }
@@ -71,7 +73,7 @@ where
         <h4>
             {vec![text(
                 bumpalo::format!(in bump, "{}",
-                "Write your nickname and press Enter:")
+                "Write your nickname and press Enter/Go:")
                 .into_bump_str()
             )]}
         </h4>
@@ -100,6 +102,7 @@ where
     </div>
     )
 }
+
 
 /// on click updates some data and sends msgs
 /// msgs will be asynchronously received and processed

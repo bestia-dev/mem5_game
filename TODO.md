@@ -1,6 +1,5 @@
 # mem5 TODO
-- monikers are too long and wrap. They must be always in one line width 50%. 
-Still no good. the size of the cell must be exactly half screen fixed. 
+
 - Make debug div closeable for user.  
 - sync data from player1 to others after reconnect.
 - different content for English learning: numbers (cardinal, ordinal), food, orientation, alphabet simple spelling, drinks, days/months, questions, colors, transportation, ...  

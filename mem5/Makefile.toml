@@ -27,7 +27,8 @@ skip_core_tasks = true
     dependencies = [
         "lmake_version_from_date",
         "build_dev",
-        "post_build",
+        "delete_old_js_snippets",
+        "copy_pkg_to_webfolder",
     ]
 
     [tasks.release]
@@ -36,7 +37,8 @@ skip_core_tasks = true
     dependencies = [
         "lmake_version_from_date",
         "build_release",
-        "post_build",
+        "delete_old_js_snippets",
+        "copy_pkg_to_webfolder",
     ]
 
     [tasks.doc]
@@ -64,12 +66,12 @@ private = true
 command = "wasm-pack"
 args = ["build","--target", "web","--release"]
 
-[tasks.post_build]
+[tasks.copy_pkg_to_webfolder]
 description = "copy wasm pkg to webfolder"
 clear = true
 private = true
 script = [
-    "\\cp ~/rustprojects/mem5_game/mem5/pkg/* -rf ~/rustprojects/mem5_game/webfolder/mem5/pkg",
+    "\\rsync -avz --delete-after ~/rustprojects/mem5_game/mem5/pkg/  ~/rustprojects/mem5_game/webfolder/mem5/pkg/",
 ]
 
 [tasks.insert_readme]
@@ -91,7 +93,7 @@ description = "copy target doc to docs (github standard)"
 clear = true
 private = true
 script = [
-    "\\cp ~/rustprojects/mem5_game/target/doc/* -rf ~/rustprojects/mem5_game/docs",
+    "\\rsync -avz --delete-after ~/rustprojects/mem5_game/target/doc/  ~/rustprojects/mem5_game/docs/",
 ]
 
 [tasks.lmake_version_from_date]
@@ -99,3 +101,9 @@ description = "in cargo.toml change version to today date"
 clear = true
 private = true
 script= ["../../utils_linux/lmake_version_from_date"]
+
+[tasks.delete_old_js_snippets]
+description = "delete old snippets"
+clear = true
+private = true
+script= ["../../utils_linux/lmake_delete_old_js_snippets"]
