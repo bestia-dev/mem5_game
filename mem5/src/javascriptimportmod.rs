@@ -9,11 +9,10 @@ extern "C" {
     /// the name of the extern javascript function
     #[allow(clippy::missing_docs_in_private_items)]
     fn javascriptdofullscreen();
-
 }
 
 ///do full screen function imported from javascript
 pub fn do_fullscreen() {
-    javascriptdofullscreen();
+    javascriptdofullscreen()
 }
 

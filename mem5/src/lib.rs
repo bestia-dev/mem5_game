@@ -277,7 +277,10 @@ pub fn run() -> Result<(), JsValue> {
     let my_ws_uid: usize = rng.gen_range(1, 9999);
 
     //find out URL
-    let location_href = unwrap!(window.location().href(), "href not known");
+    let mut location_href = unwrap!(window.location().href(), "href not known");
+    //without /index.html
+    location_href=location_href.to_lowercase().replace("index.html","");
+    //logmod::debug_write(&format!("location_href: {}", &location_href));
 
     //WebSocket connection
     let ws = websocketcommunicationmod::setup_ws_connection(location_href.clone(), my_ws_uid);

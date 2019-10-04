@@ -1,5 +1,4 @@
 # mem5 TODO
-- iPhone/android webapp manifest file  
 
 - Make debug div closeable for user.  
 - sync data from player1 to others after reconnect.

@@ -62,7 +62,7 @@ where
 
 ///check the fullscreen_element. works only on android
 pub fn is_fullscreen(rrc: &RootRenderingComponent) -> bool {
-    if ! rrc.game_data.is_fullscreen {
+    if rrc.game_data.is_fullscreen == false {
         logmod::debug_write("is_fullscreen is false");
         let window = unwrap!(web_sys::window());
         //let screen = unwrap!(window.screen());
@@ -86,10 +86,10 @@ pub fn is_fullscreen(rrc: &RootRenderingComponent) -> bool {
                 Some(media_query_list) => {
                     logmod::debug_write("media_query_list Some");
                     if media_query_list.matches() {
-                        logmod::debug_write("mathes true");
+                        logmod::debug_write("matches true");
                         true
                     } else {
-                        logmod::debug_write("mathes false");
+                        logmod::debug_write("matches false");
                         false
                     }
                 }

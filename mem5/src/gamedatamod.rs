@@ -122,6 +122,8 @@ pub struct GameData {
     pub href: String,
     /// is reconnect
     pub is_reconnect: bool,
+    /// to not check it all the time
+    pub is_fullscreen: bool,
 }
 //endregion
 
@@ -267,6 +269,7 @@ impl GameData {
             error_text: "".to_string(),
             href: "".to_string(),
             is_reconnect: false,
+            is_fullscreen: false,
         }
     }
     ///check only if status StatusInviteAskBegin

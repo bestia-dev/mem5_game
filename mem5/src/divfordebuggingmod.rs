@@ -21,7 +21,7 @@ pub fn div_for_debugging<'a>(_rrc: &'a RootRenderingComponent, bump: &'a Bump) -
 
     dodrio!(bump,
     <div >
-        <pre style="color:white;">
+        <pre style="color:white;white-space: pre-wrap;">
             {vec![text(text2)]}
         </pre>
     </div>

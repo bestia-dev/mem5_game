@@ -1,4 +1,4 @@
-///javascript function to do full screen
+///javascript function to do full screen and return a promise
 export function javascriptdofullscreen() {
     //just an example how to import javascript function to rust
     //this is a javascript function because of different vendor prefixes
