@@ -11,14 +11,13 @@ use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
 use typed_html::dodrio;
 use web_sys;
-use conv::*;
 //endregion
 
 ///information for fullscreen
-pub fn div_for_fullscreen<'a>(_rrc: &'a RootRenderingComponent, bump: &'a Bump) -> Node<'a> {
+pub fn div_for_fullscreen<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump) -> Node<'a> {
     dodrio!(bump,
     <div >
-        {button_for_fullscreen(bump)}
+        {button_for_fullscreen(rrc,bump)}
     </div>
     )
 }
@@ -34,13 +33,20 @@ fn is_iphone() -> bool {
 */
 
 ///render a fullscreen button on android, but not for iphone
-fn button_for_fullscreen(bump: &Bump) -> Vec<Node> {
+
+pub fn button_for_fullscreen<'a, 'bump>(
+    rrc: &'a RootRenderingComponent,
+    bump: &'bump Bump,
+) -> Vec<Node<'bump>>
+where
+    'a: 'bump,
+{
     let mut ret_val = vec![dodrio!(bump,
         <div>
         </div>
     )];
 
-    if !is_fullscreen() {
+    if !is_fullscreen(&rrc) {
         ret_val.push(dodrio!(bump,
         <h4>
             {vec![text(bumpalo::format!(in bump,
@@ -55,22 +61,49 @@ fn button_for_fullscreen(bump: &Bump) -> Vec<Node> {
 }
 
 ///check the fullscreen_element. works only on android
-pub fn is_fullscreen() -> bool {
-    let window = unwrap!(web_sys::window());
-    let screen = unwrap!(window.screen());
-    let document = unwrap!(window.document());
+pub fn is_fullscreen(rrc: &RootRenderingComponent) -> bool {
+    if ! rrc.game_data.is_fullscreen {
+        logmod::debug_write("is_fullscreen is false");
+        let window = unwrap!(web_sys::window());
+        //let screen = unwrap!(window.screen());
+        let document = unwrap!(window.document());
 
-    //return
-    if document.fullscreen_element().is_some() {
-        true
+        //return
+        if document.fullscreen_element().is_some() {
+            logmod::debug_write("fullscreen is_some");
+            true
+        } else {
+            logmod::debug_write("fullscreen is None");
+            //if the web app is started from android HomeScreen than
+            //it has @media (display-mode: fullscreen)
+            let media_query_list = unwrap!(window.match_media("(display-mode: fullscreen)"));
+            logmod::debug_write(&format!("media_query_list: {:?}", media_query_list));
+            match media_query_list {
+                None => {
+                    logmod::debug_write("media_query_list None");
+                    false
+                }
+                Some(media_query_list) => {
+                    logmod::debug_write("media_query_list Some");
+                    if media_query_list.matches() {
+                        logmod::debug_write("mathes true");
+                        true
+                    } else {
+                        logmod::debug_write("mathes false");
+                        false
+                    }
+                }
+            }
+        }
     } else {
-        false
+        logmod::debug_write("field is_fullscreen is true");
+        true
     }
 }
 
 ///render the div for fullscreen
 pub fn div_fullscreen<'a, 'bump>(
-    _rrc: &'a RootRenderingComponent,
+    rrc: &'a RootRenderingComponent,
     bump: &'bump Bump,
 ) -> Vec<Node<'bump>>
 where
@@ -81,23 +114,14 @@ where
         </div>
     )];
 
-    if !is_fullscreen() {
+    if !is_fullscreen(rrc) {
         ret_val.push(dodrio!(bump,
-        <div class="div_clickable" style="background-color: yellow;" onclick={move |root, vdom, _event| {
+        <div class="div_clickable" style="background-color: yellow;"
+        onclick={move |root, vdom, _event| {
+            let rrc = root.unwrap_mut::<RootRenderingComponent>();
+            rrc.game_data.is_fullscreen=true;
             javascriptimportmod::do_fullscreen();
-            //async call
-            /* TODO:
-            let window = unwrap!(web_sys::window());
-            let screen = unwrap!(window.screen());
-            let document = unwrap!(window.document());
-            let element = unwrap!(document.document_element());
-            async{
-                let promise = element.request_fullscreen();
-                let js_fut = JsFuture::from(promise);
-                js_fut.await.unwrap();
-                vdom.schedule_render();
-            }
-            */
+            vdom.schedule_render();
             }}>
             <h2 id= "ws_elem" style= "color:green;">
                 {vec![text(
