@@ -3,7 +3,7 @@
 //region: use, const
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::javascriptimportmod;
-use crate::logmod;
+//use crate::logmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -63,40 +63,40 @@ where
 ///check the fullscreen_element. works only on android
 pub fn is_fullscreen(rrc: &RootRenderingComponent) -> bool {
     if rrc.game_data.is_fullscreen == false {
-        logmod::debug_write("is_fullscreen is false");
+        //logmod::debug_write("is_fullscreen is false");
         let window = unwrap!(web_sys::window());
         //let screen = unwrap!(window.screen());
         let document = unwrap!(window.document());
 
         //return
         if document.fullscreen_element().is_some() {
-            logmod::debug_write("fullscreen is_some");
+            //logmod::debug_write("fullscreen is_some");
             true
         } else {
-            logmod::debug_write("fullscreen is None");
+            //logmod::debug_write("fullscreen is None");
             //if the web app is started from android HomeScreen than
             //it has @media (display-mode: fullscreen)
             let media_query_list = unwrap!(window.match_media("(display-mode: fullscreen)"));
-            logmod::debug_write(&format!("media_query_list: {:?}", media_query_list));
+            //logmod::debug_write(&format!("media_query_list: {:?}", media_query_list));
             match media_query_list {
                 None => {
-                    logmod::debug_write("media_query_list None");
+                    //logmod::debug_write("media_query_list None");
                     false
                 }
                 Some(media_query_list) => {
-                    logmod::debug_write("media_query_list Some");
+                    //logmod::debug_write("media_query_list Some");
                     if media_query_list.matches() {
-                        logmod::debug_write("matches true");
+                        //logmod::debug_write("matches true");
                         true
                     } else {
-                        logmod::debug_write("matches false");
+                        //logmod::debug_write("matches false");
                         false
                     }
                 }
             }
         }
     } else {
-        logmod::debug_write("field is_fullscreen is true");
+        //logmod::debug_write("field is_fullscreen is true");
         true
     }
 }
