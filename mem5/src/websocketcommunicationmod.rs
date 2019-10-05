@@ -9,6 +9,7 @@ use crate::statusplaybefore2ndcardmod;
 use crate::statustaketurnbeginmod;
 use crate::logmod;
 use crate::statusplayagainmod;
+use crate::websocketreconnectmod;
 
 use unwrap::unwrap;
 use futures::Future;
@@ -24,7 +25,8 @@ use web_sys::{ErrorEvent, WebSocket};
 //but I don't want references, because they have the lifetime problem.
 #[allow(clippy::needless_pass_by_value)]
 ///setup WebSocket connection
-pub fn setup_ws_connection(location_href: String, client_ws_id: usize) -> WebSocket {
+pub fn setup_ws_connection(location_href: String, client_ws_id: usize,
+players_ws_uid:String) -> WebSocket {
     //web-sys has WebSocket for Rust exactly like JavaScript has¸
     //location_href comes in this format  http://localhost:4000/
     let mut loc_href = location_href.replace("http://", "ws://");
@@ -55,7 +57,8 @@ pub fn setup_ws_connection(location_href: String, client_ws_id: usize) -> WebSoc
         unwrap!(
             ws_c.send_with_str(
                 &serde_json::to_string(&WsMessage::MsgRequestWsUid {
-                    test: String::from("test"),
+                    my_ws_uid: client_ws_id.clone(),
+                    players_ws_uid : players_ws_uid.clone(),
                 })
                 .expect("error sending test"),
             ),
@@ -65,6 +68,7 @@ pub fn setup_ws_connection(location_href: String, client_ws_id: usize) -> WebSoc
 
     let cb_oh: Closure<dyn Fn()> = Closure::wrap(open_handler);
     ws.set_onopen(Some(cb_oh.as_ref().unchecked_ref()));
+
     //don't drop the open_handler memory
     cb_oh.forget();
 
@@ -94,8 +98,21 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
         match msg {
             //I don't know why I need a dummy, but is entertaining to have one.
             WsMessage::MsgDummy { dummy } => logmod::debug_write(dummy.as_str()),
-            //this MsgRequestWsUid is only for the WebSocket server
-            WsMessage::MsgRequestWsUid { test } => logmod::debug_write(test.as_str()),
+            WsMessage::MsgRequestWsUid { my_ws_uid, players_ws_uid } => {
+                logmod::debug_write(players_ws_uid.as_str());
+                //this is a reconnect. Send all data to this player.
+                wasm_bindgen_futures::spawn_local(
+                    weak.with_component({
+                        let v2 = weak.clone();
+                        move |root| {
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                            websocketreconnectmod::on_msg_request_ws_uid(rrc, my_ws_uid);
+                            v2.schedule_render();
+                        }
+                    })
+                    .map_err(|_| ()),
+                );
+            },
             WsMessage::MsgResponseWsUid { your_ws_uid,server_version:_ } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
@@ -263,6 +280,33 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusplayagainmod::on_msg_play_again(rrc);
+                            v2.schedule_render();
+                        }
+                    })
+                    .map_err(|_| ()),
+                );
+            }
+            WsMessage::MsgAllGameData {
+                my_ws_uid: _,
+                players_ws_uid: _,
+                players,
+                card_grid_data,
+                card_index_of_first_click,
+                card_index_of_second_click,
+                player_turn,
+                game_status
+            } => {
+                wasm_bindgen_futures::spawn_local(
+                    weak.with_component({
+                        let v2 = weak.clone();
+                        move |root| {
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                            websocketreconnectmod::on_msg_all_game_data(rrc, players,
+                card_grid_data,
+                card_index_of_first_click,
+                card_index_of_second_click,
+                player_turn,
+                game_status);
                             v2.schedule_render();
                         }
                     })

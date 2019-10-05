@@ -81,7 +81,7 @@ where
             <input
             id="nickname"
             name="nickname"
-            style= "border: none;margin:auto;display:inline-block;text-align: center; background-color: #212121;color: #6AFF4D;"
+            class="input-nickname"
             value={bumpalo::format!(in bump, "{}",
                 rrc.game_data.my_nickname)
                 .into_bump_str()

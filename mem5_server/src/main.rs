@@ -210,12 +210,18 @@ fn user_connected(
     //hahahahaha syntax 'turbofish' ::<>
     let my_id = unwrap!(url_param.parse::<usize>());
     //if uid already exists, it is an error
+    let mut user_exist=false;
     for (&uid, ..) in users.lock().expect("error users.lock()").iter() {
         if uid == my_id {
-            //disconnect the old user
-            info!("user_disconnected for reconnect: {}", my_id);
-            user_disconnected(my_id, &users);
+            user_exist=true;
+            break;
         }
+    }
+
+    if user_exist{
+        //disconnect the old user
+        info!("user_disconnected for reconnect: {}", my_id);
+        user_disconnected(my_id, &users);
     }
 
     // Split the socket into a sender and receive of messages.
@@ -289,8 +295,8 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
 
     match msg {
         WsMessage::MsgDummy { dummy } => info!("MsgDummy: {}", dummy),
-        WsMessage::MsgRequestWsUid { test } => {
-            info!("MsgRequestWsUid: {}", test);
+        WsMessage::MsgRequestWsUid {my_ws_uid, players_ws_uid } => {
+            info!("MsgRequestWsUid: {} {}", my_ws_uid, players_ws_uid);
             let j = serde_json::to_string(
                 &WsMessage::MsgResponseWsUid { 
                     your_ws_uid: ws_uid_of_message,
@@ -308,6 +314,8 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
                 Ok(()) => (),
                 Err(_disconnected) => {}
             }
+            //send to other users for reconnect. Do nothing if there is not yet other users.
+            send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         },
         /* obsolete, but keep it as an example how to return a text file over websocket
         WsMessage::RequestGameConfig { filename } => {
@@ -349,7 +357,9 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         | WsMessage::MsgPlayerClick2ndCardPoint { players_ws_uid, .. }
         | WsMessage::MsgPlayerClick2ndCardTakeTurnBegin { players_ws_uid, .. }
         | WsMessage::MsgTakeTurnEnd { players_ws_uid, .. }
-        | WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin { players_ws_uid, .. } => {
+        | WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin { players_ws_uid, .. } 
+        | WsMessage::MsgAllGameData { players_ws_uid, .. } 
+        => {
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
     }

@@ -283,7 +283,8 @@ pub fn run() -> Result<(), JsValue> {
     //logmod::debug_write(&format!("location_href: {}", &location_href));
 
     //WebSocket connection
-    let ws = websocketcommunicationmod::setup_ws_connection(location_href.clone(), my_ws_uid);
+    let players_ws_uid="[]".to_string(); //empty vector in json
+    let ws = websocketcommunicationmod::setup_ws_connection(location_href.clone(), my_ws_uid,players_ws_uid);
     //I don't know why is needed to clone the WebSocket connection
     let ws_c = ws.clone();
 

@@ -59,8 +59,10 @@ pub enum WsMessage {
     },
     ///Request WebSocket Uid - first message to WebSocket server
     MsgRequestWsUid {
-        ///anything
-        test: String,
+        ///ws client instance unique id. To not listen the echo to yourself.
+        my_ws_uid: usize,
+        ///json of vector of players for the server to know whom to send msg
+        players_ws_uid: String,
     },
     ///response from WebSocket server for first message
     MsgResponseWsUid {
@@ -141,6 +143,24 @@ pub enum WsMessage {
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
         players_ws_uid: String,
+    },
+    MsgAllGameData{
+        ///ws client instance unique id. To not listen the echo to yourself.
+        my_ws_uid: usize,
+        ///only the players that recconected
+        players_ws_uid: String,
+        ///json of vector of players with nicknames and order data
+        players: String,
+        ///vector of cards status
+        card_grid_data: String,
+        ///have to send all the state of the game
+        card_index_of_first_click: usize,
+        ///have to send all the state of the game
+        card_index_of_second_click: usize,
+        ///player turn
+        player_turn: usize,
+        ///game status
+        game_status: GameStatus,
     },
 }
 

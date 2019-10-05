@@ -3,6 +3,7 @@
 //region: use, const
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::sessionstoragemod;
+use crate::websocketreconnectmod;
 
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
@@ -12,7 +13,7 @@ use typed_html::dodrio;
 
 ///information for debugging
 #[allow(dead_code)]
-pub fn div_for_debugging<'a>(_rrc: &'a RootRenderingComponent, bump: &'a Bump) -> Node<'a> {
+pub fn div_for_debugging<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump) -> Node<'a> {
     //for debugging only
     
     let text2 = bumpalo::format!(in bump, "debug info:\n{}",
@@ -24,6 +25,7 @@ pub fn div_for_debugging<'a>(_rrc: &'a RootRenderingComponent, bump: &'a Bump) -
         <pre style="color:white;white-space: pre-wrap;">
             {vec![text(text2)]}
         </pre>
+        {vec![websocketreconnectmod::div_reconnect(rrc, bump)]}
     </div>
     )    
 }
