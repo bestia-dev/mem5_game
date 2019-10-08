@@ -144,6 +144,7 @@ pub enum WsMessage {
         ///all players for the server to know whom to send msg
         players_ws_uid: String,
     },
+    ///all game data
     MsgAllGameData{
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,

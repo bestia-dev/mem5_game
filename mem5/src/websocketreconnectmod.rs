@@ -90,6 +90,7 @@ pub fn on_msg_request_ws_uid(rrc: &RootRenderingComponent, _my_ws_uid: usize) {
 }
 
 ///after reconnect receive allthe data from other player
+#[allow(clippy::needless_pass_by_value)]
 pub fn on_msg_all_game_data(
     rrc: &mut RootRenderingComponent,
     players: String,
@@ -100,7 +101,7 @@ pub fn on_msg_all_game_data(
     game_status: GameStatus,
 ) {
     //only the first message is processed
-    if rrc.game_data.is_reconnect == true {
+    if rrc.game_data.is_reconnect {
         rrc.game_data.is_reconnect = false;
         rrc.game_data.players = unwrap!(serde_json::from_str(&players));
         rrc.game_data.card_grid_data = unwrap!(serde_json::from_str(&card_grid_data));

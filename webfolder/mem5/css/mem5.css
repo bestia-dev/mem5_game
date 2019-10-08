@@ -129,6 +129,7 @@ img {
 }
 
 .input-nickname {
+    width:100%;
     border: none;
     margin:auto;
     display:inline-block;

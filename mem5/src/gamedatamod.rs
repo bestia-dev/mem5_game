@@ -272,6 +272,7 @@ impl GameData {
             is_fullscreen: false,
         }
     }
+    /*
     ///check only if status StatusInviteAskBegin
     pub fn is_status_invite_ask_begin(&self) -> bool {
         #[allow(clippy::wildcard_enum_match_arm)]
@@ -280,6 +281,7 @@ impl GameData {
             _ => false,
         }
     }
+    */
     ///the only status for rendering the grid container
     pub fn is_status_for_grid_container(&self) -> bool {
         #[allow(clippy::wildcard_enum_match_arm)]

@@ -10,7 +10,7 @@ use crate::statustaketurnbeginmod;
 use crate::statusinviteaskbeginmod;
 use crate::statusinviteaskedmod;
 use crate::statusinviteaskingmod;
-use crate::websocketreconnectmod;
+//use crate::websocketreconnectmod;
 
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
@@ -27,12 +27,15 @@ pub fn div_player_actions_from_game_status<'a, 'bump>(
 where
     'a: 'bump,
 {
-    if !rrc.game_data.is_status_invite_ask_begin()
+    
+    //if rrc.game_data.is_status_invite_ask_begin() {
+    /*
         && (rrc.game_data.is_reconnect || rrc.game_data.ws.ready_state() != 1)
     {
         //ready_state: 0	CONNECTING, 1	OPEN, 2	CLOSING, 3	CLOSED
         websocketreconnectmod::div_reconnect(rrc, bump)
-    } else if let GameStatus::StatusInviteAskBegin = rrc.game_data.game_status {
+    */
+     if let GameStatus::StatusInviteAskBegin = rrc.game_data.game_status {
         statusinviteaskbeginmod::div_invite_ask_begin(rrc, bump)
     } else if let GameStatus::StatusInviteAsked = rrc.game_data.game_status {
         statusinviteaskedmod::div_invite_asked(rrc, bump)

@@ -46,7 +46,7 @@ where
         </div>
     )];
 
-    if !is_fullscreen(&rrc) {
+    if !is_fullscreen(rrc) {
         ret_val.push(dodrio!(bump,
         <h4>
             {vec![text(bumpalo::format!(in bump,
@@ -62,7 +62,10 @@ where
 
 ///check the fullscreen_element. works only on android
 pub fn is_fullscreen(rrc: &RootRenderingComponent) -> bool {
-    if rrc.game_data.is_fullscreen == false {
+    if rrc.game_data.is_fullscreen {
+        //logmod::debug_write("field is_fullscreen is true");
+        true
+    } else {
         //logmod::debug_write("is_fullscreen is false");
         let window = unwrap!(web_sys::window());
         //let screen = unwrap!(window.screen());
@@ -85,19 +88,11 @@ pub fn is_fullscreen(rrc: &RootRenderingComponent) -> bool {
                 }
                 Some(media_query_list) => {
                     //logmod::debug_write("media_query_list Some");
-                    if media_query_list.matches() {
-                        //logmod::debug_write("matches true");
-                        true
-                    } else {
-                        //logmod::debug_write("matches false");
-                        false
-                    }
+                    //returns true if is started from Home screen
+                    media_query_list.matches() 
                 }
             }
         }
-    } else {
-        //logmod::debug_write("field is_fullscreen is true");
-        true
     }
 }
 

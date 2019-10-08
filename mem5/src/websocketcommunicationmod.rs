@@ -29,7 +29,7 @@ pub fn setup_ws_connection(location_href: String, client_ws_id: usize,
 players_ws_uid:String) -> WebSocket {
     //web-sys has WebSocket for Rust exactly like JavaScript has¸
     //location_href comes in this format  http://localhost:4000/
-    let mut loc_href = location_href.replace("http://", "ws://");
+    let mut loc_href = location_href.replace("http://", "ws://").replace("https://", "wss://");
     //Only for debugging in the development environment
     //let mut loc_href = String::from("ws://192.168.1.57:80/");
     loc_href.push_str("mem5ws/");
@@ -57,7 +57,7 @@ players_ws_uid:String) -> WebSocket {
         unwrap!(
             ws_c.send_with_str(
                 &serde_json::to_string(&WsMessage::MsgRequestWsUid {
-                    my_ws_uid: client_ws_id.clone(),
+                    my_ws_uid: client_ws_id,
                     players_ws_uid : players_ws_uid.clone(),
                 })
                 .expect("error sending test"),

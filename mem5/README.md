@@ -63,7 +63,7 @@ HTML5 has finally bring a true stateful bidirectional communication.
 Most of the programming problems are more easily and effectively solved this way.  
 The old unidirectional stateless communication is very good for static html pages,  
 but is terrible for any dynamic page. The WebSocket is very rudimental and often the  
-communication breaks for many different reasons. The programmer must deal with it inside the application.  
+communication breaks for many different reasons. The programmer must deal with it inside the application. On any network problem it is possible that the message is sent but not received. This is not working well for this game. So I must implement that the receiver sends a confirmation message. The sender must wait for this message to continue the workflow.  
 The protocol has nothing that can be used to deal with reconnections.  
 I send simple structs text messages in json format between the players.  
 They are all in the WsMsg enum and therefore interchangeable.  

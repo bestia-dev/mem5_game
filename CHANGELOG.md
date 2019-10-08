@@ -7,3 +7,4 @@
 2019-09-20 rust 2018 does not need extern, git push from terminal inside VSCode  
 2019-09-21 send only vec of ws_uid in player field in msg  
 2019-09-22 send minimum data in msgs  
+2019-10-08 Let's Encrypt TLS on google VM  
