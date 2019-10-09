@@ -15,7 +15,7 @@ pub fn save_nickname_to_localstorage(vdom_weak: &dodrio::VdomWeak) {
     let document = unwrap!(window.document(), "document");
 
     //logmod::debug_write("before get_element_by_id");
-    let input_nickname = unwrap!(document.get_element_by_id("nickname"));
+    let input_nickname = unwrap!(document.get_element_by_id("input_nickname"));
     //logmod::debug_write("before dyn_into");
     let input_html_element_nickname = unwrap!(
         input_nickname.dyn_into::<web_sys::HtmlInputElement>(),

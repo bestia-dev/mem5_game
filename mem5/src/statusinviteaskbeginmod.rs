@@ -14,11 +14,8 @@ use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
 use mem5_common::{GameStatus, Player, WsMessage};
 use typed_html::dodrio;
-use wasm_bindgen::JsCast; //don't remove this. It is needed for dyn_into.
-                          //endregion
-
-/// The key code for the enter key.
-pub const ENTER: u32 = 13;
+//use wasm_bindgen::JsCast; //don't remove this. It is needed for dyn_into.
+//endregion
 
 ///render invite ask begin, ask to play for multiple contents/folders
 pub fn div_invite_ask_begin<'a, 'bump>(
@@ -73,36 +70,29 @@ where
         <h4>
             {vec![text(
                 bumpalo::format!(in bump, "{}",
-                "Write your nickname and press Enter/Go:")
+                "Write your nickname:")
                 .into_bump_str()
             )]}
         </h4>
         <div style="margin-left: auto ;margin-right: auto ;text-align: center" >
             <input
-            id="nickname"
+            id="input_nickname"
             name="nickname"
-            class="input-nickname"
             value={bumpalo::format!(in bump, "{}",
                 rrc.game_data.my_nickname)
                 .into_bump_str()
             }
-            onkeydown={ move |root, vdom_weak, event| {
-                let event: web_sys::KeyboardEvent = event.dyn_into().unwrap();
-
-                match event.key_code() {
-                    ENTER => {
-                        let v2 = vdom_weak.clone();
-                        localstoragemod::save_nickname_to_localstorage(&v2);
-                        }
-                    _ => {}
+            onkeyup={ move |root, vdom_weak, event| {
+                //save on every key stroke
+                let v2 = vdom_weak.clone();
+                localstoragemod::save_nickname_to_localstorage(&v2);
                 }
-            }}>
+            }>
             </input>
         </div>
     </div>
     )
 }
-
 
 /// on click updates some data and sends msgs
 /// msgs will be asynchronously received and processed

@@ -1,6 +1,6 @@
 [package]
 name = "mem5_common"
-version = "19.10.5-18.40" #no need for semver if it is not a library
+version = "19.10.9-11.52" #no need for semver if it is not a library
 description = "commons for mem5 wasm and server"
 authors = ["Luciano Bestia"]
 edition = "2018"

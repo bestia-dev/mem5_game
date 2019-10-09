@@ -89,7 +89,7 @@ pub fn is_fullscreen(rrc: &RootRenderingComponent) -> bool {
                 Some(media_query_list) => {
                     //logmod::debug_write("media_query_list Some");
                     //returns true if is started from Home screen
-                    media_query_list.matches() 
+                    media_query_list.matches()
                 }
             }
         }
@@ -111,14 +111,14 @@ where
 
     if !is_fullscreen(rrc) {
         ret_val.push(dodrio!(bump,
-        <div class="div_clickable" style="background-color: yellow;"
+        <div id="div_fullscreen" class="div_clickable"
         onclick={move |root, vdom, _event| {
             let rrc = root.unwrap_mut::<RootRenderingComponent>();
             rrc.game_data.is_fullscreen=true;
             javascriptimportmod::do_fullscreen();
             vdom.schedule_render();
             }}>
-            <h2 id= "ws_elem" style= "color:green;">
+            <h2 id= "h2_fullscreen" >
                 {vec![text(
                         bumpalo::format!(in bump, "Click for FullScreen{}!", "")
                     .into_bump_str(),
