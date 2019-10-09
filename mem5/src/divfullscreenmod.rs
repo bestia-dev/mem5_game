@@ -118,7 +118,7 @@ where
             javascriptimportmod::do_fullscreen();
             vdom.schedule_render();
             }}>
-            <h2 id= "h2_fullscreen" >
+            <h2 id="h2_fullscreen" >
                 {vec![text(
                         bumpalo::format!(in bump, "Click for FullScreen{}!", "")
                     .into_bump_str(),

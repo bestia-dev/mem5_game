@@ -24,7 +24,7 @@ where
                 let window = unwrap!(web_sys::window(), "error: web_sys::window");
                 let x = window.location().reload();
             }}>
-        <h2 id= "ws_elem" style= "color:green;">
+        <h2 class="h2_user_can_click">
                 {vec![text(
                     //Play again?
                     bumpalo::format!(in bump, "Game Over! Play again{}?", "").into_bump_str(),

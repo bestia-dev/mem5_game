@@ -57,14 +57,14 @@ description = "build for debug / dev"
 clear = true
 private = true
 command = "wasm-pack"
-args = ["build", "--target", "web","--dev"]
+args = ["build", "--target", "web","--dev", "--no-typescript"]
 
 [tasks.build_release]
 description = "build for release"
 clear = true
 private = true
 command = "wasm-pack"
-args = ["build","--target", "web","--release"]
+args = ["build","--target", "web","--release", "--no-typescript"]
 
 [tasks.copy_pkg_to_webfolder]
 description = "copy wasm pkg to webfolder"

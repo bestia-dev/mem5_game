@@ -41,14 +41,14 @@ where
         //endregion
         vdom.schedule_render();
         }}>
-            <h2 id="ws_elem" style= "color:green;">
+            <h2 class="h2_user_can_click">
                 {vec![
                     text(bumpalo::format!(in bump, "Start Game?{}", "").into_bump_str()),
                 ]}
             </h2>
         </div>
         <div>
-            <h2 style= "color:red;">
+            <h2 class="h2_user_must_wait">
                 {vec![
                     text(bumpalo::format!(in bump, "Players accepted: {}.", rrc.game_data.players.len()-1).into_bump_str()),
                 ]}

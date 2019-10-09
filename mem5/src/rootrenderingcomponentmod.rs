@@ -207,12 +207,12 @@ impl Render for RootRenderingComponent {
             //because I want to debug the WebSocket lost connection
             dodrio!(bump,
                 <div>
-                    <h1 style= "color:red;" >
+                    <h2 class="h2_user_must_wait">
                         {vec![text(
                             bumpalo::format!(in bump, "error_text {} !", self.game_data.error_text)
                                 .into_bump_str(),
                             )]}
-                    </h1>
+                    </h2>
                 </div>
             )
         }

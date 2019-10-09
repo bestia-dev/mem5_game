@@ -67,7 +67,7 @@ where
     //unpredictable situation
     //return
     dodrio!(bump,
-    <h2 id= "ws_elem">
+    <h2  >
         {vec![text(bumpalo::format!(in bump, "gamestatus: {} player {}", rrc.game_data.game_status.as_ref(),rrc.game_data.my_player_number).into_bump_str())]}
     </h2>
     )

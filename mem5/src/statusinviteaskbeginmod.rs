@@ -38,7 +38,7 @@ where
 
                 vdom.schedule_render();
                 }}>
-            <h2 id= "ws_elem" style= "color:green;">
+            <h2 class="h2_user_can_click">
                 {vec![text(
                 //show Ask Player2 to Play!
                 bumpalo::format!(in bump, "Invite for {}", folder_name_clone2)

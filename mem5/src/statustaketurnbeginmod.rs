@@ -53,7 +53,7 @@ where
                     // Finally, re-render the component on the next animation frame.
                     vdom.schedule_render();
                 }}>
-            <h2 id= "ws_elem" style= "color:green;">
+            <h2 class="h2_user_must_click">
                 {vec![text(
                     bumpalo::format!(in bump, "{} {}, click here to take your turn !",
                         unwrap!(rrc.game_data.players.get(rrc.game_data.my_player_number-1)).nickname,
@@ -67,7 +67,7 @@ where
     } else {
         //return wait for the other player
         dodrio!(bump,
-        <h2 id="ws_elem" style= "color:red;">
+        <h2 class="h2_user_must_wait">
             {vec![text(bumpalo::format!(in bump, "Wait for {} {} !",
             unwrap!(rrc.game_data.players.get(next_player-1)).nickname,
             crate::ordinal_numbers(next_player)

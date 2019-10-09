@@ -28,7 +28,7 @@ where
                 div_invite_asked_on_click(rrc);
                 vdom.schedule_render();
             }}>
-        <h2 id= "ws_elem" style= "color:green;">
+        <h2 class="h2_user_must_click">
                 {vec![text(
                     //show Ask Player2 to Play!
                     bumpalo::format!(in bump, "{}, click here to Accept {} from {}!",
@@ -84,7 +84,7 @@ where
     'a: 'bump,
 {
     dodrio!(bump,
-    <h2 id= "ws_elem" style= "color:red;">
+    <h2 class="h2_user_must_wait">
         {vec![text(bumpalo::format!(in bump, "Game {} accepted.", rrc.game_data.asked_folder_name).into_bump_str(),)]}
     </h2>
     )

@@ -33,7 +33,7 @@ The game is over when all the cards are permanently face up.
 Click on \"Play again?\" to re-start the game.  ";
 
 ///game description
-const GAME_DESCRIPTION:& str = "Learning to use Rust Wasm/WebAssembly with Dodrio Virtual Dom and WebSockets communication - fourth iteration.";
+const GAME_DESCRIPTION:& str = "Learning to use Rust Wasm/WebAssembly with Dodrio Virtual Dom, WebSockets communication and PWA (Progressive Web App) - fifth iteration.";
 
 ///Render Component: The static parts can be cached easily.
 pub struct RulesAndDescription {}

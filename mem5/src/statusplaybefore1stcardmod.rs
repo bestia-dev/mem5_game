@@ -25,7 +25,7 @@ where
     if rrc.game_data.my_player_number == rrc.game_data.player_turn {
         dodrio!(bump,
         <div >
-            <h2 id= "ws_elem" style= "color:orange;">
+            <h2 class="h2_must_do_something">
                 {vec![text(bumpalo::format!(in bump, "Play {} {} !",
                 unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
                 crate::ordinal_numbers(rrc.game_data.player_turn))
@@ -36,7 +36,7 @@ where
     } else {
         //return wait for the other player
         dodrio!(bump,
-        <h2 id="ws_elem" style= "color:red;">
+        <h2 class="h2_user_must_wait">
             {vec![text(bumpalo::format!(in bump, "Wait for {} {} !",
             unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
             crate::ordinal_numbers(rrc.game_data.player_turn)

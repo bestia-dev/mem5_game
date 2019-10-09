@@ -57,7 +57,7 @@ where
             rrc.game_data.is_reconnect = false;
             vdom.schedule_render();
         }}>
-            <h2 id= "ws_elem" style= "color:green;">
+            <h2 class="h2_user_can_click">
                 {vec![text(
                 //StatusReconnect?
                 bumpalo::format!(in bump, "Reconnect{}", "").into_bump_str(),
