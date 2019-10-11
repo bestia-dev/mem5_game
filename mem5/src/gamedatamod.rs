@@ -124,6 +124,8 @@ pub struct GameData {
     pub is_reconnect: bool,
     /// to not check it all the time
     pub is_fullscreen: bool,
+    /// flag that is waiting ack
+    pub is_waiting_ack: bool,
 }
 //endregion
 
@@ -270,6 +272,7 @@ impl GameData {
             href: "".to_string(),
             is_reconnect: false,
             is_fullscreen: false,
+            is_waiting_ack: false,
         }
     }
     /*

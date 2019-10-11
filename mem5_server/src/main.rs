@@ -358,7 +358,8 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         | WsMessage::MsgPlayerClick2ndCardTakeTurnBegin { players_ws_uid, .. }
         | WsMessage::MsgTakeTurnEnd { players_ws_uid, .. }
         | WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin { players_ws_uid, .. } 
-        | WsMessage::MsgAllGameData { players_ws_uid, .. } 
+        | WsMessage::MsgAllGameData { players_ws_uid, .. }
+        | WsMessage::Ack{players_ws_uid, ..}
         => {
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }

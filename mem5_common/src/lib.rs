@@ -163,6 +163,15 @@ pub enum WsMessage {
         ///game status
         game_status: GameStatus,
     },
+    ///acknowledge msg, that the receiver received the message
+    Ack{
+        ///msg sender uid
+        my_ws_uid: usize,
+        ///send msg to this players
+        players_ws_uid: String,
+        ///msg id (random)
+        msg_id:usize,
+    }
 }
 
 ///the game can be in various statuses and that differentiate the UI and actions

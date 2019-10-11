@@ -271,10 +271,17 @@ pub fn run() -> Result<(), JsValue> {
         "No #div_for_virtual_dom"
     );
 
-    let mut rng = SmallRng::from_entropy();
     //my_ws_uid is random generated on the client and sent to
-    //WebSocket server with an url param
-    let my_ws_uid: usize = rng.gen_range(1, 9999);
+    //WebSocket server with an url param. It is saved locally to allow reconnection
+    //if there are connection problems.
+    let mut my_ws_uid: usize = localstoragemod::load_my_ws_uid();
+    if my_ws_uid==0 {
+        let mut rng = SmallRng::from_entropy();
+        my_ws_uid = rng.gen_range(1, 9999);
+        localstoragemod::save_my_ws_uid(my_ws_uid);
+    }
+    //from now on, I don't want it mutable (variable shadowing).
+    let my_ws_uid=my_ws_uid;
 
     //find out URL
     let mut location_href = unwrap!(window.location().href(), "href not known");

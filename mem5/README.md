@@ -1,6 +1,6 @@
 # mem5
 
-mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio and WebSocket communication  
+mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web App).  
 
 [comment]: # (lmake_readme version)  
 Look also at the workspace readme on <https://github.com/LucianoBestia/mem5_game>  
@@ -72,6 +72,23 @@ The WebSocket server is coded especially for this game and recognizes 3 types of
 - msg to broadcast to every other player
 - msg to send only to the actual game players
 
+## WS is not reliable
+
+Simple messaging is not reliable. On mobiles it is even worse. There is a lot of possibilities that something goes wrong and the message doesn't reach the destination. That means that I need to always reply that the message is delivered.  
+Workflow:  
+
+- sender sends one message to more players (more ws_uid) with one random number
+    push to a vector more items with ws_uid and msg_id
+    blocks the continuation of the workflow untill receives all ACK from all players
+
+- receiver on receive send the ACK aknowledge msg with his ws_uid and msg_id
+
+- the sender receives the ACK and removes one item from the vector
+    if there is no more items for that msg_id, the workflow can continue.
+    if after 3 seconds the ACK is not received and error message is shown to the player.
+
+This is very similar to message a queue, but with a time limit.  
+
 ## WS reconnect
 
 TODO: It looks that plain web sockets have often connection problems and they disconnect here and there. Creating a good reconnect is pretty challenging.  
@@ -131,12 +148,11 @@ But not on smartphones that are the only target for this app.
 Apple is very restrictive and does not allow fullscreen Safari on iPhones.  
 The workaround is to make a shortcut for the webapp on the homescreen.  
 
-## mem5 as webapp on HomeScreen
+## PWA (Progressive Web App)
 
 On both android and iPhone is possible to "Add to homescreen" the webapp.  
 Then it will open in fullscreen and be beautiful.  
-In safari the share icon (a square with arrow up) has "Add to home screen".
-<https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html>  
+To be 100% PWA it must be secured with TLS and must have a service worker.  
 
 ## Modules
 
