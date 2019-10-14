@@ -58,7 +58,7 @@ clear = true
 # backslash is the escape character for all other special characters.
 # and then another time I have to escape the backslash. So 4 backslash for one backslash.
 script = [
-    "rsync -e -avz --delete-after /home/luciano/rustprojects/mem5_game/webfolder/ /home/luciano/rustprojects/googlecloud/var/www/webapps/mem5_game/",
+    "rsync -avz --delete-after /home/luciano/rustprojects/mem5_game/webfolder/ /home/luciano/rustprojects/googlecloud/var/www/webapps/mem5_game/",
     "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@34.87.17.103 screen -dr mem5-8085 -X stuff $'\\\\003'",
     "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@34.87.17.103 screen -dr mem5-8085 -X stuff 'cd\\ \\/var\\/www\\/webapps\\/mem5_game\\\\n'",
     "rsync -e ssh -avz --delete-after /home/luciano/rustprojects/googlecloud/var/www/webapps/mem5_game/ luciano_bestia@34.87.17.103:/var/www/webapps/mem5_game/",
