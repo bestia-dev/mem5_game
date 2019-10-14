@@ -1,6 +1,8 @@
 // sw.js
 var cacheName = 'mem5_game';
 var filesToCache = [
+    './pkg/mem5_bg.wasm',
+    './pkg/mem5.js',
     'main.js',
     'css/mem5.css',
     'images/icons-16.png',

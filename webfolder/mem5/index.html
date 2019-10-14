@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <!--a lot of tricks to make it fullscreen. Best option is to "Add to home screen" the webapp on both iPhone and Android. -->
   <link rel="manifest" href="manifest.json">
+  <meta name="Description" content="A simple and fun memory game.">
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#FFFF00">
 
   <link rel="icon" type="image/png" href="images/icons-16.png" sizes="16x16">
   <link rel="icon" type="image/png" href="images/icons-32.png" sizes="32x32">
   <link rel="icon" type="image/png" href="images/icons-192.png" sizes="192x192">
   <link rel="icon" type="image/png" href="images/icons-512.png" sizes="512x512">
+  <link rel="apple-touch-icon" href="images/icons-192.png">
+  <!-- not working in browsers yet:
+  <link rel="preload" href="./pkg/mem5_bg.wasm" as="module">
+  -->
 
   <title>mem5</title>
   <link rel="stylesheet" href="css/mem5.css">
@@ -21,6 +27,9 @@
 </head>
 
 <body>
+  <noscript>
+    <p>This game cannot work without javascript enabled !</p>
+  </noscript>
   <div id="div_for_virtual_dom">
   </div>
   <script type="module">
