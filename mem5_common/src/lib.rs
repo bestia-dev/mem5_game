@@ -50,7 +50,7 @@ use serde_derive::{Serialize, Deserialize};
 
 ///`WsMessage` enum for WebSocket
 #[allow(clippy::pub_enum_variant_names)]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub enum WsMessage {
     ///MsgDummy
     MsgDummy {
@@ -143,6 +143,8 @@ pub enum WsMessage {
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
         players_ws_uid: String,
+        ///msg id (random)
+        msg_id:usize,
     },
     ///all game data
     MsgAllGameData{
@@ -164,7 +166,7 @@ pub enum WsMessage {
         game_status: GameStatus,
     },
     ///acknowledge msg, that the receiver received the message
-    Ack{
+    MsgAckTakeTurnEnd{
         ///msg sender uid
         my_ws_uid: usize,
         ///send msg to this players

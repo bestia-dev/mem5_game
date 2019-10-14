@@ -281,7 +281,8 @@ pub fn run() -> Result<(), JsValue> {
         localstoragemod::save_my_ws_uid(my_ws_uid);
     }
     //from now on, I don't want it mutable (variable shadowing).
-    let my_ws_uid=my_ws_uid;
+    #[allow(clippy::shadow_same)]
+    let my_ws_uid = my_ws_uid;
 
     //find out URL
     let mut location_href = unwrap!(window.location().href(), "href not known");

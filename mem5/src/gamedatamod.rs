@@ -5,7 +5,7 @@ use crate::localstoragemod;
 
 use serde_derive::{Serialize, Deserialize};
 use unwrap::unwrap;
-use mem5_common::{GameStatus, Player};
+use mem5_common::{GameStatus, Player, WsMessage};
 use rand::rngs::SmallRng;
 use rand::seq::SliceRandom;
 use rand::FromEntropy;
@@ -81,6 +81,18 @@ pub struct Card {
     ///field for id attribute for HTML element image contains the card index
     pub card_index_and_id: usize,
 }
+
+///save the message in queue to resend it if timeout expires
+#[derive(Serialize, Deserialize)]
+pub struct MsgInQueue{
+    ///the player that must ack the msg
+    pub player_ws_uid: usize,
+    ///the msg id is a random number
+    pub msg_id:usize,
+    ///the content of the message if it needs to be resend
+    pub msg: WsMessage,
+}
+
 ///game data
 pub struct GameData {
     ///my ws client instance unique id. To not listen the echo to yourself.
@@ -124,8 +136,8 @@ pub struct GameData {
     pub is_reconnect: bool,
     /// to not check it all the time
     pub is_fullscreen: bool,
-    /// flag that is waiting ack
-    pub is_waiting_ack: bool,
+    /// vector of msgs waiting for ack. If the 3 sec timeout passes it resends the same msg.
+    pub msgs_waiting_ack: Vec<MsgInQueue>,
 }
 //endregion
 
@@ -272,7 +284,7 @@ impl GameData {
             href: "".to_string(),
             is_reconnect: false,
             is_fullscreen: false,
-            is_waiting_ack: false,
+            msgs_waiting_ack: vec!{},
         }
     }
     /*

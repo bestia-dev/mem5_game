@@ -16,7 +16,7 @@ The workspace mem5_game is made of:
 ## Info and working game
 
 You can play the game here (hosted on google cloud platform):  
-<http://bestia.shorturl.com/mem5>  
+<http://bestia.dev/mem5>  
 Read the `Previous project`:  
 <https://github.com/LucianoBestia/mem4_game>  
 

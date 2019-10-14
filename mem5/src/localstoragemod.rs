@@ -3,6 +3,7 @@
 //region: use
 //use crate::logmod;
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::javascriptimportmod;
 
 use unwrap::unwrap;
 use wasm_bindgen::JsCast;
@@ -55,19 +56,27 @@ pub fn load_nickname() -> String {
 
 ///save my_ws_uid to local storage
 pub fn save_my_ws_uid(my_ws_uid:usize) {
-    let window = unwrap!(web_sys::window(), "window");
-    let ls = unwrap!(unwrap!(window.local_storage()));
-    //localstorage saves only strings
-    let _x = ls.set_item("my_ws_uid", &format!("{}", my_ws_uid));
+    if  javascriptimportmod::is_mobile_device(){
+        //save it only on smartphones. The desktop browser I use for debugging in multiple tabs.
+        let window = unwrap!(web_sys::window(), "window");
+        let ls = unwrap!(unwrap!(window.local_storage()));
+        //localstorage saves only strings
+        let _x = ls.set_item("my_ws_uid", &format!("{}", my_ws_uid));
+    }
 }
 
 ///load my_ws_uid from local storage
 pub fn load_my_ws_uid() -> usize {
-    let window = unwrap!(web_sys::window(), "window");
-    let ls = unwrap!(unwrap!(window.local_storage()));
-    //localstorage saves only strings
-    let str_uid = unwrap!(ls.get_item("my_ws_uid")).unwrap_or("0".to_string());
-    //return my_ws_uid
-    let usize_uid = str_uid.parse::<usize>().unwrap();
-    usize_uid
+    if  javascriptimportmod::is_mobile_device(){
+        let window = unwrap!(web_sys::window(), "window");
+        let ls = unwrap!(unwrap!(window.local_storage()));
+        //localstorage saves only strings
+        let str_uid = unwrap!(ls.get_item("my_ws_uid")).unwrap_or_else(|| "0".to_string());
+        let usize_uid = str_uid.parse::<usize>().unwrap();
+        //return my_ws_uid
+        usize_uid
+    }else{
+        //return my_ws_uid
+        0
+    }
 }

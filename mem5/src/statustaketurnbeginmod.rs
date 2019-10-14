@@ -6,12 +6,16 @@ use crate::websocketcommunicationmod;
 use mem5_common::{GameStatus, WsMessage};
 use crate::gamedatamod::{CardStatusCardFace};
 use crate::logmod;
+use crate::gamedatamod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
 use typed_html::dodrio;
+use rand::Rng;
+use rand::rngs::SmallRng;
+use rand::FromEntropy;
 //endregion
 
 ///render take turn
@@ -35,23 +39,34 @@ where
     if rrc.game_data.my_player_number == next_player {
         dodrio!(bump,
         <div class="div_clickable" onclick={move |root, vdom, _event| {
-                    let rrc =
-                        root.unwrap_mut::<RootRenderingComponent>();
+                    let rrc = root.unwrap_mut::<RootRenderingComponent>();
                     //this game_data mutable reference is dropped on the end of the function
                     //region: send WsMessage over WebSocket
-                        logmod::debug_write(&format!("ws_send_msg: MsgTakeTurnEnd {}", ""));
-
-                    websocketcommunicationmod::ws_send_msg(
-                        &rrc.game_data.ws,
-                        &WsMessage::MsgTakeTurnEnd {
-                            my_ws_uid: rrc.game_data.my_ws_uid,
-                            players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
+                    logmod::debug_write(&format!("ws_send_msg: MsgTakeTurnEnd {}", ""));
+                    let mut rng = SmallRng::from_entropy();
+                    let msg_id =rng.gen_range(1, 4294967295);
+                    let msg = WsMessage::MsgTakeTurnEnd {
+                        my_ws_uid: rrc.game_data.my_ws_uid,
+                        players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
+                        msg_id,
+                    };
+                    websocketcommunicationmod::ws_send_msg(&rrc.game_data.ws,&msg);
+                    //write the msgs in the queue
+                    for player in rrc.game_data.players.iter(){
+                        if player.ws_uid != rrc.game_data.my_ws_uid{
+                            let msg_for_loop = msg.clone();
+                            rrc.game_data.msgs_waiting_ack.push(
+                                gamedatamod::MsgInQueue{
+                                    player_ws_uid: player.ws_uid,
+                                    msg_id,
+                                    msg: msg_for_loop,
+                                }
+                            );
                         }
-                    );
+                    }
                     //endregion
-                    take_turn_end(rrc);
-                    // Finally, re-render the component on the next animation frame.
-                    vdom.schedule_render();
+                    //Here I wait for on_MsgAckTakeTurnEnd from 
+                    //every player before call take_turn_end(rrc);
                 }}>
             <h2 class="h2_user_must_click">
                 {vec![text(
@@ -127,6 +142,44 @@ pub fn on_msg_take_turn_begin(rrc: &mut RootRenderingComponent, card_index_of_se
 }
 
 ///msg player change
-pub fn on_msg_take_turn_end(rrc: &mut RootRenderingComponent) {
+pub fn on_msg_take_turn_end(rrc: &mut RootRenderingComponent,msg_sender_ws_uid:usize, msg_id:usize) {
+    //send back the ACK msg to the sender
+     websocketcommunicationmod::ws_send_msg(
+        &rrc.game_data.ws,
+        &WsMessage::MsgAckTakeTurnEnd {
+            my_ws_uid: rrc.game_data.my_ws_uid,
+            players_ws_uid: serde_json::to_string(&vec![msg_sender_ws_uid]).unwrap(),
+            msg_id
+        }
+    );
+
     take_turn_end(rrc);
+}
+
+
+///all the players must acknowledge that they received the msg
+#[allow(clippy::needless_pass_by_value)]
+pub fn on_msg_ack_take_turn_end(
+    rrc: &mut RootRenderingComponent,
+    player_ws_uid: usize,
+    msg_id: usize
+) {
+    //remove the waiting msg from the queue
+    //I use the oposite method "retain" because there is not a method "remove"
+    rrc.game_data.msgs_waiting_ack.retain(|x| !(x.player_ws_uid == player_ws_uid && x.msg_id==msg_id));
+
+    //if there is no more items with this msg_id, then proceed
+    let mut has_msg_id = false;
+    for x in rrc.game_data.msgs_waiting_ack.iter(){
+        if x.msg_id==msg_id {
+            has_msg_id=true;
+            break;
+        }
+    }
+    if !has_msg_id{
+        logmod::debug_write("take_turn_end(rrc)");
+        take_turn_end(rrc);
+    }
+    //TODO: timer if after 3 seconds the ack is not received resend the msg
+    //do this 3 times and then hard error
 }

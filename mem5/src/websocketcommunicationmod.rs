@@ -255,15 +255,16 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             WsMessage::MsgTakeTurnEnd {
-                my_ws_uid: _,
+                my_ws_uid,
                 players_ws_uid: _,
+                msg_id
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statustaketurnbeginmod::on_msg_take_turn_end(rrc);
+                            statustaketurnbeginmod::on_msg_take_turn_end(rrc,my_ws_uid,msg_id);
                             v2.schedule_render();
                         }
                     })
@@ -307,6 +308,23 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 card_index_of_second_click,
                 player_turn,
                 game_status);
+                            v2.schedule_render();
+                        }
+                    })
+                    .map_err(|_| ()),
+                );
+            }
+            WsMessage::MsgAckTakeTurnEnd {
+                my_ws_uid,
+                players_ws_uid: _,
+                msg_id,
+            } => {
+                wasm_bindgen_futures::spawn_local(
+                    weak.with_component({
+                        let v2 = weak.clone();
+                        move |root| {
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                            statustaketurnbeginmod::on_msg_ack_take_turn_end(rrc, my_ws_uid, msg_id);
                             v2.schedule_render();
                         }
                     })

@@ -74,7 +74,7 @@ The WebSocket server is coded especially for this game and recognizes 3 types of
 
 ## WS is not reliable
 
-Simple messaging is not reliable. On mobiles it is even worse. There is a lot of possibilities that something goes wrong and the message doesn't reach the destination. That means that I need to always reply that the message is delivered.  
+Simple messaging is not reliable. On mobiles it is even worse. There is a lot of possibilities that something goes wrong and the message doesn't reach the destination. That means that I need to always reply and acknowledgement "ack" that the message is delivered.  
 Workflow:  
 
 - sender sends one message to more players (more ws_uid) with one random number
@@ -89,9 +89,9 @@ Workflow:
 
 This is very similar to message a queue, but with a time limit.  
 
-## WS reconnect
+## gRPC
 
-TODO: It looks that plain web sockets have often connection problems and they disconnect here and there. Creating a good reconnect is pretty challenging.  
+The new shiny protocol for web communication is great for server-to-server communication. But it is still very limited inside the browser. When it eventually becomes stable I would like to change Websockets for gRPC.
 
 ## The game flow
 

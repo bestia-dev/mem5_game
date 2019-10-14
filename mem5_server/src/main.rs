@@ -14,7 +14,7 @@
 //! ## Google vm
 //! One working server is installed on google vm.  
 //! You can play the game here (hosted on google cloud platform):  
-//! http://bestia.shorturl.com/mem5  
+//! http://bestia.dev/mem5  
 //! 
 //! 
 //! 
@@ -359,7 +359,7 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         | WsMessage::MsgTakeTurnEnd { players_ws_uid, .. }
         | WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin { players_ws_uid, .. } 
         | WsMessage::MsgAllGameData { players_ws_uid, .. }
-        | WsMessage::Ack{players_ws_uid, ..}
+        | WsMessage::MsgAckTakeTurnEnd{players_ws_uid, ..}
         => {
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
