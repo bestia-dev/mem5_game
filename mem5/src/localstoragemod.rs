@@ -72,9 +72,9 @@ pub fn load_my_ws_uid() -> usize {
         let ls = unwrap!(unwrap!(window.local_storage()));
         //localstorage saves only strings
         let str_uid = unwrap!(ls.get_item("my_ws_uid")).unwrap_or_else(|| "0".to_string());
-        let usize_uid = str_uid.parse::<usize>().unwrap();
         //return my_ws_uid
-        usize_uid
+        let my_ws_uid=unwrap!(str_uid.parse::<usize>());
+        my_ws_uid
     }else{
         //return my_ws_uid
         0

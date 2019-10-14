@@ -3,7 +3,6 @@
 //region: use, const
 use crate::divcardmonikermod;
 use crate::divfordebuggingmod;
-use crate::divfullscreenmod;
 use crate::divgridcontainermod;
 use crate::divplayeractionsmod;
 use crate::divplayersandscoresmod;
@@ -198,7 +197,6 @@ impl Render for RootRenderingComponent {
                     }
                 }
                 {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
-                {vec![divfullscreenmod::div_for_fullscreen(self, bump)]}
                 {vec![self.cached_rules_and_description.render(bump)]}
             </div>
             )
