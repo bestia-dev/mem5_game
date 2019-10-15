@@ -59,14 +59,6 @@ impl RootRenderingComponent {
             Cached::invalidate(&mut self.cached_players_and_scores);
         }
     }
-
-    ///prepares the game data
-    pub fn game_data_init(&mut self) {
-        self.game_data.content_folder_name = self.game_data.asked_folder_name.clone();
-        self.game_data.prepare_random_data();
-        self.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
-        self.game_data.player_turn = 1;
-    }
     ///reset the data to replay the game
     pub fn reset(&mut self) {
         self.game_data.card_grid_data = gamedatamod::GameData::prepare_for_empty();
@@ -92,51 +84,6 @@ impl RootRenderingComponent {
             self.game_data.error_text = "my_ws_uid is incorrect!".to_string();
         }
     }
-
-    ///on game data init
-    pub fn on_msg_game_data_init(
-        &mut self,
-        card_grid_data: &str,
-        game_config: &str,
-        players: &str,
-    ) {
-        //logmod::debug_write(&format!("on_msg_game_data_init {}", players));
-        self.game_data.content_folder_name = self.game_data.asked_folder_name.clone();
-        self.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
-        self.game_data.player_turn = 1;
-        self.game_data.card_grid_data = unwrap!(
-            serde_json::from_str(card_grid_data),
-            "error serde_json::from_str(card_grid_data)"
-        );
-
-        self.game_data.game_config = unwrap!(
-            serde_json::from_str(game_config),
-            "error serde_json::from_str(game_config)"
-        );
-
-        self.game_data.players = unwrap!(
-            serde_json::from_str(players),
-            "error serde_json::from_str(players)"
-        );
-
-        self.game_data.players_ws_uid =
-            gamedatamod::prepare_players_ws_uid(&self.game_data.players);
-
-        //find my player number
-        for index in 0..self.game_data.players.len() {
-            if unwrap!(
-                self.game_data.players.get_mut(index),
-                "self.game_data.players.get_mut(index)"
-            )
-            .ws_uid
-                == self.game_data.my_ws_uid
-            {
-                self.game_data.my_player_number = unwrap!(index.checked_add(1));
-            }
-        }
-        self.check_invalidate_for_all_components();
-    }
-    //endregion
 }
 //endregion
 

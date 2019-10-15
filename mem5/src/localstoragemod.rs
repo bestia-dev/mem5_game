@@ -3,7 +3,6 @@
 //region: use
 //use crate::logmod;
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
-use crate::javascriptimportmod;
 
 use unwrap::unwrap;
 use wasm_bindgen::JsCast;

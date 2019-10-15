@@ -151,7 +151,7 @@ pub fn on_msg_take_turn_end(rrc: &mut RootRenderingComponent,msg_sender_ws_uid:u
         &rrc.game_data.ws,
         &WsMessage::MsgAckTakeTurnEnd {
             my_ws_uid: rrc.game_data.my_ws_uid,
-            players_ws_uid: serde_json::to_string(&vec![msg_sender_ws_uid]).unwrap(),
+            players_ws_uid: unwrap!(serde_json::to_string(&vec![msg_sender_ws_uid])),
             msg_id
         }
     );
@@ -173,7 +173,7 @@ pub fn on_msg_ack_take_turn_end(
 
     //if there is no more items with this msg_id, then proceed
     let mut has_msg_id = false;
-    for x in rrc.game_data.msgs_waiting_ack.iter(){
+    for x in &rrc.game_data.msgs_waiting_ack{
         if x.msg_id==msg_id {
             has_msg_id=true;
             break;

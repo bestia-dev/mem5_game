@@ -2,6 +2,7 @@
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
+use crate::statusgamedatainitmod;
 use crate::statusinviteaskedmod;
 use crate::statusinviteaskbeginmod;
 use crate::statusplaybefore1stcardmod;
@@ -186,7 +187,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
 
                             if let GameStatus::StatusPlayAccepted = rrc.game_data.game_status {
-                                rrc.on_msg_game_data_init(&card_grid_data, &game_config, &players);
+                                let v3 = v2.clone();
+                                statusgamedatainitmod::on_msg_game_data_init(rrc,v3, &card_grid_data, &game_config, &players);
                                 v2.schedule_render();
                             }
                         }

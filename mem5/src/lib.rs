@@ -231,12 +231,14 @@ mod divrulesanddescriptionmod;
 mod fetchmod;
 mod fetchgamesmetadatamod;
 mod fetchgameconfigmod;
+mod fetchallimgsforcachemod;
 mod gamedatamod;
 mod javascriptimportmod;
 mod localstoragemod;
 mod logmod;
 mod rootrenderingcomponentmod;
 mod sessionstoragemod;
+mod statusgamedatainitmod;
 mod statusinviteaskbeginmod;
 mod statusinviteaskedmod;
 mod statusinviteaskingmod;
@@ -259,6 +261,7 @@ use wasm_bindgen::prelude::*;
 
 //region: wasm_bindgen(start) is where everything starts
 #[wasm_bindgen(start)]
+#[allow(clippy::shadow_same)]
 ///To start the Wasm application, wasm_bindgen runs this functions
 pub fn run() -> Result<(), JsValue> {
     // Initialize debugging for when/if something goes wrong.
@@ -282,7 +285,6 @@ pub fn run() -> Result<(), JsValue> {
         sessionstoragemod::save_my_ws_uid(my_ws_uid);
     }
     //from now on, I don't want it mutable (variable shadowing).
-    #[allow(clippy::shadow_same)]
     let my_ws_uid = my_ws_uid;
 
     //find out URL

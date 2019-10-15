@@ -72,7 +72,7 @@ where
         </div>
     )];
 
-    if !is_fullscreen(rrc) {
+    if !is_fullscreen(rrc) && javascriptimportmod::is_mobile_device() {
         ret_val.push(dodrio!(bump,
         <div id="div_fullscreen" class="div_clickable"
         onclick={move |root, vdom, _event| {

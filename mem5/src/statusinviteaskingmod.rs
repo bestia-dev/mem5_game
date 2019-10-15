@@ -3,6 +3,8 @@
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
+use crate::fetchallimgsforcachemod;
+use crate::statusgamedatainitmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -23,23 +25,25 @@ where
     dodrio!(bump,
     <div>
         <div class="div_clickable" onclick={move |root, vdom, _event| {
-                    let rrc =
-                        root.unwrap_mut::<RootRenderingComponent>();
-                    //region: send WsMessage over WebSocket
-                    rrc.game_data_init();
-                    //logmod::debug_write(&format!("MsgGameDataInit send {}",rrc.game_data.players_ws_uid));
-                    websocketcommunicationmod::ws_send_msg(
-                        &rrc.game_data.ws,
-                        &WsMessage::MsgGameDataInit {
-                            my_ws_uid: rrc.game_data.my_ws_uid,
-                            players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
-                            players: unwrap!(serde_json::to_string(&rrc.game_data.players)),
-                            card_grid_data: unwrap!(serde_json::to_string(&rrc.game_data.card_grid_data)),
-                            game_config: unwrap!(serde_json::to_string(&rrc.game_data.game_config)),
-                        },
-                    );
-        //endregion
-        vdom.schedule_render();
+            let rrc = root.unwrap_mut::<RootRenderingComponent>();
+            //region: send WsMessage over WebSocket
+            statusgamedatainitmod::game_data_init(rrc);
+            //logmod::debug_write(&format!("MsgGameDataInit send {}",rrc.game_data.players_ws_uid));
+            websocketcommunicationmod::ws_send_msg(
+                &rrc.game_data.ws,
+                &WsMessage::MsgGameDataInit {
+                    my_ws_uid: rrc.game_data.my_ws_uid,
+                    players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
+                    players: unwrap!(serde_json::to_string(&rrc.game_data.players)),
+                    card_grid_data: unwrap!(serde_json::to_string(&rrc.game_data.card_grid_data)),
+                    game_config: unwrap!(serde_json::to_string(&rrc.game_data.game_config)),
+                },
+            );
+            let v2 = vdom.clone();
+            //async fetch all imgs and put them in service worker cache
+            fetchallimgsforcachemod::fetch_all_img_for_cache_request(rrc, v2);
+            //endregion
+            vdom.schedule_render();
         }}>
             <h2 class="h2_user_can_click">
                 {vec![
