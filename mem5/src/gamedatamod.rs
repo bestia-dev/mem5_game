@@ -305,6 +305,7 @@ impl GameData {
             | GameStatus::StatusPlayBefore2ndCard
             | GameStatus::StatusTakeTurnBegin
             | GameStatus::StatusTakeTurnEnd
+            | GameStatus::StatusWaitingAckMsg
             | GameStatus::StatusGameOverPlayAgainBegin => true,
             _ => false,
         }
