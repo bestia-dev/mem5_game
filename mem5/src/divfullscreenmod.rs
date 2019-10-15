@@ -91,12 +91,12 @@ where
         ));
         ret_val.push(dodrio!(bump,
         <div>
-            <h2>
+            <h3>
                 {vec![text(
                     bumpalo::format!(in bump, "or choose Add to Homescreen from your browser menu{}", "")
                 .into_bump_str(),
                 )]}
-            </h2>
+            </h3>
         </div>
         ));
     }

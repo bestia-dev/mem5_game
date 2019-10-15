@@ -60,8 +60,8 @@ impl Render for RulesAndDescription {
             </h4>
             <h6>
                 {vec![text(bumpalo::format!(in bump, "Learning Rust programming: {}", "").into_bump_str(),)]}
-                /*TODO: tried to add rel="noreferrer", but the macro don't understand that */
-                <a href= "https://github.com/LucianoBestia/mem5_game" target="_blank">
+                /*TODO: tried to add rel="noreferrer", but the dodrio! macro doesn't understand that */
+                <a href= "https://github.com/LucianoBestia/mem5_game" target="_blank" style="color:#74bbfb">
                     {vec![text(bumpalo::format!(in bump, "https://github.com/LucianoBestia/mem5_game{}", "").into_bump_str(),)]}
                 </a>
             </h6>

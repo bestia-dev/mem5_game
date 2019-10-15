@@ -48,7 +48,7 @@ pub fn save_nickname_to_localstorage(vdom_weak: &dodrio::VdomWeak) {
 pub fn load_nickname() -> String {
     let window = unwrap!(web_sys::window(), "window");
     let ls = unwrap!(unwrap!(window.local_storage()));
-    let empty1 = "Player".to_string();
+    let empty1 = "nickname".to_string();
     //return nickname
     unwrap!(ls.get_item("nickname")).unwrap_or(empty1)
 }

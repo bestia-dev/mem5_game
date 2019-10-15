@@ -66,15 +66,13 @@ where
     'a: 'bump,
 {
     dodrio!(bump,
-    <div>
-        <h4>
+    <div style="margin-left: auto ;margin-right: auto ;text-align: center" >
+        <label>
             {vec![text(
                 bumpalo::format!(in bump, "{}",
                 "Write your nickname:")
                 .into_bump_str()
             )]}
-        </h4>
-        <div style="margin-left: auto ;margin-right: auto ;text-align: center" >
             <input
             id="input_nickname"
             name="nickname"
@@ -89,7 +87,7 @@ where
                 }
             }>
             </input>
-        </div>
+        </label>
     </div>
     )
 }
