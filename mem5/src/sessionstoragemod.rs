@@ -41,3 +41,23 @@ pub fn get_debug_text() -> String {
     //return nickname
     unwrap!(ls.get_item("debug_text")).unwrap_or(empty1)
 }
+
+///save my_ws_uid to session storage
+pub fn save_my_ws_uid(my_ws_uid:usize) {
+        //save it only on smartphones. The desktop browser I use for debugging in multiple tabs.
+        let window = unwrap!(web_sys::window(), "window");
+        let ls = unwrap!(unwrap!(window.session_storage()));
+        //sessionstorage saves only strings
+        let _x = ls.set_item("my_ws_uid", &format!("{}", my_ws_uid));
+}
+
+///load my_ws_uid from session storage
+pub fn load_my_ws_uid() -> usize {
+        let window = unwrap!(web_sys::window(), "window");
+        let ls = unwrap!(unwrap!(window.session_storage()));
+        //sessionstorage saves only strings
+        let str_uid = unwrap!(ls.get_item("my_ws_uid")).unwrap_or_else(|| "0".to_string());
+        //return my_ws_uid
+        let my_ws_uid=unwrap!(str_uid.parse::<usize>());
+        my_ws_uid
+}

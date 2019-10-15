@@ -43,6 +43,7 @@ where
                     //this game_data mutable reference is dropped on the end of the function
                     //region: send WsMessage over WebSocket
                     logmod::debug_write(&format!("ws_send_msg: MsgTakeTurnEnd {}", ""));
+                    rrc.game_data.game_status=GameStatus::StatusWaitingAckMsg;
                     let mut rng = SmallRng::from_entropy();
                     let msg_id =rng.gen_range(1, 4294967295);
                     let msg = WsMessage::MsgTakeTurnEnd {

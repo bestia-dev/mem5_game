@@ -244,6 +244,7 @@ mod statusplayagainmod;
 mod statusplaybefore1stcardmod;
 mod statusplaybefore2ndcardmod;
 mod statustaketurnbeginmod;
+mod statuswaitingackmsgmod;
 mod websocketcommunicationmod;
 mod websocketreconnectmod;
 //endregion
@@ -274,11 +275,11 @@ pub fn run() -> Result<(), JsValue> {
     //my_ws_uid is random generated on the client and sent to
     //WebSocket server with an url param. It is saved locally to allow reconnection
     //if there are connection problems.
-    let mut my_ws_uid: usize = localstoragemod::load_my_ws_uid();
+    let mut my_ws_uid: usize = sessionstoragemod::load_my_ws_uid();
     if my_ws_uid==0 {
         let mut rng = SmallRng::from_entropy();
         my_ws_uid = rng.gen_range(1, 9999);
-        localstoragemod::save_my_ws_uid(my_ws_uid);
+        sessionstoragemod::save_my_ws_uid(my_ws_uid);
     }
     //from now on, I don't want it mutable (variable shadowing).
     #[allow(clippy::shadow_same)]

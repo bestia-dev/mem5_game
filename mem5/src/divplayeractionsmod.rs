@@ -10,6 +10,7 @@ use crate::statustaketurnbeginmod;
 use crate::statusinviteaskbeginmod;
 use crate::statusinviteaskedmod;
 use crate::statusinviteaskingmod;
+use crate::statuswaitingackmsgmod;
 //use crate::websocketreconnectmod;
 
 use dodrio::builder::text;
@@ -51,6 +52,8 @@ where
         statustaketurnbeginmod::div_take_turn_begin(rrc, bump)
     } else if let GameStatus::StatusGameOverPlayAgainBegin = rrc.game_data.game_status {
         statusplayagainmod::div_play_again(rrc, bump)
+    } else if let GameStatus::StatusWaitingAckMsg = rrc.game_data.game_status {
+        statuswaitingackmsgmod::div_waiting_ack_msg(rrc, bump)
     } else {
         div_unpredicted(rrc, bump)
     }

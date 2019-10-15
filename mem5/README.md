@@ -89,9 +89,10 @@ Workflow:
 
 This is very similar to message a queue, but with a time limit.  
 
-## gRPC
+## gRPC, WebRTC datachannel
 
-The new shiny protocol for web communication is great for server-to-server communication. But it is still very limited inside the browser. When it eventually becomes stable I would like to change Websockets for gRPC.
+The new shiny protocol gRPC for web communication is great for server-to-server communication. But it is still very limited inside the browser. When it eventually becomes stable I would like to change Websockets for gRPC.  
+The WebRTC datachannel sounds great for perr-to-peer commnication. Expecting, that the players will be all on the same wifi network, this solves all latency issues. But everybody say it is too complicated. Will wait and see.  
 
 ## The game flow
 

@@ -201,6 +201,8 @@ pub enum GameStatus {
     StatusGameOverPlayAgainBegin,
     ///StatusReconnect after a lost connection
     StatusReconnect,
+    ///waiting ack msg
+    StatusWaitingAckMsg
 }
 
 ///data for one player
