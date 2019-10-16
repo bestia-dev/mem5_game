@@ -65,31 +65,65 @@ pub fn div_nickname_input<'a, 'bump>(
 where
     'a: 'bump,
 {
-    dodrio!(bump,
-    <div style="margin-left: auto ;margin-right: auto ;text-align: center" >
-        <label>
-            {vec![text(
-                bumpalo::format!(in bump, "{}",
-                "Write your nickname:")
-                .into_bump_str()
-            )]}
-            <input
-            id="input_nickname"
-            name="nickname"
-            value={bumpalo::format!(in bump, "{}",
-                rrc.game_data.my_nickname)
-                .into_bump_str()
-            }
-            onkeyup={ move |root, vdom_weak, event| {
-                //save on every key stroke
-                let v2 = vdom_weak.clone();
-                localstoragemod::save_nickname_to_localstorage(&v2);
+    //if the user did not yet input his nickname than blink
+    //all the code is the same except the class and the call to schedule_render
+    if rrc.game_data.my_nickname=="nickname"{
+        dodrio!(bump,
+        <div style="margin-left: auto ;margin-right: auto ;text-align: center" >
+            <label>
+                {vec![text(
+                    bumpalo::format!(in bump, "{}",
+                    "Write your nickname:")
+                    .into_bump_str()
+                )]}
+                <input
+                id="input_nickname"
+                name="nickname"
+                class="input_nickname_blink"
+                value={bumpalo::format!(in bump, "{}",
+                    rrc.game_data.my_nickname)
+                    .into_bump_str()
                 }
-            }>
-            </input>
-        </label>
-    </div>
-    )
+                onkeyup={ move |root, vdom_weak, event| {
+                    //save on every key stroke
+                    let v2 = vdom_weak.clone();
+                    localstoragemod::save_nickname_to_localstorage(&v2);
+                    v2.schedule_render();
+                    }
+                }>
+                </input>
+            </label>
+        </div>
+        )
+    }
+    else{
+        //if the use already has input his nickname no blinking is needed
+        dodrio!(bump,
+        <div style="margin-left: auto ;margin-right: auto ;text-align: center" >
+            <label>
+                {vec![text(
+                    bumpalo::format!(in bump, "{}",
+                    "Write your nickname:")
+                    .into_bump_str()
+                )]}
+                <input
+                id="input_nickname"
+                name="nickname"
+                value={bumpalo::format!(in bump, "{}",
+                    rrc.game_data.my_nickname)
+                    .into_bump_str()
+                }
+                onkeyup={ move |root, vdom_weak, event| {
+                    //save on every key stroke
+                    let v2 = vdom_weak.clone();
+                    localstoragemod::save_nickname_to_localstorage(&v2);
+                    }
+                }>
+                </input>
+            </label>
+        </div>
+        )
+    }
 }
 
 /// on click updates some data and sends msgs

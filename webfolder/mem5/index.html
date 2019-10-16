@@ -3,10 +3,21 @@
 
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-  <!--a lot of tricks to make it fullscreen. Best option is to "Add to home screen" the webapp on both iPhone and Android. -->
+  <title>mem5</title>
+  <meta name="Description" content="A simple and fun memory game for friends in close proximity.">
+  <link rel="stylesheet" href="css/mem5.css">
+
+  <!--
+A lot of tricks is needed to simply make the game fill the width of the smartphone and go fullscreen.
+IOS Safari does not have the FullScreen API, but Android Chrome has it.
+The best option is the browser menu item "Add to home screen" on both iPhone and Android.
+Even better is a true and complete PWA (Progressive Web App), but that requires a lot of prerequisits. 
+The meta viewport properties user-scalable and maximum-scale does not work in many cases: 
+on Safari or in Crome with accessibility settings (bigger fonts). So I will try with javascript.
+-->
+
   <link rel="manifest" href="manifest.json">
-  <meta name="Description" content="A simple and fun memory game.">
-  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width = device-width,initial-scale = 1.0" />
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -17,16 +28,12 @@
   <link rel="icon" type="image/png" href="images/icons-192.png" sizes="192x192">
   <link rel="icon" type="image/png" href="images/icons-512.png" sizes="512x512">
   <link rel="apple-touch-icon" href="images/icons-192.png">
-  <!-- not working in browsers yet:
-  <link rel="preload" href="./pkg/mem5_bg.wasm" as="module">
-  -->
 
-  <title>mem5</title>
-  <link rel="stylesheet" href="css/mem5.css">
+  <script src="js/on_load.js"></script>
 </head>
 
 <body>
-  <script src="start-service-worker.js"></script>
+  <script src="js/start_service_worker.js"></script>
   <noscript>
     <h2>
       !!!???!!!<br>
@@ -41,7 +48,8 @@
       Waiting to<br>
       download <br>
       mem5...<br>
-      It is fast on <br>
+      This is <br>
+      very quick on <br>
       fast networks.
     </h2>
   </div>

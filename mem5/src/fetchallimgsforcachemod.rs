@@ -10,6 +10,7 @@ use web_sys::{Request, RequestInit};
 //endregion
 
 ///fetch all imgs for the cache
+#[allow(clippy::needless_pass_by_value)]
 pub fn fetch_all_img_for_cache_request(rrc: &mut RootRenderingComponent, vdom_weak: dodrio::VdomWeak) {
 
     for x in &rrc.game_data.card_grid_data{

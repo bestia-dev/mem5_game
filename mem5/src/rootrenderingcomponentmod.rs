@@ -114,13 +114,13 @@ impl Render for RootRenderingComponent {
 
         if self.game_data.error_text == "" {
             let xmax_grid_size = divgridcontainermod::max_grid_size(self);
-            let xmax_grid_size_add_two = unwrap!(xmax_grid_size.hor.checked_add(2));
-            let xstyle2 = format!("width:{}px;", xmax_grid_size_add_two);
+            //let xmax_grid_size_add_two = unwrap!(xmax_grid_size.hor.checked_add(2));
+            //let xstyle2 = format!("width:{}px;", xmax_grid_size_add_two);
             //logmod::debug_write(&format!("width m_container {}", xmax_grid_size_add_two));
 
             //the main HTML render
             dodrio!(bump,
-            <div class= "m_container" style={xstyle2}>
+            <div class= "m_container" >
                 {vec![divcardmonikermod::div_grid_card_moniker(self, bump)]}
                 {
                     if self.game_data.is_status_for_grid_container(){

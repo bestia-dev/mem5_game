@@ -22,7 +22,7 @@ pub fn div_for_debugging<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump) ->
 
     dodrio!(bump,
     <div >
-        <pre style="color:white;white-space: pre-wrap;">
+        <pre style="color: white; white-space: pre-wrap; word-break: break-all;">
             {vec![text(text2)]}
         </pre>
         {vec![websocketreconnectmod::div_reconnect(rrc, bump)]}
