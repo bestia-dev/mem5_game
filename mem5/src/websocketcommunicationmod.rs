@@ -197,9 +197,10 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             WsMessage::MsgPlayerClick1stCard {
-                my_ws_uid: _,
+                my_ws_uid,
                 players_ws_uid: _,
                 card_index_of_first_click,
+                msg_id,
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
@@ -207,8 +208,9 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusplaybefore1stcardmod::on_msg_player_click_1st_card(
-                                rrc,
+                                rrc, my_ws_uid,
                                 card_index_of_first_click,
+                                msg_id
                             );
                             v2.schedule_render();
                         }
@@ -227,7 +229,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusplaybefore2ndcardmod::on_msg_player_click_2nd_card_point(
-                                rrc,
+                                rrc, 
                                 card_index_of_second_click,
                             );
                             v2.schedule_render();
@@ -333,6 +335,24 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
+            WsMessage::MsgAckPlayerClick1stCard {
+                my_ws_uid,
+                players_ws_uid: _,
+                msg_id,
+            } => {
+                wasm_bindgen_futures::spawn_local(
+                    weak.with_component({
+                        let v2 = weak.clone();
+                        move |root| {
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                            statusplaybefore1stcardmod::on_msg_ack_player_click1st_card(rrc, my_ws_uid, msg_id);
+                            v2.schedule_render();
+                        }
+                    })
+                    .map_err(|_| ()),
+                );
+            }
+
         }
     });
 

@@ -142,7 +142,7 @@ impl Render for RootRenderingComponent {
                         )]
                     }
                 }
-                {vec![divcardmonikermod::div_grid_card_moniker(self, bump)]}
+                {divcardmonikermod::div_grid_card_moniker(self, bump)}
                 {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
                 {vec![self.cached_rules_and_description.render(bump)]}
             </div>

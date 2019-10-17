@@ -14,10 +14,10 @@ const GAME_TITLE: &str = "mem5";
 //endregion
 
 ///the header can show only the game title or two card monikers. Not everything together.
-pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump) -> Node<'a> {
+pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump) -> Vec<Node<'a>> {
     //this game_data mutable reference is dropped on the end of the function
     let game_data = &rrc.game_data;
-
+    let mut vec_node = Vec::new();
     //if the card_monikers are visible, than don't show GameTitle, because there is not
     //enought space on smartphones
     if game_data.card_index_of_first_click != 0 || game_data.card_index_of_second_click != 0 {
@@ -48,7 +48,7 @@ pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump
         let right_fontsize = calc_font_size(right_text_len);
         let right_style_string =
             bumpalo::format!(in bump, "font-size:{}rem;", right_fontsize).into_bump_str();
-        //return
+        vec_node.push(
         dodrio!(bump,
         <div class= "grid_container_header" style="grid-template-columns: 50% 50%;min-height: 60px; vertical-align: middle;">
             <div id="card_moniker_left" class= "grid_item" style={left_style_string} >
@@ -58,22 +58,22 @@ pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump
                 {vec![text(bumpalo::format!(in bump, "{}", right_text).into_bump_str())]}
             </div>
         </div>
-        )
-    } else {
-        {
-            let version = env!("CARGO_PKG_VERSION");
-            let style_string = bumpalo::format!(in bump, "font-size:{}rem;", 2.0).into_bump_str();
-            dodrio!(bump,
-            <div class= "grid_container_header" style= "grid-template-columns: auto;min-height: 60px; vertical-align: middle;">
-                <div id="card_moniker_center" class= "grid_item" style={style_string} >
-                    {vec![text(GAME_TITLE),
-                        text(" - "),
-                        text(version)]}
-                </div>
-            </div>
-            )
-        }
-    }
+        ));
+    } 
+
+    let version = env!("CARGO_PKG_VERSION");
+    let style_string = bumpalo::format!(in bump, "font-size:{}rem;", 2.0).into_bump_str();
+    vec_node.push( dodrio!(bump,
+    <div class= "grid_container_header" style= "grid-template-columns: auto;min-height: 60px; vertical-align: middle;">
+        <div id="card_moniker_center" class= "grid_item" style={style_string} >
+            {vec![text(GAME_TITLE),
+                text(" - "),
+                text(version)]}
+        </div>
+    </div>
+    ));
+    //return
+    vec_node
 }
 
 ///when the lenght is bigger, the fontsize get smaller

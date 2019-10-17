@@ -111,6 +111,8 @@ pub enum WsMessage {
         players_ws_uid: String,
         ///have to send all the state of the game
         card_index_of_first_click: usize,
+        ///msg id (random)
+        msg_id:usize,
     },
     ///player click success
     MsgPlayerClick2ndCardPoint {
@@ -167,6 +169,15 @@ pub enum WsMessage {
     },
     ///acknowledge msg, that the receiver received the message
     MsgAckTakeTurnEnd{
+        ///msg sender uid
+        my_ws_uid: usize,
+        ///send msg to this players
+        players_ws_uid: String,
+        ///msg id (random)
+        msg_id:usize,
+    },
+    ///acknowledge msg, that the receiver received the message
+    MsgAckPlayerClick1stCard{
         ///msg sender uid
         my_ws_uid: usize,
         ///send msg to this players
