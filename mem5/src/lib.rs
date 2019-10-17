@@ -221,6 +221,7 @@
 //endregion
 
 //region: mod is used only in lib file. All the rest use use crate
+mod ackmsgmod;
 mod divcardmonikermod;
 mod divfordebuggingmod;
 mod divfullscreenmod;

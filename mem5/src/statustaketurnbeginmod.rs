@@ -2,20 +2,17 @@
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
-use crate::websocketcommunicationmod;
 use mem5_common::{GameStatus, WsMessage};
 use crate::gamedatamod::{CardStatusCardFace};
 use crate::logmod;
-use crate::gamedatamod;
+use crate::ackmsgmod;
+use crate::websocketcommunicationmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
 use typed_html::dodrio;
-use rand::Rng;
-use rand::rngs::SmallRng;
-use rand::FromEntropy;
 //endregion
 
 ///render take turn
@@ -43,30 +40,16 @@ where
                     //this game_data mutable reference is dropped on the end of the function
                     //region: send WsMessage over WebSocket
                     logmod::debug_write(&format!("ws_send_msg: MsgTakeTurnEnd {}", ""));
-                    rrc.game_data.game_status=GameStatus::StatusWaitingAckMsg;
-                     vdom.schedule_render();
-                     
-                    let mut rng = SmallRng::from_entropy();
-                    let msg_id =rng.gen_range(1, 4294967295);
+                    
+                    let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc,vdom);
+
                     let msg = WsMessage::MsgTakeTurnEnd {
                         my_ws_uid: rrc.game_data.my_ws_uid,
                         players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
                         msg_id,
                     };
-                    websocketcommunicationmod::ws_send_msg(&rrc.game_data.ws,&msg);
-                    //write the msgs in the queue
-                    for player in rrc.game_data.players.iter(){
-                        if player.ws_uid != rrc.game_data.my_ws_uid{
-                            let msg_for_loop = msg.clone();
-                            rrc.game_data.msgs_waiting_ack.push(
-                                gamedatamod::MsgInQueue{
-                                    player_ws_uid: player.ws_uid,
-                                    msg_id,
-                                    msg: msg_for_loop,
-                                }
-                            );
-                        }
-                    }
+                    ackmsgmod::send_msg_and_write_in_queue(rrc,&msg,msg_id);
+
                     //endregion
                     //Here I wait for on_MsgAckTakeTurnEnd from 
                     //every player before call take_turn_end(rrc);
@@ -96,7 +79,7 @@ where
 }
 
 ///fn on change for both click and we msg.
-pub fn take_turn_end(rrc: &mut RootRenderingComponent) {
+pub fn update(rrc: &mut RootRenderingComponent) {
     logmod::debug_write(&format!(
         "take_turn_end: player_turn {}  my_player_number {}",
         &rrc.game_data.player_turn, &rrc.game_data.my_player_number
@@ -156,7 +139,7 @@ pub fn on_msg_take_turn_end(rrc: &mut RootRenderingComponent,msg_sender_ws_uid:u
         }
     );
 
-    take_turn_end(rrc);
+    update(rrc);
 }
 
 
@@ -167,21 +150,10 @@ pub fn on_msg_ack_take_turn_end(
     player_ws_uid: usize,
     msg_id: usize
 ) {
-    //remove the waiting msg from the queue
-    //I use the oposite method "retain" because there is not a method "remove"
-    rrc.game_data.msgs_waiting_ack.retain(|x| !(x.player_ws_uid == player_ws_uid && x.msg_id==msg_id));
 
-    //if there is no more items with this msg_id, then proceed
-    let mut has_msg_id = false;
-    for x in &rrc.game_data.msgs_waiting_ack{
-        if x.msg_id==msg_id {
-            has_msg_id=true;
-            break;
-        }
-    }
-    if !has_msg_id{
-        logmod::debug_write("take_turn_end(rrc)");
-        take_turn_end(rrc);
+    if ackmsgmod::remove_ack_msg_from_queue(rrc,player_ws_uid,msg_id) {
+        logmod::debug_write("update take_turn_end(rrc)");
+        update(rrc);
     }
     //TODO: timer if after 3 seconds the ack is not received resend the msg
     //do this 3 times and then hard error

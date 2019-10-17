@@ -3,19 +3,16 @@
 //region: use
 use crate::gamedatamod::CardStatusCardFace;
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
-use crate::websocketcommunicationmod;
 use mem5_common::{GameStatus, WsMessage};
-use crate::gamedatamod;
 use crate::logmod;
+use crate::ackmsgmod;
+use crate::websocketcommunicationmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
 use typed_html::dodrio;
-use rand::Rng;
-use rand::rngs::SmallRng;
-use rand::FromEntropy;
 //endregion
 
 #[allow(clippy::integer_arithmetic)]
@@ -54,35 +51,18 @@ where
 //div_grid_container() is in divgridcontainermod.rs
 
 /// on click
-pub fn on_click_1st_card(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
+pub fn on_click_1st_card(rrc: &mut RootRenderingComponent,vdom:dodrio::VdomWeak, this_click_card_index: usize) {
     //change card status and game status
     rrc.game_data.card_index_of_first_click = this_click_card_index;
 
-    let mut rng = SmallRng::from_entropy();
-    let msg_id = rng.gen_range(1, 4294967295);
+    let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc,vdom);
     let msg = WsMessage::MsgPlayerClick1stCard {
         my_ws_uid: rrc.game_data.my_ws_uid,
         players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
         card_index_of_first_click: this_click_card_index,
         msg_id,
-    };
-
-    //region: send WsMessage over WebSocket
-    rrc.game_data.game_status = GameStatus::StatusWaitingAckMsg;
-    websocketcommunicationmod::ws_send_msg(&rrc.game_data.ws, &msg);
-    //write the msgs in the queue
-    for player in rrc.game_data.players.iter() {
-        if player.ws_uid != rrc.game_data.my_ws_uid {
-            let msg_for_loop = msg.clone();
-            rrc.game_data
-                .msgs_waiting_ack
-                .push(gamedatamod::MsgInQueue {
-                    player_ws_uid: player.ws_uid,
-                    msg_id,
-                    msg: msg_for_loop,
-                });
-        }
-    }
+    };                    
+    ackmsgmod::send_msg_and_write_in_queue(rrc,&msg,msg_id);
     //after ack for this message call on_msg_player_click_1st_card(rrc, this_click_card_index);
 
     //endregion
@@ -96,16 +76,14 @@ pub fn on_msg_player_click_1st_card(
     msg_id: usize,
 ) {
     //logmod::debug_write("on_msg_player_click_1st_card");
-    //send ack
     //send back the ACK msg to the sender
-    websocketcommunicationmod::ws_send_msg(
+     websocketcommunicationmod::ws_send_msg(
         &rrc.game_data.ws,
-        &WsMessage::MsgAckPlayerClick1stCard
-         {
+        &WsMessage::MsgAckPlayerClick1stCard {
             my_ws_uid: rrc.game_data.my_ws_uid,
             players_ws_uid: unwrap!(serde_json::to_string(&vec![msg_sender_ws_uid])),
-            msg_id,
-        },
+            msg_id
+        }
     );
 
     rrc.game_data.card_index_of_first_click = card_index_of_first_click;
@@ -128,21 +106,8 @@ pub fn on_msg_ack_player_click1st_card(
     player_ws_uid: usize,
     msg_id: usize,
 ) {
-    //remove the waiting msg from the queue
-    //I use the oposite method "retain" because there is not a method "remove"
-    rrc.game_data
-        .msgs_waiting_ack
-        .retain(|x| !(x.player_ws_uid == player_ws_uid && x.msg_id == msg_id));
-
-    //if there is no more items with this msg_id, then proceed
-    let mut has_msg_id = false;
-    for x in &rrc.game_data.msgs_waiting_ack {
-        if x.msg_id == msg_id {
-            has_msg_id = true;
-            break;
-        }
-    }
-    if !has_msg_id {
+    
+    if ackmsgmod::remove_ack_msg_from_queue(rrc,player_ws_uid,msg_id) {
         logmod::debug_write("update player_click_1st_card(rrc)");
         update(rrc);
     }

@@ -209,8 +209,8 @@ pub fn div_grid_item<'a, 'bump>(
                 rrc.game_data.card_grid_data.get(this_click_card_index),
                 "error this_click_card_index"
             ).status.as_ref()==CardStatusCardFace::Down.as_ref(){
-
-                div_grid_item_on_click(rrc,this_click_card_index);
+                let v2=vdom.clone();
+                div_grid_item_on_click(rrc,v2,this_click_card_index);
 
                 // Finally, re-render the component on the next animation frame.
                 vdom.schedule_render();
@@ -223,7 +223,7 @@ pub fn div_grid_item<'a, 'bump>(
 }
 
 /// on click
-fn div_grid_item_on_click(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
+fn div_grid_item_on_click(rrc: &mut RootRenderingComponent, vdom:dodrio::VdomWeak, this_click_card_index: usize) {
     //region: audio play
     //prepare the audio element with src filename of mp3
     let audio_element = web_sys::HtmlAudioElement::new_with_src(
@@ -253,7 +253,7 @@ fn div_grid_item_on_click(rrc: &mut RootRenderingComponent, this_click_card_inde
     let game_status = rrc.game_data.game_status.clone();
 
     if game_status.as_ref() == GameStatus::StatusPlayBefore1stCard.as_ref() {
-        statusplaybefore1stcardmod::on_click_1st_card(rrc, this_click_card_index)
+        statusplaybefore1stcardmod::on_click_1st_card(rrc, vdom, this_click_card_index)
     } else if game_status.as_ref() == GameStatus::StatusPlayBefore2ndCard.as_ref() {
         statusplaybefore2ndcardmod::on_click_2nd_card(rrc, this_click_card_index)
     } else {
