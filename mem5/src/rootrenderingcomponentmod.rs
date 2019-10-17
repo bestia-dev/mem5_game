@@ -121,7 +121,6 @@ impl Render for RootRenderingComponent {
             //the main HTML render
             dodrio!(bump,
             <div class= "m_container" >
-                {vec![divcardmonikermod::div_grid_card_moniker(self, bump)]}
                 {
                     if self.game_data.is_status_for_grid_container(){
                         vec![divgridcontainermod::div_grid_container(self,bump,&xmax_grid_size)]
@@ -143,6 +142,7 @@ impl Render for RootRenderingComponent {
                         )]
                     }
                 }
+                {vec![divcardmonikermod::div_grid_card_moniker(self, bump)]}
                 {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
                 {vec![self.cached_rules_and_description.render(bump)]}
             </div>

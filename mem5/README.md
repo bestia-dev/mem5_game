@@ -155,6 +155,9 @@ On both android and iPhone is possible to "Add to homescreen" the webapp.
 Then it will open in fullscreen and be beautiful.  
 To be 100% PWA it must be secured with TLS and must have a service worker.  
 
+**Very important :**
+On Android Chrome to `Clear & reset` the cached data of the website you must click on the icon of the URL address (the lock) and choose `Site Settings`.  
+
 ## Modules
 
 Rust code is splitted into modules. They are not exactly like classes, but can be similar.  

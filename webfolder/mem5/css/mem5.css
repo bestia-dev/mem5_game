@@ -1,5 +1,21 @@
 /*simplified css style based on https://www.w3schools.com/w3css/default.asp */
 
+/*https://websemantics.uk/articles/responsive-fonts/  */
+
+/* 10px @ 300px increasing to 40px @ 1200px */
+@media (min-width: 300px) {
+    :root {
+      font-size: calc(0.625rem + ((1vw - 3px) * 3.3333));
+      /* Where: * 3.3333 = 100 * font_Size_Difference / viewport_Width_Difference */
+    }
+  }
+  /* Prevent font scaling beyond this breakpoint */
+  @media (min-width: 1200px) {
+    :root {
+      font-size: 40px;
+    }
+  }
+
 /*region elements - styles accross all the elements */
 
 html {
@@ -14,10 +30,11 @@ html {
 }
 
 body {
+    text-size-adjust: 100%;
     background-color: #000000;
     margin: 0;
     font-family: Verdana, sans-serif;
-    font-size: 15px;
+    font-size: 1.6rem;
     line-height: 1.5;
     color: #FBF462 !important;
     -webkit-user-select: none;
@@ -42,27 +59,27 @@ h6 {
 }
 
 h1 {
-    font-size: 36px;
+    font-size: 3.6rem;
 }
 
 h2 {
-    font-size: 30px;
+    font-size: 3.0rem;
 }
 
 h3 {
-    font-size: 24px;
+    font-size: 2.4rem;
 }
 
 h4 {
-    font-size: 20px;
+    font-size: 2.0rem;
 }
 
 h5 {
-    font-size: 18px;
+    font-size: 1.8rem;
 }
 
 h6 {
-    font-size: 16px;
+    font-size: 1.6rem;
 }
 
 img {
@@ -99,13 +116,13 @@ img {
 
 .grid_container_header {
     display: grid;
-    font-size: 36px;
+    font-size: 3.6rem;
     width=100%;
 }
 
 .grid_container_players {
     display: grid;
-    font-size: 20px;
+    font-size: 2.0rem;
     width=100%;
 }
 
@@ -139,7 +156,6 @@ img {
 
 #card_moniker_left #card_moniker_right #card_moniker_center{
     white-space:nowrap;
-    min-height: 60px;
 }
 
 #card_moniker_left{
@@ -164,7 +180,7 @@ img {
     text-align: center;
     background-color: #212121;
     color: rgb(252, 255, 77);
-    font-size: 30px;
+    font-size: 3.0rem;
 }
 
 .input_nickname_blink{

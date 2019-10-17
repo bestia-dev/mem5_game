@@ -9,3 +9,5 @@
 2019-09-22 send minimum data in msgs  
 2019-10-08 Let's Encrypt TLS on google VM  
 2019-10-09 Save nickname to storage on every key up.  
+2019-10-16 PWA, screen-width, fullscreen, service worker fetch in cache 
+
