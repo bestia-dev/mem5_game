@@ -178,3 +178,14 @@ I prepared some flows and tasks for Cargo make.
 `cargo make dev` - builds the development version and runs the server and the browser  
 `cargo make release` - builds the release version and runs the server and the browser  
 `cargo make doc` - build the `/target/doc` folder and copy to the `../docs` folder.  
+
+## font-size
+
+Browsers have 2 types of zoom:
+
+- zoom everything proportionally (like it)
+- zoom only the text (this breaks the layout completely)
+
+When the font-size in android is increased (accessibility) it applies somehow also to the browser rendering.  
+I have tried many different things, but it looks this cannot be overridden from the css or javascript.  
+

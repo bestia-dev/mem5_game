@@ -17,6 +17,7 @@ use futures::Future;
 use js_sys::Reflect;
 use mem5_common::GameStatus;
 use mem5_common::WsMessage;
+use mem5_common::MsgAckKind;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{ErrorEvent, WebSocket};
@@ -352,7 +353,31 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
-
+            WsMessage::MsgAck {
+                my_ws_uid,
+                players_ws_uid: _,
+                msg_id,
+                msg_ack_kind
+            } => {
+                wasm_bindgen_futures::spawn_local(
+                    weak.with_component({
+                        let v2 = weak.clone();
+                        move |root| {
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                            match msg_ack_kind{
+                                MsgAckKind::MsgTakeTurnEnd =>{
+                                    statustaketurnbeginmod::on_msg_ack_take_turn_end(rrc, my_ws_uid, msg_id);
+                                }
+                                MsgAckKind::MsgPlayerClick1stCard =>{
+                                    statusplaybefore1stcardmod::on_msg_ack_player_click1st_card(rrc, my_ws_uid, msg_id);
+                                }
+                            }
+                            v2.schedule_render();
+                        }
+                    })
+                    .map_err(|_| ()),
+                );
+            }
         }
     });
 

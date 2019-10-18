@@ -184,6 +184,17 @@ pub enum WsMessage {
         players_ws_uid: String,
         ///msg id (random)
         msg_id:usize,
+    },
+    ///acknowledge msg, that the receiver received the message
+    MsgAck{
+        ///msg sender uid
+        my_ws_uid: usize,
+        ///send msg to this players
+        players_ws_uid: String,
+        ///msg id (random)
+        msg_id:usize,
+        ///kind of ack msg
+        msg_ack_kind: MsgAckKind,
     }
 }
 
@@ -226,4 +237,14 @@ pub struct Player {
     ///field for src attribute for HTML element image and filename of card image
     pub points: usize,
 }
+
+#[derive(Display, AsRefStr, Serialize, Deserialize, Clone)]
+#[allow(clippy::pub_enum_variant_names)]
+pub enum MsgAckKind {
+    ///ack for MsgTakeTurnEnd
+    MsgTakeTurnEnd,
+    ///ack for MsgPlayerClick1stCard
+    MsgPlayerClick1stCard,
+}
+
 //endregion

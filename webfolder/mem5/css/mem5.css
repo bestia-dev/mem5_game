@@ -1,26 +1,13 @@
 /*simplified css style based on https://www.w3schools.com/w3css/default.asp */
 
-/*https://websemantics.uk/articles/responsive-fonts/  */
-
-/* 10px @ 300px increasing to 40px @ 1200px */
-@media (min-width: 300px) {
-    :root {
-      font-size: calc(0.625rem + ((1vw - 3px) * 3.3333));
-      /* Where: * 3.3333 = 100 * font_Size_Difference / viewport_Width_Difference */
-    }
-  }
-  /* Prevent font scaling beyond this breakpoint */
-  @media (min-width: 1200px) {
-    :root {
-      font-size: 40px;
-    }
-  }
-
 /*region elements - styles accross all the elements */
 
 html {
     box-sizing: border-box;
     overflow-x: hidden;
+    text-size-adjust: None;
+    /* 32px at 600 width, 16px at 300 width */
+    font-size: calc(100vw / 30);
 }
 
 *,
@@ -30,7 +17,6 @@ html {
 }
 
 body {
-    text-size-adjust: 100%;
     background-color: #000000;
     margin: 0;
     font-family: Verdana, sans-serif;
@@ -97,7 +83,7 @@ img {
     margin-right: auto;
     color: #FBF462 !important;
     background-color: #000000 !important;
-    width=100%;
+    width:100%;
 }
 
 /* using simple css-grid for the layout of the game grid */
@@ -107,7 +93,7 @@ img {
     grid-column-gap: 5px;
     margin-left: auto;
     margin-right: auto;
-    width=100%;
+    width:100%;
 }
 
 .grid_item {
@@ -117,13 +103,13 @@ img {
 .grid_container_header {
     display: grid;
     font-size: 3.6rem;
-    width=100%;
+    width:100%;
 }
 
 .grid_container_players {
     display: grid;
     font-size: 2.0rem;
-    width=100%;
+    width:100%;
 }
 
 .div_clickable {

@@ -5,6 +5,7 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <title>mem5</title>
   <meta name="Description" content="A simple and fun memory game for friends in close proximity.">
+  <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/mem5.css">
 
   <!--
@@ -53,6 +54,15 @@ on Safari or in Crome with accessibility settings (bigger fonts). So I will try 
       fast networks.
     </h2>
   </div>
+  <script>
+    var div = document.getElementById('div_for_virtual_dom');
+
+    function css(element, property) {
+      return window.getComputedStyle(element, null).getPropertyValue(property);
+    }
+
+    alert(css(div, 'font-size'));
+  </script>
   <script type="module">
     import init from "./pkg/mem5.js";
     init("./pkg/mem5_bg.wasm");
