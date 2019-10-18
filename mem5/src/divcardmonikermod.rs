@@ -80,9 +80,10 @@ pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump
 ///if the len is 10 the fontsize is 3.0rem, if the len is 20 the fontsize is 1.5rem
 ///this means that the 80 is constant:  10*3.0=30 20*1.5=30
 #[allow(
-    clippy::integer_arithmetic, 
+    clippy::integer_arithmetic,
     clippy::integer_division,
-clippy::cast_precision_loss)]
+    clippy::cast_precision_loss
+)]
 fn calc_font_size(text_len: usize) -> f64 {
     if text_len < 10 {
         3.0
