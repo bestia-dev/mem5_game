@@ -122,6 +122,8 @@ pub enum WsMessage {
         players_ws_uid: String,
         ///have to send all the state of the game
         card_index_of_second_click: usize,
+        ///msg id (random)
+        msg_id: usize,
     },
     ///take turn begin
     MsgPlayerClick2ndCardTakeTurnBegin {
@@ -228,6 +230,8 @@ pub enum MsgAckKind {
     MsgTakeTurnEnd,
     ///ack for MsgPlayerClick1stCard
     MsgPlayerClick1stCard,
+    ///ack for MsgPlayerClick2ndCardPoint
+    MsgPlayerClick2ndCardPoint,
 }
 
 //endregion

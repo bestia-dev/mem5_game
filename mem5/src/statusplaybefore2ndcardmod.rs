@@ -6,8 +6,10 @@ use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
 use crate::statustaketurnbeginmod;
 use crate::statusplayagainmod;
+use crate::ackmsgmod;
+use crate::logmod;
 
-use mem5_common::{GameStatus, WsMessage};
+use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -51,16 +53,15 @@ where
 
 //div_grid_container() is in divgridcontainermod.rs
 
-///on click
-pub fn on_click_2nd_card(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
-    card_click_2nd_card(rrc, this_click_card_index);
-}
-
 ///on second click
 ///The on click event passed by JavaScript executes all the logic
 ///and changes only the fields of the Card Grid struct.
 ///That struct is the only permanent data storage for later render the virtual dom.
-pub fn card_click_2nd_card(rrc: &mut RootRenderingComponent, this_click_card_index: usize) {
+pub fn on_click_2nd_card(
+    rrc: &mut RootRenderingComponent,
+    vdom: &dodrio::VdomWeak,
+    this_click_card_index: usize,
+) {
     rrc.game_data.card_index_of_second_click = this_click_card_index;
 
     //3 possible outcomes: 1) same player, 2) Next Player 3) end game/play again
@@ -77,18 +78,21 @@ pub fn card_click_2nd_card(rrc: &mut RootRenderingComponent, this_click_card_ind
             .get(rrc.game_data.card_index_of_second_click))
         .card_number_and_img_src
     {
-        on_msg_player_click_2nd_card_point(rrc, this_click_card_index);
         //region: send WsMessage over WebSocket
-        websocketcommunicationmod::ws_send_msg(
-            &rrc.game_data.ws,
-            &WsMessage::MsgPlayerClick2ndCardPoint {
-                my_ws_uid: rrc.game_data.my_ws_uid,
-                players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
-                card_index_of_second_click: rrc.game_data.card_index_of_second_click,
-            },
-        );
+        let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc, vdom);
+        let msg = WsMessage::MsgPlayerClick2ndCardPoint {
+            my_ws_uid: rrc.game_data.my_ws_uid,
+            players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
+            card_index_of_second_click: this_click_card_index,
+            msg_id,
+        };
+        ackmsgmod::send_msg_and_write_in_queue(rrc, &msg, msg_id);
+        update_click_2nd_card_point(rrc);
+
+        //then wait for ack msg event
         //endregion
 
+        //TODO: this shoul go in the ack msg event
         //if all the cards are permanenty up, this is the end of the game
         let mut is_all_permanently = true;
         //the zero element is exceptional, but the iterator uses it
@@ -133,9 +137,22 @@ pub fn card_click_2nd_card(rrc: &mut RootRenderingComponent, this_click_card_ind
 ///msg player click
 pub fn on_msg_player_click_2nd_card_point(
     rrc: &mut RootRenderingComponent,
+    msg_sender_ws_uid: usize,
     card_index_of_second_click: usize,
+    msg_id: usize,
 ) {
+    ackmsgmod::send_ack(
+        rrc,
+        msg_sender_ws_uid,
+        msg_id,
+        MsgAckKind::MsgPlayerClick2ndCardPoint,
+    );
     rrc.game_data.card_index_of_second_click = card_index_of_second_click;
+    update_click_2nd_card_point(rrc);
+}
+
+///msg player click
+pub fn update_click_2nd_card_point(rrc: &mut RootRenderingComponent) {
     //flip the card up
     unwrap!(
         rrc.game_data
@@ -160,4 +177,18 @@ pub fn on_msg_player_click_2nd_card_point(
     //the same player continues to play
     rrc.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
     rrc.check_invalidate_for_all_components();
+}
+
+///on msg ack player click2nd card
+pub fn on_msg_ack_player_click2nd_card(
+    rrc: &mut RootRenderingComponent,
+    player_ws_uid: usize,
+    msg_id: usize,
+) {
+    if ackmsgmod::remove_ack_msg_from_queue(rrc, player_ws_uid, msg_id) {
+        logmod::debug_write("update player_click_2nd_card(rrc)");
+        update_click_2nd_card_point(rrc);
+    }
+    //TODO: timer if after 3 seconds the ack is not received resend the msg
+    //do this 3 times and then hard error
 }

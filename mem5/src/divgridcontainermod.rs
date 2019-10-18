@@ -258,7 +258,7 @@ fn div_grid_item_on_click(
     if game_status.as_ref() == GameStatus::StatusPlayBefore1stCard.as_ref() {
         statusplaybefore1stcardmod::on_click_1st_card(rrc, vdom, this_click_card_index)
     } else if game_status.as_ref() == GameStatus::StatusPlayBefore2ndCard.as_ref() {
-        statusplaybefore2ndcardmod::on_click_2nd_card(rrc, this_click_card_index)
+        statusplaybefore2ndcardmod::on_click_2nd_card(rrc, vdom, this_click_card_index)
     } else {
         panic!("this else must never be reached!");
     }

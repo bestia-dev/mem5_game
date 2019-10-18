@@ -15,9 +15,7 @@ use crate::websocketreconnectmod;
 use unwrap::unwrap;
 use futures::Future;
 use js_sys::Reflect;
-use mem5_common::GameStatus;
-use mem5_common::WsMessage;
-use mem5_common::MsgAckKind;
+use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{ErrorEvent, WebSocket};
@@ -238,9 +236,10 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             WsMessage::MsgPlayerClick2ndCardPoint {
-                my_ws_uid: _,
+                my_ws_uid,
                 players_ws_uid: _,
                 card_index_of_second_click,
+                msg_id,
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
@@ -249,7 +248,9 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusplaybefore2ndcardmod::on_msg_player_click_2nd_card_point(
                                 rrc,
+                                my_ws_uid,
                                 card_index_of_second_click,
+                                msg_id,
                             );
                             v2.schedule_render();
                         }
@@ -359,6 +360,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                                 }
                                 MsgAckKind::MsgPlayerClick1stCard => {
                                     statusplaybefore1stcardmod::on_msg_ack_player_click1st_card(
+                                        rrc, my_ws_uid, msg_id,
+                                    );
+                                }
+                                MsgAckKind::MsgPlayerClick2ndCardPoint => {
+                                    statusplaybefore2ndcardmod::on_msg_ack_player_click2nd_card(
                                         rrc, my_ws_uid, msg_id,
                                     );
                                 }
