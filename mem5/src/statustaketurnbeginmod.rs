@@ -111,9 +111,28 @@ pub fn update(rrc: &mut RootRenderingComponent) {
 }
 
 ///on msg take turn begin
-pub fn on_msg_take_turn_begin(rrc: &mut RootRenderingComponent, card_index_of_second_click: usize) {
+pub fn on_msg_take_turn_begin(
+    rrc: &mut RootRenderingComponent,
+    msg_sender_ws_uid: usize,
+    card_index_of_second_click: usize,
+    msg_id: usize,
+) {
     logmod::debug_write("on_msg_take_turn_begin");
+    ackmsgmod::send_ack(
+        rrc,
+        msg_sender_ws_uid,
+        msg_id,
+        MsgAckKind::MsgPlayerClick2ndCardTakeTurnBegin,
+    );
     rrc.game_data.card_index_of_second_click = card_index_of_second_click;
+
+    update_take_turn_begin(rrc);
+}
+
+///update take turn begin
+pub fn update_take_turn_begin(rrc: &mut RootRenderingComponent) {
+    logmod::debug_write("update_take_turn_begin");
+
     //flip the card up
     unwrap!(
         rrc.game_data

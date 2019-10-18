@@ -78,59 +78,28 @@ pub fn on_click_2nd_card(
             .get(rrc.game_data.card_index_of_second_click))
         .card_number_and_img_src
     {
-        //region: send WsMessage over WebSocket
         let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc, vdom);
         let msg = WsMessage::MsgPlayerClick2ndCardPoint {
             my_ws_uid: rrc.game_data.my_ws_uid,
             players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
-            card_index_of_second_click: this_click_card_index,
+            card_index_of_second_click: rrc.game_data.card_index_of_second_click,
             msg_id,
         };
         ackmsgmod::send_msg_and_write_in_queue(rrc, &msg, msg_id);
         update_click_2nd_card_point(rrc);
-
-        //then wait for ack msg event
-        //endregion
-
-        //TODO: this shoul go in the ack msg event
-        //if all the cards are permanenty up, this is the end of the game
-        let mut is_all_permanently = true;
-        //the zero element is exceptional, but the iterator uses it
-        unwrap!(rrc.game_data.card_grid_data.get_mut(0)).status = CardStatusCardFace::UpPermanently;
-
-        for x in &rrc.game_data.card_grid_data {
-            match x.status {
-                CardStatusCardFace::UpPermanently => {}
-                CardStatusCardFace::Down | CardStatusCardFace::UpTemporary => {
-                    is_all_permanently = false;
-                    break;
-                }
-            }
-        }
-        if is_all_permanently {
-            statusplayagainmod::on_msg_play_again(rrc);
-            //send message
-            websocketcommunicationmod::ws_send_msg(
-                &rrc.game_data.ws,
-                &WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin {
-                    my_ws_uid: rrc.game_data.my_ws_uid,
-                    players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
-                },
-            );
-        }
+    //then wait for ack msg event and then check if is game over
     } else {
-        statustaketurnbeginmod::on_msg_take_turn_begin(rrc, this_click_card_index);
+        statustaketurnbeginmod::update_take_turn_begin(rrc);
 
-        //region: send WsMessage over WebSocket
-        websocketcommunicationmod::ws_send_msg(
-            &rrc.game_data.ws,
-            &WsMessage::MsgPlayerClick2ndCardTakeTurnBegin {
-                my_ws_uid: rrc.game_data.my_ws_uid,
-                players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
-                card_index_of_second_click: rrc.game_data.card_index_of_second_click,
-            },
-        );
-        //endregion
+        let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc, vdom);
+        let msg = &WsMessage::MsgPlayerClick2ndCardTakeTurnBegin {
+            my_ws_uid: rrc.game_data.my_ws_uid,
+            players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
+            card_index_of_second_click: rrc.game_data.card_index_of_second_click,
+            msg_id
+        };
+        ackmsgmod::send_msg_and_write_in_queue(rrc, msg, msg_id);
+        //then wait for ack msg event
     }
 }
 
@@ -180,15 +149,53 @@ pub fn update_click_2nd_card_point(rrc: &mut RootRenderingComponent) {
 }
 
 ///on msg ack player click2nd card
-pub fn on_msg_ack_player_click2nd_card(
+pub fn on_msg_ack_player_click2nd_card_point(
     rrc: &mut RootRenderingComponent,
     player_ws_uid: usize,
     msg_id: usize,
 ) {
     if ackmsgmod::remove_ack_msg_from_queue(rrc, player_ws_uid, msg_id) {
-        logmod::debug_write("update player_click_2nd_card(rrc)");
+        logmod::debug_write("update on_msg_ack_player_click2nd_card_point(rrc)");
         update_click_2nd_card_point(rrc);
+
+        //if all the cards are permanenty up, this is the end of the game
+        let mut is_all_permanently = true;
+        //the zero element is exceptional, but the iterator uses it
+        unwrap!(rrc.game_data.card_grid_data.get_mut(0)).status = CardStatusCardFace::UpPermanently;
+
+        for x in &rrc.game_data.card_grid_data {
+            match x.status {
+                CardStatusCardFace::UpPermanently => {}
+                CardStatusCardFace::Down | CardStatusCardFace::UpTemporary => {
+                    is_all_permanently = false;
+                    break;
+                }
+            }
+        }
+        if is_all_permanently {
+            statusplayagainmod::on_msg_play_again(rrc);
+            //send message
+            websocketcommunicationmod::ws_send_msg(
+                &rrc.game_data.ws,
+                &WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin {
+                    my_ws_uid: rrc.game_data.my_ws_uid,
+                    players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
+                },
+            );
+        }
     }
     //TODO: timer if after 3 seconds the ack is not received resend the msg
     //do this 3 times and then hard error
+}
+
+///on msg ack player click2nd card take turn begin
+pub fn on_msg_ack_player_click2nd_card_take_turn_begin(
+    rrc: &mut RootRenderingComponent,
+    player_ws_uid: usize,
+    msg_id: usize,
+) {
+    if ackmsgmod::remove_ack_msg_from_queue(rrc, player_ws_uid, msg_id) {
+        logmod::debug_write("update on_msg_ack_player_click2nd_card_take_turn_begin(rrc)");
+        statustaketurnbeginmod::update_take_turn_begin(rrc);
+    }
 }

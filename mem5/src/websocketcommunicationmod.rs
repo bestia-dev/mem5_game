@@ -259,9 +259,10 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
             WsMessage::MsgPlayerClick2ndCardTakeTurnBegin {
-                my_ws_uid: _,
+                my_ws_uid,
                 players_ws_uid: _,
                 card_index_of_second_click,
+                msg_id,
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
@@ -270,7 +271,9 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statustaketurnbeginmod::on_msg_take_turn_begin(
                                 rrc,
+                                my_ws_uid,
                                 card_index_of_second_click,
+                                msg_id,
                             );
                             v2.schedule_render();
                         }
@@ -364,7 +367,12 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                                     );
                                 }
                                 MsgAckKind::MsgPlayerClick2ndCardPoint => {
-                                    statusplaybefore2ndcardmod::on_msg_ack_player_click2nd_card(
+                                    statusplaybefore2ndcardmod::on_msg_ack_player_click2nd_card_point(
+                                        rrc, my_ws_uid, msg_id,
+                                    );
+                                }
+                                MsgAckKind::MsgPlayerClick2ndCardTakeTurnBegin => {
+                                    statusplaybefore2ndcardmod::on_msg_ack_player_click2nd_card_take_turn_begin(
                                         rrc, my_ws_uid, msg_id,
                                     );
                                 }
