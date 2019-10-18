@@ -1,23 +1,23 @@
 //region: lmake_readme insert "readme.md"
 //! **mem5_server - html and WebSocket server for the mem5 game**
-//! 
+//!
 //! version: 19.9.9  
 //! Look also at the workspace readme https://github.com/LucianoBestia/mem5_game  
-//! 
+//!
 //! ## mem5_server
 //! Primarily made for learning to code Rust for a http + WebSocket server on the same port  
 //! Using Warp for a simple memory game for kids - mem5.  
 //! On the local public IP address on port 80 listens to http and WebSocket.  
 //! Route for http `/` serves static files from folder `/mem5/`  
 //! Route `/mem5ws/` broadcast all WebSocket msg to all connected clients except sender  
-//! 
+//!
 //! ## Google vm
 //! One working server is installed on google vm.  
 //! You can play the game here (hosted on google cloud platform):  
 //! http://bestia.dev/mem5  
-//! 
-//! 
-//! 
+//!
+//!
+//!
 
 //endregion: lmake_readme insert "readme.md"
 
@@ -56,7 +56,7 @@ use clap::{App, Arg};
 use env_logger::Env;
 use futures::sync::mpsc;
 use futures::{Future, Stream};
-use mem5_common::{ WsMessage};
+use mem5_common::{WsMessage};
 use regex::Regex;
 use std::collections::HashMap;
 use std::net::SocketAddr;
@@ -210,15 +210,15 @@ fn user_connected(
     //hahahahaha syntax 'turbofish' ::<>
     let my_id = unwrap!(url_param.parse::<usize>());
     //if uid already exists, it is an error
-    let mut user_exist=false;
+    let mut user_exist = false;
     for (&uid, ..) in users.lock().expect("error users.lock()").iter() {
         if uid == my_id {
-            user_exist=true;
+            user_exist = true;
             break;
         }
     }
 
-    if user_exist{
+    if user_exist {
         //disconnect the old user
         info!("user_disconnected for reconnect: {}", my_id);
         user_disconnected(my_id, &users);
@@ -295,10 +295,13 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
 
     match msg {
         WsMessage::MsgDummy { dummy } => info!("MsgDummy: {}", dummy),
-        WsMessage::MsgRequestWsUid {my_ws_uid, players_ws_uid } => {
+        WsMessage::MsgRequestWsUid {
+            my_ws_uid,
+            players_ws_uid,
+        } => {
             info!("MsgRequestWsUid: {} {}", my_ws_uid, players_ws_uid);
             let j = serde_json::to_string(
-                &WsMessage::MsgResponseWsUid { 
+                &WsMessage::MsgResponseWsUid {
                     your_ws_uid: ws_uid_of_message,
                     server_version: env!("CARGO_PKG_VERSION").to_string(),
                      })
@@ -316,7 +319,7 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
             }
             //send to other users for reconnect. Do nothing if there is not yet other users.
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
-        },
+        }
         /* obsolete, but keep it as an example how to return a text file over websocket
         WsMessage::RequestGameConfig { filename } => {
             info!("RequestGameConfig: {}", filename);
@@ -357,10 +360,9 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         | WsMessage::MsgPlayerClick2ndCardPoint { players_ws_uid, .. }
         | WsMessage::MsgPlayerClick2ndCardTakeTurnBegin { players_ws_uid, .. }
         | WsMessage::MsgTakeTurnEnd { players_ws_uid, .. }
-        | WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin { players_ws_uid, .. } 
+        | WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin { players_ws_uid, .. }
         | WsMessage::MsgAllGameData { players_ws_uid, .. }
-        | WsMessage::MsgAck{players_ws_uid, ..}
-        => {
+        | WsMessage::MsgAck { players_ws_uid, .. } => {
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
     }
@@ -438,7 +440,9 @@ pub fn local_ip_get() -> Option<IpAddr> {
 
     let stdout = unwrap!(String::from_utf8(output.stdout));
 
-    let re = unwrap!(Regex::new(r#"(?m)^.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*$"#));
+    let re = unwrap!(Regex::new(
+        r#"(?m)^.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*$"#
+    ));
     for cap in re.captures_iter(&stdout) {
         let host = cap.get(2).map_or("", |m| m.as_str());
         if host != "127.0.0.1" {

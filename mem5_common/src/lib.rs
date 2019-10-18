@@ -112,7 +112,7 @@ pub enum WsMessage {
         ///have to send all the state of the game
         card_index_of_first_click: usize,
         ///msg id (random)
-        msg_id:usize,
+        msg_id: usize,
     },
     ///player click success
     MsgPlayerClick2ndCardPoint {
@@ -146,10 +146,10 @@ pub enum WsMessage {
         ///all players for the server to know whom to send msg
         players_ws_uid: String,
         ///msg id (random)
-        msg_id:usize,
+        msg_id: usize,
     },
     ///all game data
-    MsgAllGameData{
+    MsgAllGameData {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
         ///only the players that recconected
@@ -168,16 +168,16 @@ pub enum WsMessage {
         game_status: GameStatus,
     },
     ///acknowledge msg, that the receiver received the message
-    MsgAck{
+    MsgAck {
         ///msg sender uid
         my_ws_uid: usize,
         ///send msg to this players
         players_ws_uid: String,
         ///msg id (random)
-        msg_id:usize,
+        msg_id: usize,
         ///kind of ack msg
         msg_ack_kind: MsgAckKind,
-    }
+    },
 }
 
 ///the game can be in various statuses and that differentiate the UI and actions
@@ -206,7 +206,7 @@ pub enum GameStatus {
     ///StatusReconnect after a lost connection
     StatusReconnect,
     ///waiting ack msg
-    StatusWaitingAckMsg
+    StatusWaitingAckMsg,
 }
 
 ///data for one player

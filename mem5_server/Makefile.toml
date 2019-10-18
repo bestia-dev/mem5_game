@@ -30,6 +30,13 @@ skip_core_tasks = true
         "post_build_release",
     ]
 
+    [tasks.fmt]
+    description = "cargo fmt - format code"
+    clear = true
+    dependencies = [
+        "cargo_fmt",
+    ]
+
     [tasks.doc]
     description = "call cargo doc"
     clear=true
@@ -84,6 +91,13 @@ script = [
     "cd ../webfolder",
     "sudo ./mem5_server"
 ]
+
+[tasks.cargo_fmt]
+description = "cargo fmt"
+clear = true
+private = true
+command = "cargo"
+args = ["fmt"]
 
 [tasks.insert_readme]
 description = "copy the content of readme.md into *.rs comments (for the docs)"

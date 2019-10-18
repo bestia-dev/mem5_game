@@ -41,6 +41,13 @@ skip_core_tasks = true
         "copy_pkg_to_webfolder",
     ]
 
+    [tasks.fmt]
+    description = "cargo fmt - format code"
+    clear = true
+    dependencies = [
+        "cargo_fmt",
+    ]
+
     [tasks.doc]
     description = "call cargo doc"
     clear=true
@@ -73,6 +80,13 @@ private = true
 script = [
     "\\rsync -avz --delete-after ~/rustprojects/mem5_game/mem5/pkg/  ~/rustprojects/mem5_game/webfolder/mem5/pkg/",
 ]
+
+[tasks.cargo_fmt]
+description = "cargo fmt"
+clear = true
+private = true
+command = "cargo"
+args = ["fmt"]
 
 [tasks.insert_readme]
 description = "copy the content of readme.md into *.rs comments (for the docs)"

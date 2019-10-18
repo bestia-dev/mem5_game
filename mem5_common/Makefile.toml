@@ -26,6 +26,13 @@ skip_core_tasks = true
         "lmake_version_from_date",
         "build-release"]
 
+    [tasks.fmt]
+    description = "cargo fmt - format code"
+    clear = true
+    dependencies = [
+        "cargo_fmt",
+    ]
+
     [tasks.doc]
     description = "call cargo doc"
     clear=true
@@ -48,6 +55,13 @@ clear=true
 private=true
 command = "cargo"
 args = ["build","--release"]
+
+[tasks.cargo_fmt]
+description = "cargo fmt"
+clear = true
+private = true
+command = "cargo"
+args = ["fmt"]
 
 [tasks.insert-readme]
 clear = true

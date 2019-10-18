@@ -25,6 +25,13 @@ clear=true
 command = "cargo"
 args = ["make","release"]
 
+[tasks.fmt]
+description = "cargo fmt for every workspace member"
+workspace = true
+clear=true
+command = "cargo"
+args = ["make","fmt"]
+
 [tasks.doc]
 description = "cargo make doc for every workspace member"
 workspace = true
