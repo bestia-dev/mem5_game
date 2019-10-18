@@ -27,11 +27,16 @@ use web_sys::{ErrorEvent, WebSocket};
 //but I don't want references, because they have the lifetime problem.
 #[allow(clippy::needless_pass_by_value)]
 ///setup WebSocket connection
-pub fn setup_ws_connection(location_href: String, client_ws_id: usize,
-players_ws_uid:String) -> WebSocket {
+pub fn setup_ws_connection(
+    location_href: String,
+    client_ws_id: usize,
+    players_ws_uid: String,
+) -> WebSocket {
     //web-sys has WebSocket for Rust exactly like JavaScript has¸
     //location_href comes in this format  http://localhost:4000/
-    let mut loc_href = location_href.replace("http://", "ws://").replace("https://", "wss://");
+    let mut loc_href = location_href
+        .replace("http://", "ws://")
+        .replace("https://", "wss://");
     //Only for debugging in the development environment
     //let mut loc_href = String::from("ws://192.168.1.57:80/");
     loc_href.push_str("mem5ws/");
@@ -60,7 +65,7 @@ players_ws_uid:String) -> WebSocket {
             ws_c.send_with_str(
                 &serde_json::to_string(&WsMessage::MsgRequestWsUid {
                     my_ws_uid: client_ws_id,
-                    players_ws_uid : players_ws_uid.clone(),
+                    players_ws_uid: players_ws_uid.clone(),
                 })
                 .expect("error sending test"),
             ),
@@ -100,7 +105,10 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
         match msg {
             //I don't know why I need a dummy, but is entertaining to have one.
             WsMessage::MsgDummy { dummy } => logmod::debug_write(dummy.as_str()),
-            WsMessage::MsgRequestWsUid { my_ws_uid, players_ws_uid } => {
+            WsMessage::MsgRequestWsUid {
+                my_ws_uid,
+                players_ws_uid,
+            } => {
                 logmod::debug_write(players_ws_uid.as_str());
                 //this is a reconnect. Send all data to this player.
                 wasm_bindgen_futures::spawn_local(
@@ -114,8 +122,11 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     })
                     .map_err(|_| ()),
                 );
-            },
-            WsMessage::MsgResponseWsUid { your_ws_uid,server_version:_ } => {
+            }
+            WsMessage::MsgResponseWsUid {
+                your_ws_uid,
+                server_version: _,
+            } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         move |root| {
@@ -189,7 +200,13 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
 
                             if let GameStatus::StatusPlayAccepted = rrc.game_data.game_status {
                                 let v3 = v2.clone();
-                                statusgamedatainitmod::on_msg_game_data_init(rrc,v3, &card_grid_data, &game_config, &players);
+                                statusgamedatainitmod::on_msg_game_data_init(
+                                    rrc,
+                                    v3,
+                                    &card_grid_data,
+                                    &game_config,
+                                    &players,
+                                );
                                 v2.schedule_render();
                             }
                         }
@@ -209,9 +226,10 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusplaybefore1stcardmod::on_msg_player_click_1st_card(
-                                rrc, my_ws_uid,
+                                rrc,
+                                my_ws_uid,
                                 card_index_of_first_click,
-                                msg_id
+                                msg_id,
                             );
                             v2.schedule_render();
                         }
@@ -230,7 +248,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusplaybefore2ndcardmod::on_msg_player_click_2nd_card_point(
-                                rrc, 
+                                rrc,
                                 card_index_of_second_click,
                             );
                             v2.schedule_render();
@@ -262,14 +280,14 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
             WsMessage::MsgTakeTurnEnd {
                 my_ws_uid,
                 players_ws_uid: _,
-                msg_id
+                msg_id,
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statustaketurnbeginmod::on_msg_take_turn_end(rrc,my_ws_uid,msg_id);
+                            statustaketurnbeginmod::on_msg_take_turn_end(rrc, my_ws_uid, msg_id);
                             v2.schedule_render();
                         }
                     })
@@ -300,53 +318,22 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 card_index_of_first_click,
                 card_index_of_second_click,
                 player_turn,
-                game_status
+                game_status,
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            websocketreconnectmod::on_msg_all_game_data(rrc, players,
-                card_grid_data,
-                card_index_of_first_click,
-                card_index_of_second_click,
-                player_turn,
-                game_status);
-                            v2.schedule_render();
-                        }
-                    })
-                    .map_err(|_| ()),
-                );
-            }
-            WsMessage::MsgAckTakeTurnEnd {
-                my_ws_uid,
-                players_ws_uid: _,
-                msg_id,
-            } => {
-                wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
-                        move |root| {
-                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statustaketurnbeginmod::on_msg_ack_take_turn_end(rrc, my_ws_uid, msg_id);
-                            v2.schedule_render();
-                        }
-                    })
-                    .map_err(|_| ()),
-                );
-            }
-            WsMessage::MsgAckPlayerClick1stCard {
-                my_ws_uid,
-                players_ws_uid: _,
-                msg_id,
-            } => {
-                wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
-                        move |root| {
-                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statusplaybefore1stcardmod::on_msg_ack_player_click1st_card(rrc, my_ws_uid, msg_id);
+                            websocketreconnectmod::on_msg_all_game_data(
+                                rrc,
+                                players,
+                                card_grid_data,
+                                card_index_of_first_click,
+                                card_index_of_second_click,
+                                player_turn,
+                                game_status,
+                            );
                             v2.schedule_render();
                         }
                     })
@@ -357,19 +344,23 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 my_ws_uid,
                 players_ws_uid: _,
                 msg_id,
-                msg_ack_kind
+                msg_ack_kind,
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            match msg_ack_kind{
-                                MsgAckKind::MsgTakeTurnEnd =>{
-                                    statustaketurnbeginmod::on_msg_ack_take_turn_end(rrc, my_ws_uid, msg_id);
+                            match msg_ack_kind {
+                                MsgAckKind::MsgTakeTurnEnd => {
+                                    statustaketurnbeginmod::on_msg_ack_take_turn_end(
+                                        rrc, my_ws_uid, msg_id,
+                                    );
                                 }
-                                MsgAckKind::MsgPlayerClick1stCard =>{
-                                    statusplaybefore1stcardmod::on_msg_ack_player_click1st_card(rrc, my_ws_uid, msg_id);
+                                MsgAckKind::MsgPlayerClick1stCard => {
+                                    statusplaybefore1stcardmod::on_msg_ack_player_click1st_card(
+                                        rrc, my_ws_uid, msg_id,
+                                    );
                                 }
                             }
                             v2.schedule_render();

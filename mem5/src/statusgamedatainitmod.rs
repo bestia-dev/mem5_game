@@ -9,9 +9,8 @@ use unwrap::unwrap;
 use mem5_common::GameStatus;
 //endregion
 
-
 ///prepares the game data
-pub fn game_data_init(rrc:&mut RootRenderingComponent) {
+pub fn game_data_init(rrc: &mut RootRenderingComponent) {
     rrc.game_data.content_folder_name = rrc.game_data.asked_folder_name.clone();
     rrc.game_data.prepare_random_data();
     rrc.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
@@ -20,7 +19,7 @@ pub fn game_data_init(rrc:&mut RootRenderingComponent) {
 
 ///on game data init
 pub fn on_msg_game_data_init(
-    rrc:&mut RootRenderingComponent,
+    rrc: &mut RootRenderingComponent,
     v2: dodrio::VdomWeak,
     card_grid_data: &str,
     game_config: &str,
@@ -30,7 +29,7 @@ pub fn on_msg_game_data_init(
     rrc.game_data.content_folder_name = rrc.game_data.asked_folder_name.clone();
     rrc.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
     rrc.game_data.player_turn = 1;
-    
+
     rrc.game_data.game_config = unwrap!(
         serde_json::from_str(game_config),
         "error serde_json::from_str(game_config)"
@@ -40,7 +39,7 @@ pub fn on_msg_game_data_init(
         serde_json::from_str(card_grid_data),
         "error serde_json::from_str(card_grid_data)"
     );
-    
+
     //async fetch all imgs and put them in service worker cache
     fetchallimgsforcachemod::fetch_all_img_for_cache_request(rrc, v2);
 
@@ -49,8 +48,7 @@ pub fn on_msg_game_data_init(
         "error serde_json::from_str(players)"
     );
 
-    rrc.game_data.players_ws_uid =
-        gamedatamod::prepare_players_ws_uid(&rrc.game_data.players);
+    rrc.game_data.players_ws_uid = gamedatamod::prepare_players_ws_uid(&rrc.game_data.players);
 
     //find my player number
     for index in 0..rrc.game_data.players.len() {

@@ -11,18 +11,18 @@ use web_sys::{Request, RequestInit};
 
 ///fetch all imgs for the cache
 #[allow(clippy::needless_pass_by_value)]
-pub fn fetch_all_img_for_cache_request(rrc: &mut RootRenderingComponent, vdom_weak: dodrio::VdomWeak) {
-
-    for x in &rrc.game_data.card_grid_data{
+pub fn fetch_all_img_for_cache_request(
+    rrc: &mut RootRenderingComponent,
+    vdom_weak: dodrio::VdomWeak,
+) {
+    for x in &rrc.game_data.card_grid_data {
         if x.card_index_and_id != 0 {
-            let url_img =  format!("content/{}/img/{}",
+            let url_img = format!(
+                "content/{}/img/{}",
                 rrc.game_data.content_folder_name,
-                unwrap!(
-                    unwrap!(rrc.game_data.game_config.as_ref())
-                    .img_filename.get(
-                        x.card_number_and_img_src
-                    )
-                )
+                unwrap!(unwrap!(rrc.game_data.game_config.as_ref())
+                    .img_filename
+                    .get(x.card_number_and_img_src))
             );
             logmod::debug_write(url_img.as_str());
             let webrequest = create_webrequest(url_img.as_str());
@@ -47,6 +47,4 @@ pub fn create_webrequest(url: &str) -> web_sys::Request {
 
 #[allow(clippy::needless_pass_by_value)]
 /// do nothing
-pub fn do_nothing(_rrc: &mut RootRenderingComponent, _respbody: String) {
-
-}
+pub fn do_nothing(_rrc: &mut RootRenderingComponent, _respbody: String) {}

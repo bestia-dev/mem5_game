@@ -223,7 +223,11 @@ pub fn div_grid_item<'a, 'bump>(
 }
 
 /// on click
-fn div_grid_item_on_click(rrc: &mut RootRenderingComponent, vdom:dodrio::VdomWeak, this_click_card_index: usize) {
+fn div_grid_item_on_click(
+    rrc: &mut RootRenderingComponent,
+    vdom: dodrio::VdomWeak,
+    this_click_card_index: usize,
+) {
     //region: audio play
     //prepare the audio element with src filename of mp3
     let audio_element = web_sys::HtmlAudioElement::new_with_src(

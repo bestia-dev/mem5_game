@@ -84,11 +84,11 @@ pub struct Card {
 
 ///save the message in queue to resend it if timeout expires
 #[derive(Serialize, Deserialize)]
-pub struct MsgInQueue{
+pub struct MsgInQueue {
     ///the player that must ack the msg
     pub player_ws_uid: usize,
     ///the msg id is a random number
-    pub msg_id:usize,
+    pub msg_id: usize,
     ///the content of the message if it needs to be resend
     pub msg: WsMessage,
 }
@@ -275,16 +275,14 @@ impl GameData {
             asked_folder_name: "".to_string(),
             my_player_number: 1,
             player_turn: 0,
-            content_folders: vec![
-                String::from("alphabet"),
-            ],
+            content_folders: vec![String::from("alphabet")],
             game_config: None,
-            games_metadata:None,
+            games_metadata: None,
             error_text: "".to_string(),
             href: "".to_string(),
             is_reconnect: false,
             is_fullscreen: false,
-            msgs_waiting_ack: vec!{},
+            msgs_waiting_ack: vec![],
         }
     }
     /*

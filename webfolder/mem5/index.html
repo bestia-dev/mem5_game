@@ -54,6 +54,9 @@ on Safari or in Crome with accessibility settings (bigger fonts). So I will try 
       fast networks.
     </h2>
   </div>
+  <!-- inspecting the size of the font for debugging purpose
+    Sadly discovered, that the font-size number is the same even when on the screen they are not.
+    because of accessibility options. Impossible to override.
   <script>
     var div = document.getElementById('div_for_virtual_dom');
 
@@ -63,6 +66,7 @@ on Safari or in Crome with accessibility settings (bigger fonts). So I will try 
 
     alert(css(div, 'font-size'));
   </script>
+-->
   <script type="module">
     import init from "./pkg/mem5.js";
     init("./pkg/mem5_bg.wasm");

@@ -28,7 +28,6 @@ pub fn div_player_actions_from_game_status<'a, 'bump>(
 where
     'a: 'bump,
 {
-    
     //if rrc.game_data.is_status_invite_ask_begin() {
     /*
         && (rrc.game_data.is_reconnect || rrc.game_data.ws.ready_state() != 1)
@@ -36,7 +35,7 @@ where
         //ready_state: 0	CONNECTING, 1	OPEN, 2	CLOSING, 3	CLOSED
         websocketreconnectmod::div_reconnect(rrc, bump)
     */
-     if let GameStatus::StatusInviteAskBegin = rrc.game_data.game_status {
+    if let GameStatus::StatusInviteAskBegin = rrc.game_data.game_status {
         statusinviteaskbeginmod::div_invite_ask_begin(rrc, bump)
     } else if let GameStatus::StatusInviteAsked = rrc.game_data.game_status {
         statusinviteaskedmod::div_invite_asked(rrc, bump)
@@ -60,10 +59,7 @@ where
 }
 
 ///render unpredicted
-fn div_unpredicted<'a, 'bump>(
-    rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
-) -> Node<'bump>
+fn div_unpredicted<'a, 'bump>(rrc: &'a RootRenderingComponent, bump: &'bump Bump) -> Node<'bump>
 where
     'a: 'bump,
 {

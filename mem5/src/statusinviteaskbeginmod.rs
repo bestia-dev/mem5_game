@@ -67,7 +67,7 @@ where
 {
     //if the user did not yet input his nickname than blink
     //all the code is the same except the class and the call to schedule_render
-    if rrc.game_data.my_nickname=="nickname"{
+    if rrc.game_data.my_nickname == "nickname" {
         dodrio!(bump,
         <div style="margin-left: auto ;margin-right: auto ;text-align: center" >
             <label>
@@ -95,8 +95,7 @@ where
             </label>
         </div>
         )
-    }
-    else{
+    } else {
         //if the use already has input his nickname no blinking is needed
         dodrio!(bump,
         <div style="margin-left: auto ;margin-right: auto ;text-align: center" >

@@ -64,7 +64,7 @@ impl Render for RulesAndDescription {
             <h6>
                 /*TODO: tried to add rel="noreferrer", but the dodrio! macro doesn't understand that */
                 <a href= "https://github.com/LucianoBestia/mem5_game" target="_blank" style="color:#74bbfb">
-                    {vec![text(bumpalo::format!(in bump, 
+                    {vec![text(bumpalo::format!(in bump,
                     "https://github.com /LucianoBestia /mem5_game{}", "").into_bump_str(),)]}
                 </a>
             </h6>
@@ -83,4 +83,3 @@ fn text_with_br_newline<'a>(txt: &'a str, bump: &'a Bump) -> Vec<Node<'a>> {
     }
     vec_text_node
 }
-

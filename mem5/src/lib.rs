@@ -1,13 +1,13 @@
 //region: lmake_readme insert "readme.md"
 //! # mem5
-//! 
+//!
 //! mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio and WebSocket communication  
-//! 
+//!
 //! version: 19.9.23  
 //! Look also at the workspace readme on <https://github.com/LucianoBestia/mem5_game>  
-//! 
+//!
 //! ## Idea
-//! 
+//!
 //! Playing the memory game alone is boring.  
 //! Playing it with friends is better.  
 //! But if all friends just stare in their smartphones, it is still boring.  
@@ -17,9 +17,9 @@
 //! All the phones will have a small card grid (ex. 3x3). But the combined card grid from all these phones together is not so small anymore. It is now much more interesting to play for the players.  
 //! It can be played with as many friends as there are: 3,4,5,...  
 //! More friends - more fun.  
-//! 
+//!
 //! ## Rust and Wasm/WebAssembly
-//! 
+//!
 //! Rust is a pretty new language created by Mozilla for really low level programming.  
 //! It is a step forward from the C language with functionality and features that are best practice today.  
 //! It is pretty hard to learn. Some concepts are so different from other languages it makes it
@@ -30,9 +30,9 @@
 //! That compiled code works inside a browser directly with the JavaScript engine.  
 //! So finally no need for JavaScript to make cross-platform applications inside browsers.  
 //! I have a lot of hope here.  
-//! 
+//!
 //! ## Virtual DOM
-//! 
+//!
 //! Constructing a HTML page with Virtual DOM (vdom) is easier  
 //! because it is rendered completely on every tick (animation frame).  
 //! Sometimes is hard for the developer to think what should change in the UI when some data changes.  
@@ -53,13 +53,13 @@
 //! When this data does not match, invalidation is called to cache them.
 //! That also schedules the rendering of the subcomponent.  
 //! If no data has changed, the cached subcomponent Node is used. This is more efficient and performant.  
-//! 
+//!
 //! ## GameData
-//! 
+//!
 //! All the game data are in this simple struct.  
-//! 
+//!
 //! ## WebSocket communication
-//! 
+//!
 //! HTML5 has finally bring a true stateful bidirectional communication.  
 //! Most of the programming problems are more easily and effectively solved this way.  
 //! The old unidirectional stateless communication is very good for static html pages,  
@@ -69,22 +69,22 @@
 //! I send simple structs text messages in json format between the players.  
 //! They are all in the WsMsg enum and therefore interchangeable.  
 //! The WebSocket server is coded especially for this game and recognizes 3 types of msg:
-//! 
+//!
 //! - msg to broadcast to every other player
 //! - msg to send only to the actual game players
-//! 
+//!
 //! ## WS reconnect
-//! 
+//!
 //! TODO: It looks that plain web sockets have often connection problems and they disconnect here and there. Creating a good reconnect is pretty challenging.  
-//! 
+//!
 //! ## The game flow
-//! 
+//!
 //! In a few words: Status1 - User action - Status2, Status1 - WsMessage - Status2
 //! In one moment the game is in a certain Game Status. The user then makes an action.
 //! This action changes the GameData and the GameStatus.  
 //! Then a message is sent to other players so they can also change their local GameData and GameStatus.  
 //! The rendering is scheduled and it will happen shortly (async).  
-//! 
+//!
 //! | Game Status1       | Render                     | User action                                 | Condition                            | GameStatus2 t.p.   | Sends Msg          | On rcv Msg o.p.              | GameStatus2 o.p.                   |
 //! | ------------------ | -------------------------- | ------------------------------------------- | ------------------------------------ | ----------------   | ----------------   | --------------------------   | --------------------------------   |
 //! | StatusInviteAskBegin     | div_invite_ask_begin       | div_invite_ask_begin_on_click               | -                                    | StatusInviteAsking       | MsgInvite             | on_msg_invite                | StatusInviteAsked                        |
@@ -97,63 +97,63 @@
 //! | MsgPlayerClick2ndCardTakeTurnBegin      | div_take_turn_begin        | div_take_turn_begin_on_click                | -                                    | StatusPlayBefore1stCard  | MsgTakeTurnEnd        | on_msg_take_turn_end         | StatusPlayBefore1stCard, the next player |
 //! | StatusGameOverPlayAgainBegin | div_play_again         | window.location().reload()                  | -                                    | -                  | -                  | -                            | -                                  |
 //! |  |  |  |  |  |  |  |  |
-//! 
+//!
 //! t.p. = this player,   o.p. = other players,  rrc = rrc, rcv = receive
-//! 
+//!
 //! 1. Some actions can have different results. For example the condition card match or card don’t match.  
 //! 2. one action must be only for one status1. This action changes Status for this player and sends Msg to other players.  
 //! 3. on receive msg can produce only one status2.  
 //! 4. in this table I ignore msgs for the server like GetConfig  
-//! 
+//!
 //! ## Futures and Promises, Rust and JavaScript
-//! 
+//!
 //! JavaScript is all asynchronous. Wasm is nothing else then a shortcut to the JavaScript engine.  
 //! So everything is asynchronous too. This is pretty hard to grasp. Everything is Promises and Futures.  
 //! There is a constant jumping from thinking in Rust to thinking is JavaScript and back. That is pretty confusing.  
 //! JavaScript does not have a good idea of Rust datatypes. All there is is a generic JSValue type.  
 //! The library `wasm-bindgen` has made a fantastic job of giving Rust the ability to call
 //! anything JavaScript can call, but the way of doing it is sometimes very hard to understand.  
-//! 
+//!
 //! ## Typed html
-//! 
+//!
 //! Writing html inside Rust code is much easier with the macro `html!` from the `crate typed-html`  
 //! <https://github.com/bodil/typed-html>  
 //! It has also a macro `dodrio!` created exclusively for the dodrio vdom.  
 //! Everything is done in compile time, so the runtime is nothing slower.
-//! 
+//!
 //! ## Browser console
-//! 
+//!
 //! At least in modern browsers (Firefox and Chrome) we have the developer tools F12 and there is a
 //! console we can output to. So we can debug what is going on with our Wasm program.
 //! But not on smartphones that are the only target for this app.  
-//! 
+//!
 //! ## Safari on iOS and FullScreen
-//! 
+//!
 //! Apple is very restrictive and does not allow fullscreen Safari on iPhones.  
 //! The workaround is to make a shortcut for the webapp on the homescreen.  
-//! 
+//!
 //! ## mem5 as webapp on HomeScreen
-//! 
+//!
 //! On both android and iPhone is possible to "Add to homescreen" the webapp.  
 //! Then it will open in fullscreen and be beautiful.  
 //! In safari the share icon (a square with arrow up) has "Add to home screen".
 //! <https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html>  
-//! 
+//!
 //! ## Modules
-//! 
+//!
 //! Rust code is splitted into modules. They are not exactly like classes, but can be similar.  
 //! Rust has much more freedom to group code in different ways. So that is best suits the problem.  
 //! I splitted the rendering into sub-components.  
 //! And then I splitted the User Actions by the Status1 to easy follow the flow of the game.  
-//! 
+//!
 //! ## Clippy
-//! 
+//!
 //! Clippy is very useful to teach us how to program in a better way.  
 //! These are not syntax errors, but hints how to do it in a more Rusty way (idiomatic).  
 //! Some lints are problematic and they are explicitly allowed here.
-//! 
+//!
 //! ## Cargo make
-//! 
+//!
 //! I prepared some flows and tasks for Cargo make.  
 //! `cargo make` - lists the possible available/public flows/tasks  
 //! `cargo make dev` - builds the development version and runs the server and the browser  
@@ -280,7 +280,7 @@ pub fn run() -> Result<(), JsValue> {
     //WebSocket server with an url param. It is saved locally to allow reconnection
     //if there are connection problems.
     let mut my_ws_uid: usize = sessionstoragemod::load_my_ws_uid();
-    if my_ws_uid==0 {
+    if my_ws_uid == 0 {
         let mut rng = SmallRng::from_entropy();
         my_ws_uid = rng.gen_range(1, 9999);
         sessionstoragemod::save_my_ws_uid(my_ws_uid);
@@ -291,20 +291,23 @@ pub fn run() -> Result<(), JsValue> {
     //find out URL
     let mut location_href = unwrap!(window.location().href(), "href not known");
     //without /index.html
-    location_href=location_href.to_lowercase().replace("index.html","");
+    location_href = location_href.to_lowercase().replace("index.html", "");
     //logmod::debug_write(&format!("location_href: {}", &location_href));
 
     //WebSocket connection
-    let players_ws_uid="[]".to_string(); //empty vector in json
-    let ws = websocketcommunicationmod::setup_ws_connection(location_href.clone(), my_ws_uid,players_ws_uid);
+    let players_ws_uid = "[]".to_string(); //empty vector in json
+    let ws = websocketcommunicationmod::setup_ws_connection(
+        location_href.clone(),
+        my_ws_uid,
+        players_ws_uid,
+    );
     //I don't know why is needed to clone the WebSocket connection
     let ws_c = ws.clone();
 
     // Construct a new RootRenderingComponent.
     //I added ws_c so that I can send messages on WebSocket
 
-    let mut rrc =
-        rootrenderingcomponentmod::RootRenderingComponent::new(ws_c, my_ws_uid);
+    let mut rrc = rootrenderingcomponentmod::RootRenderingComponent::new(ws_c, my_ws_uid);
     rrc.game_data.href = location_href.to_string();
 
     // Mount the component to the `<div id="div_for_virtual_dom">`.
@@ -332,29 +335,22 @@ pub fn session_storage() -> web_sys::Storage {
 //endregion
 
 ///format ordinal numbers as string 1st, 2nd,3rd,...
-#[allow(
-    clippy::indexing_slicing,  
-    clippy::integer_arithmetic
-    )]
-pub fn ordinal_numbers(number:usize)->String{
+#[allow(clippy::indexing_slicing, clippy::integer_arithmetic)]
+pub fn ordinal_numbers(number: usize) -> String {
     //these are only ascii characters, so no problem with utf_8
-    let mut ord_str = format!("{}",number);
+    let mut ord_str = format!("{}", number);
     let places = ord_str.len();
 
-    let slice = &ord_str[places-1..];
-    if slice=="1"{
+    let slice = &ord_str[places - 1..];
+    if slice == "1" {
         ord_str.push_str("st");
-    }
-    else if slice=="2"{
+    } else if slice == "2" {
         ord_str.push_str("nd");
-    }
-    else if slice=="3"{
+    } else if slice == "3" {
         ord_str.push_str("rd");
-    }
-    else {
+    } else {
         ord_str.push_str("th");
     }
     //return
     ord_str
 }
-

@@ -16,9 +16,8 @@ extern "C" {
 extern "C" {
     /// the name of the extern javascript function
     #[allow(clippy::missing_docs_in_private_items)]
-    fn javascriptismobiledevice()->bool;
+    fn javascriptismobiledevice() -> bool;
 }
-
 
 ///do full screen function - imported from javascript
 pub fn do_fullscreen() {
@@ -26,6 +25,6 @@ pub fn do_fullscreen() {
 }
 
 ///is mobile device function - imported from javascript
-pub fn is_mobile_device()->bool {
+pub fn is_mobile_device() -> bool {
     javascriptismobiledevice()
 }

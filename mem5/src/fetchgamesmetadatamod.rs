@@ -11,11 +11,8 @@ use web_sys::{Request, RequestInit};
 
 ///async fetch_response() for gamesmetadata.json
 #[allow(clippy::needless_pass_by_value)]
-pub fn fetch_games_metadata_request(href:String, vdom_weak: dodrio::VdomWeak) {
-    let url_config = format!(
-        "{}/content/gamesmetadata.json",
-        href
-    );
+pub fn fetch_games_metadata_request(href: String, vdom_weak: dodrio::VdomWeak) {
+    let url_config = format!("{}/content/gamesmetadata.json", href);
     //logmod::debug_write(url_config.as_str());
     let webrequest = create_webrequest(url_config.as_str());
     fetchmod::fetch_response(vdom_weak, &webrequest, &set_game_metadata_from_json);
@@ -38,7 +35,7 @@ pub fn create_webrequest(url: &str) -> web_sys::Request {
 pub fn set_game_metadata_from_json(rrc: &mut RootRenderingComponent, respbody: String) {
     //respbody is json.
     //logmod::debug_write(format!("respbody: {}", respbody).as_str());
-    let v: gamedatamod::GamesMetadata =unwrap!(serde_json::from_str(respbody.as_str()));
+    let v: gamedatamod::GamesMetadata = unwrap!(serde_json::from_str(respbody.as_str()));
     rrc.game_data.games_metadata = Some(v.clone());
     //fill the vector
     rrc.game_data.content_folders.clear();

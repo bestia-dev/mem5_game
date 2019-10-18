@@ -168,24 +168,6 @@ pub enum WsMessage {
         game_status: GameStatus,
     },
     ///acknowledge msg, that the receiver received the message
-    MsgAckTakeTurnEnd{
-        ///msg sender uid
-        my_ws_uid: usize,
-        ///send msg to this players
-        players_ws_uid: String,
-        ///msg id (random)
-        msg_id:usize,
-    },
-    ///acknowledge msg, that the receiver received the message
-    MsgAckPlayerClick1stCard{
-        ///msg sender uid
-        my_ws_uid: usize,
-        ///send msg to this players
-        players_ws_uid: String,
-        ///msg id (random)
-        msg_id:usize,
-    },
-    ///acknowledge msg, that the receiver received the message
     MsgAck{
         ///msg sender uid
         my_ws_uid: usize,

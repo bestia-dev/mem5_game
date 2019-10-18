@@ -59,7 +59,7 @@ pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump
             </div>
         </div>
         ));
-    } 
+    }
 
     let version = env!("CARGO_PKG_VERSION");
     let style_string = bumpalo::format!(in bump, "font-size:{}rem;", 2.0).into_bump_str();
@@ -79,9 +79,7 @@ pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump
 ///when the lenght is bigger, the fontsize get smaller
 ///if the len is 10 the fontsize is 3.0rem, if the len is 20 the fontsize is 1.5rem
 ///this means that the 80 is constant:  10*3.0=30 20*1.5=30
-#[allow(clippy::integer_arithmetic,
-    clippy::integer_division
-)]
+#[allow(clippy::integer_arithmetic, clippy::integer_division)]
 fn calc_font_size(text_len: usize) -> f64 {
     if text_len < 10 {
         3.0

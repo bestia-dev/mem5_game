@@ -3,10 +3,9 @@
 //region: use
 use crate::gamedatamod::CardStatusCardFace;
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
-use mem5_common::{GameStatus, WsMessage};
+use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 use crate::logmod;
 use crate::ackmsgmod;
-use crate::websocketcommunicationmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -51,18 +50,22 @@ where
 //div_grid_container() is in divgridcontainermod.rs
 
 /// on click
-pub fn on_click_1st_card(rrc: &mut RootRenderingComponent,vdom:dodrio::VdomWeak, this_click_card_index: usize) {
+pub fn on_click_1st_card(
+    rrc: &mut RootRenderingComponent,
+    vdom: dodrio::VdomWeak,
+    this_click_card_index: usize,
+) {
     //change card status and game status
     rrc.game_data.card_index_of_first_click = this_click_card_index;
 
-    let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc,vdom);
+    let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc, vdom);
     let msg = WsMessage::MsgPlayerClick1stCard {
         my_ws_uid: rrc.game_data.my_ws_uid,
         players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
         card_index_of_first_click: this_click_card_index,
         msg_id,
-    };                    
-    ackmsgmod::send_msg_and_write_in_queue(rrc,&msg,msg_id);
+    };
+    ackmsgmod::send_msg_and_write_in_queue(rrc, &msg, msg_id);
     //after ack for this message call on_msg_player_click_1st_card(rrc, this_click_card_index);
 
     //endregion
@@ -71,21 +74,16 @@ pub fn on_click_1st_card(rrc: &mut RootRenderingComponent,vdom:dodrio::VdomWeak,
 ///msg player click
 pub fn on_msg_player_click_1st_card(
     rrc: &mut RootRenderingComponent,
-    msg_sender_ws_uid:usize,
+    msg_sender_ws_uid: usize,
     card_index_of_first_click: usize,
     msg_id: usize,
 ) {
-    //logmod::debug_write("on_msg_player_click_1st_card");
-    //send back the ACK msg to the sender
-     websocketcommunicationmod::ws_send_msg(
-        &rrc.game_data.ws,
-        &WsMessage::MsgAckPlayerClick1stCard {
-            my_ws_uid: rrc.game_data.my_ws_uid,
-            players_ws_uid: unwrap!(serde_json::to_string(&vec![msg_sender_ws_uid])),
-            msg_id
-        }
+    ackmsgmod::send_ack(
+        rrc,
+        msg_sender_ws_uid,
+        msg_id,
+        MsgAckKind::MsgPlayerClick1stCard,
     );
-
     rrc.game_data.card_index_of_first_click = card_index_of_first_click;
     update(rrc);
 }
@@ -106,8 +104,7 @@ pub fn on_msg_ack_player_click1st_card(
     player_ws_uid: usize,
     msg_id: usize,
 ) {
-    
-    if ackmsgmod::remove_ack_msg_from_queue(rrc,player_ws_uid,msg_id) {
+    if ackmsgmod::remove_ack_msg_from_queue(rrc, player_ws_uid, msg_id) {
         logmod::debug_write("update player_click_1st_card(rrc)");
         update(rrc);
     }

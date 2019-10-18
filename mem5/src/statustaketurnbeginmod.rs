@@ -2,11 +2,10 @@
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
-use mem5_common::{GameStatus, WsMessage};
+use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 use crate::gamedatamod::{CardStatusCardFace};
 use crate::logmod;
 use crate::ackmsgmod;
-use crate::websocketcommunicationmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -40,7 +39,7 @@ where
                     //this game_data mutable reference is dropped on the end of the function
                     //region: send WsMessage over WebSocket
                     logmod::debug_write(&format!("ws_send_msg: MsgTakeTurnEnd {}", ""));
-                    
+
                     let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc,vdom);
 
                     let msg = WsMessage::MsgTakeTurnEnd {
@@ -51,7 +50,7 @@ where
                     ackmsgmod::send_msg_and_write_in_queue(rrc,&msg,msg_id);
 
                     //endregion
-                    //Here I wait for on_MsgAckTakeTurnEnd from 
+                    //Here I wait for on_MsgAck from
                     //every player before call take_turn_end(rrc);
                 }}>
             <h2 class="h2_user_must_click">
@@ -128,30 +127,23 @@ pub fn on_msg_take_turn_begin(rrc: &mut RootRenderingComponent, card_index_of_se
 }
 
 ///msg player change
-pub fn on_msg_take_turn_end(rrc: &mut RootRenderingComponent,msg_sender_ws_uid:usize, msg_id:usize) {
-    //send back the ACK msg to the sender
-     websocketcommunicationmod::ws_send_msg(
-        &rrc.game_data.ws,
-        &WsMessage::MsgAckTakeTurnEnd {
-            my_ws_uid: rrc.game_data.my_ws_uid,
-            players_ws_uid: unwrap!(serde_json::to_string(&vec![msg_sender_ws_uid])),
-            msg_id
-        }
-    );
-
+pub fn on_msg_take_turn_end(
+    rrc: &mut RootRenderingComponent,
+    msg_sender_ws_uid: usize,
+    msg_id: usize,
+) {
+    ackmsgmod::send_ack(rrc, msg_sender_ws_uid, msg_id, MsgAckKind::MsgTakeTurnEnd);
     update(rrc);
 }
-
 
 ///all the players must acknowledge that they received the msg
 #[allow(clippy::needless_pass_by_value)]
 pub fn on_msg_ack_take_turn_end(
     rrc: &mut RootRenderingComponent,
     player_ws_uid: usize,
-    msg_id: usize
+    msg_id: usize,
 ) {
-
-    if ackmsgmod::remove_ack_msg_from_queue(rrc,player_ws_uid,msg_id) {
+    if ackmsgmod::remove_ack_msg_from_queue(rrc, player_ws_uid, msg_id) {
         logmod::debug_write("update take_turn_end(rrc)");
         update(rrc);
     }
