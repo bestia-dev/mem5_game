@@ -209,8 +209,7 @@ pub fn div_grid_item<'a, 'bump>(
                 rrc.game_data.card_grid_data.get(this_click_card_index),
                 "error this_click_card_index"
             ).status.as_ref()==CardStatusCardFace::Down.as_ref(){
-                let v2=vdom.clone();
-                div_grid_item_on_click(rrc,v2,this_click_card_index);
+                div_grid_item_on_click(rrc,&vdom,this_click_card_index);
 
                 // Finally, re-render the component on the next animation frame.
                 vdom.schedule_render();
@@ -225,7 +224,7 @@ pub fn div_grid_item<'a, 'bump>(
 /// on click
 fn div_grid_item_on_click(
     rrc: &mut RootRenderingComponent,
-    vdom: dodrio::VdomWeak,
+    vdom: &dodrio::VdomWeak,
     this_click_card_index: usize,
 ) {
     //region: audio play

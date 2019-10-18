@@ -222,6 +222,7 @@ pub struct Player {
 
 #[derive(Display, AsRefStr, Serialize, Deserialize, Clone)]
 #[allow(clippy::pub_enum_variant_names)]
+///msg ack kind
 pub enum MsgAckKind {
     ///ack for MsgTakeTurnEnd
     MsgTakeTurnEnd,

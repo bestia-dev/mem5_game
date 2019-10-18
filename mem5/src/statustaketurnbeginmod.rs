@@ -40,7 +40,7 @@ where
                     //region: send WsMessage over WebSocket
                     logmod::debug_write(&format!("ws_send_msg: MsgTakeTurnEnd {}", ""));
 
-                    let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc,vdom);
+                    let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc,&vdom);
 
                     let msg = WsMessage::MsgTakeTurnEnd {
                         my_ws_uid: rrc.game_data.my_ws_uid,

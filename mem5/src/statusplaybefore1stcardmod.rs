@@ -52,7 +52,7 @@ where
 /// on click
 pub fn on_click_1st_card(
     rrc: &mut RootRenderingComponent,
-    vdom: dodrio::VdomWeak,
+    vdom: &dodrio::VdomWeak,
     this_click_card_index: usize,
 ) {
     //change card status and game status
@@ -88,6 +88,7 @@ pub fn on_msg_player_click_1st_card(
     update(rrc);
 }
 
+///update the rrc data
 pub fn update(rrc: &mut RootRenderingComponent) {
     //flip the card up
     unwrap!(rrc
@@ -99,6 +100,7 @@ pub fn update(rrc: &mut RootRenderingComponent) {
     rrc.check_invalidate_for_all_components();
 }
 
+///on msg ack player click1st card
 pub fn on_msg_ack_player_click1st_card(
     rrc: &mut RootRenderingComponent,
     player_ws_uid: usize,
