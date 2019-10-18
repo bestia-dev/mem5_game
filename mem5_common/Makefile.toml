@@ -25,6 +25,13 @@ skip_core_tasks = true
     dependencies = [
         "lmake_version_from_date",
         "build-release"]
+    
+    [tasks.audit]
+    description = "cargo audit - for warning dependencies"
+    clear = true
+    dependencies = [
+        "cargo_audit",
+    ]
 
     [tasks.fmt]
     description = "cargo fmt - format code"
@@ -55,6 +62,13 @@ clear=true
 private=true
 command = "cargo"
 args = ["build","--release"]
+
+[tasks.cargo_audit]
+description = "cargo audit - no cargo.lock for library?"
+clear = true
+private = true
+#command = "cargo"
+#args = ["audit"]
 
 [tasks.cargo_fmt]
 description = "cargo fmt"

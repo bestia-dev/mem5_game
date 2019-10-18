@@ -30,6 +30,13 @@ skip_core_tasks = true
         "post_build_release",
     ]
 
+    [tasks.audit]
+    description = "cargo audit - for warning dependencies"
+    clear = true
+    dependencies = [
+        "cargo_audit",
+    ]
+    
     [tasks.fmt]
     description = "cargo fmt - format code"
     clear = true
@@ -91,6 +98,13 @@ script = [
     "cd ../webfolder",
     "sudo ./mem5_server"
 ]
+
+[tasks.cargo_audit]
+description = "cargo audit"
+clear = true
+private = true
+command = "cargo"
+args = ["audit"]
 
 [tasks.cargo_fmt]
 description = "cargo fmt"

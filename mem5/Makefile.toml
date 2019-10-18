@@ -41,6 +41,13 @@ skip_core_tasks = true
         "copy_pkg_to_webfolder",
     ]
 
+    [tasks.audit]
+    description = "cargo audit - for warning dependencies"
+    clear = true
+    dependencies = [
+        "cargo_audit",
+    ]
+
     [tasks.fmt]
     description = "cargo fmt - format code"
     clear = true
@@ -80,6 +87,13 @@ private = true
 script = [
     "\\rsync -avz --delete-after ~/rustprojects/mem5_game/mem5/pkg/  ~/rustprojects/mem5_game/webfolder/mem5/pkg/",
 ]
+
+[tasks.cargo_audit]
+description = "cargo audit"
+clear = true
+private = true
+command = "cargo"
+args = ["audit"]
 
 [tasks.cargo_fmt]
 description = "cargo fmt"

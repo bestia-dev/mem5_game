@@ -25,6 +25,14 @@ clear=true
 command = "cargo"
 args = ["make","release"]
 
+    [tasks.audit]
+    description = "cargo audit - for warning dependencies"
+    clear = true
+    dependencies = [
+        "cargo_audit",
+        "workspace_audit",
+    ]
+
 [tasks.fmt]
 description = "cargo fmt for every workspace member"
 workspace = true
@@ -74,3 +82,18 @@ script = [
 ]
 
 #endregion
+
+[tasks.cargo_audit]
+description = "cargo audit"
+clear = true
+private = true
+command = "cargo"
+args = ["audit"]
+
+[tasks.workspace_audit]
+description = "cargo audit for every workspace member"
+workspace = true
+clear=true
+private=true
+command = "cargo"
+args = ["make","audit"]
