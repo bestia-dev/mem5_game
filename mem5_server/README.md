@@ -2,12 +2,12 @@
 
 [comment]: # (lmake_readme version)  
 
-**Html and WebSocket server for the mem5 game**
-Primarily made for learning to code Rust for a http + WebSocket server on the same port  
+**Html and WebSocket server for the mem5 game**  
+Primarily made for learning to code Rust for a http + WebSocket server on the same port.  
 Using Warp for a simple memory game for kids - mem5.  
 On the IP address on port 8085 listens to http and WebSocket.  
-Route for http `/` serves static files from folder `/mem5/`  
-Route `/mem5ws/` broadcast all WebSocket msg to all connected clients except sender  
+Route for http `/` serves static files from folder `/mem5/`.  
+Route `/mem5ws/` broadcast all WebSocket msg to all connected clients except sender.  
 
 ## Google vm
 

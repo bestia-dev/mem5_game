@@ -2,7 +2,7 @@
 
 [comment]: # (lmake_readme version)  
 
-**commons for mem5 wasm and server**
+**commons for mem5 wasm and server**  
 Learning to code Rust for a http + WebSocket.  
 Here are just the structures, that are in common between frontend and backend.  
 Mostly because of the Messages.  

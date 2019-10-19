@@ -60,8 +60,7 @@ skip_core_tasks = true
     clear=true
     dependencies = [
         "insert_readme",
-        "cargo_doc",
-        "cargo_docs_copy"
+        "cargo_doc"
     ]
 
 # endregion
@@ -114,15 +113,6 @@ clear = true
 private = true
 command="cargo"
 args=["doc","--no-deps","--document-private-items","--open"]
-
-[tasks.cargo_docs_copy]
-description = "copy target doc to docs (github standard)"
-# TODO: should be better if first delete old content
-clear = true
-private = true
-script = [
-    "\\rsync -avz --delete-after ~/rustprojects/mem5_game/target/doc/  ~/rustprojects/mem5_game/docs/",
-]
 
 [tasks.lmake_version_from_date]
 description = "in cargo.toml change version to today date"

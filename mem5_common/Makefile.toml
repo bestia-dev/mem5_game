@@ -45,8 +45,7 @@ skip_core_tasks = true
     clear=true
     dependencies = [
         "insert-readme",
-        "cargo-doc",
-        "cargo-docs-copy"
+        "cargo-doc"
     ]
 #endregion
 
@@ -89,13 +88,6 @@ private = true
 description = "call cargo doc"
 command="cargo"
 args=["doc","--no-deps","--document-private-items","--open"]
-
-[tasks.cargo-docs-copy]
-clear = true
-private = true
-script = [
-    "\\cp ~/rustprojects/mem5_game/target/doc/*.* -rf -v ~/rustprojects/mem5_game/docs",
-]
 
 [tasks.lmake_version_from_date]
 clear = true
