@@ -7,6 +7,7 @@
 
 Documentation generated from source code:  
 <https://lucianobestia.github.io/mem5_game/mem5/index.html>  
+<https://lucianobestia.github.io/mem5_game/mem5_server/index.html>  
 The workspace mem5_game is made of:  
 
 1. Wasm/WebAssembly (for browsers) frontend - mem5  
