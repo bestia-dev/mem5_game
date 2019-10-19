@@ -14,6 +14,7 @@ The workspace mem5_game is made of:
 3. common structures - mem5_common  
 
 Every project has its own readme.md.  
+
 - [mem5/README.md](
 https://github.com/LucianoBestia/mem5_game/blob/master/mem5/README.md)  
 - [mem5_common/README.md](https://github.com/LucianoBestia/mem5_game/blob/master/mem5_common/README.md)  
@@ -41,4 +42,4 @@ I prepared some flows and tasks for Cargo make for the workspace.
 
 ## TODO and CHANGELOG
 
-Read files TODO.md and CHANGELOG.md.  
+Read files [TODO.md](https://github.com/LucianoBestia/mem5_game/blob/master/TODO.md) and [CHANGELOG.md](https://github.com/LucianoBestia/mem5_game/blob/master/CHANGELOG.md).  
