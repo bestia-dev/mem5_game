@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `mem5` crate."><meta name="keywords" content="rust, rustlang, rust-lang, mem5"><title>mem5 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../mem5/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><p class='location'>Crate mem5</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all mem5's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'mem5', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/mem5/lib.rs.html#2-397' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>mem5</a></span></h1><div class='docblock'><h1 id="mem5" class="section-header"><a href="#mem5">mem5</a></h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `mem5` crate."><meta name="keywords" content="rust, rustlang, rust-lang, mem5"><title>mem5 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../mem5/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><p class='location'>Crate mem5</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all mem5's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'mem5', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/mem5/lib.rs.html#2-392' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>mem5</a></span></h1><div class='docblock'><h1 id="mem5" class="section-header"><a href="#mem5">mem5</a></h1>
 <p>mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web App).</p>
 <p>version: 19.10.19-9.56</p>
 <h2 id="idea" class="section-header"><a href="#idea">Idea</a></h2>
@@ -34,7 +34,7 @@ When GameData change and we know it will affect the DOM, then rendering must be 
 The main component of the Dodrio Virtual Dom is the Root Rendering Component (rrc).<br />
 It is the component that renders the complete user interface (HTML).<br />
 The root rendering component is easily splitted  into sub-components.<br />
-<img src="https://github.com/LucianoBestia/mem5_game/raw/master/docs/img/subcomponents.png" alt="subcomponents" /><br />
+<img src="https://github.com/LucianoBestia/mem5_game/blob/master/webfolder/mem5/images/subcomponents.png" alt="subcomponents" /><br />
 Some subcomponents don't need any extra data and can be coded as simple functions.<br />
 The subcomponent &quot;players and scores&quot; has its own data. This data is cached from the GameData.<br />
 When this data does not match, invalidation is called to cache them.
@@ -85,7 +85,7 @@ It is a little bit different from the game flow. The first player broadcast an i
 All other players that are in the first status receive that and are asked if they accept.<br />
 When the user Accepts it sends a msg to the first player.<br />
 The first player waits to receive msgs from all other users.<br />
-After that he starts the game. This calculats the game_data and send this init data to all other players.</p>
+After that he starts the game. This calculates the game_data and send this init data to all other players.</p>
 <table><thead><tr><th>Game Status1</th><th>Render</th><th>User action</th><th>GameStatus2 p.p.</th><th>Sends Msg</th><th>On rcv Msg o.p.</th><th>GameStatus2 o.p.</th></tr></thead><tbody>
 <tr><td>StatusInviteAskBegin</td><td>div_invite_ask_begin</td><td>div_invite_ask_begin_on_click</td><td>StatusInviteAsking</td><td>MsgInvite</td><td>on_msg_invite</td><td>StatusInviteAsked</td></tr>
 <tr><td>StatusInviteAsked</td><td>div_invite_asked</td><td>div_invite_asked_on_click</td><td>StatusPlayAccepted</td><td>MsgPlayAccept</td><td>on_msg_play_accept</td><td>-</td></tr>
@@ -93,7 +93,9 @@ After that he starts the game. This calculats the game_data and send this init d
 <tr><td>StatusInviteAsking</td><td>div_invite_asking</td><td>game_data_init</td><td>StatusPlayBefore1stCard</td><td>MsgGameDataInit</td><td>on_msg_game_data_init</td><td>StatusPlayBefore1stCard</td></tr>
 </tbody></table>
 <p>This starts the game flow, that repeats until the game is over.</p>
-<p>In one moment the game is in a certain Game Status. The user then makes an action on the GUI.
+<p>In one moment the game is in a one Game Status for all players.<br />
+One player is the playing player and all others are awaiting.<br />
+The active user then makes an action on the GUI.
 This action will eventually change the GameData and the GameStatus. But before that there is communication.<br />
 A message is sent to other players so they can also change their local GameData and GameStatus.<br />
 Because of unreliable networks ther must be an acknowledge ack msg to confirm, that the msg is received to continue the game.<br />
@@ -112,7 +114,6 @@ The rendering is scheduled and it will happen shortly (async).</p>
 <li>Some actions can have different results. For example the condition if card match or if card don’t match.</li>
 <li>one action must be only for one status1. This action changes Status for this player and sends Msg to other players.</li>
 <li>on receive msg can produce only one status2.</li>
-<li>in this table I ignore msgs for the server like GetConfig</li>
 </ol>
 <h2 id="futures-and-promises-rust-and-javascript" class="section-header"><a href="#futures-and-promises-rust-and-javascript">Futures and Promises, Rust and JavaScript</a></h2>
 <p>JavaScript is all asynchronous. Wasm is nothing else then a shortcut to the JavaScript engine.<br />
@@ -120,48 +121,44 @@ So everything is asynchronous too. This is pretty hard to grasp. Everything is P
 There is a constant jumping from thinking in Rust to thinking is JavaScript and back. That is pretty confusing.<br />
 JavaScript does not have a good idea of Rust datatypes. All there is is a generic JSValue type.<br />
 The library <code>wasm-bindgen</code> has made a fantastic job of giving Rust the ability to call
-anything JavaScript can call, but the way of doing it is sometimes very hard to understand.</p>
+anything JavaScript can call, but the way of doing it is sometimes cumbersome.</p>
 <h2 id="typed-html" class="section-header"><a href="#typed-html">Typed html</a></h2>
 <p>Writing html inside Rust code is much easier with the macro <code>html!</code> from the <code>crate typed-html</code><br />
 <a href="https://github.com/bodil/typed-html">https://github.com/bodil/typed-html</a><br />
 It has also a macro <code>dodrio!</code> created exclusively for the dodrio vdom.<br />
-Everything is done in compile time, so the runtime is nothing slower.</p>
+Everything is done in compile time, so the runtime is nothing slower.<br />
+TODO: what if an attribute is not covered by the macro. Can I add it later?</p>
 <h2 id="browser-console" class="section-header"><a href="#browser-console">Browser console</a></h2>
 <p>At least in modern browsers (Firefox and Chrome) we have the developer tools F12 and there is a
 console we can output to. So we can debug what is going on with our Wasm program.
-But not on smartphones that are the only target for this app.</p>
+But not on smartphones !! I save the eroor and log messages in sessionStorage and this is displayed on the screen.</p>
 <h2 id="safari-on-ios-and-fullscreen" class="section-header"><a href="#safari-on-ios-and-fullscreen">Safari on iOS and FullScreen</a></h2>
 <p>Apple is very restrictive and does not allow fullscreen Safari on iPhones.<br />
-The workaround is to make a shortcut for the webapp on the homescreen.</p>
+The workaround is to <code>Add to Homescreen</code> the webapp.</p>
 <h2 id="pwa-progressive-web-app" class="section-header"><a href="#pwa-progressive-web-app">PWA (Progressive Web App)</a></h2>
-<p>On both android and iPhone is possible to &quot;Add to homescreen&quot; the webapp.<br />
-Then it will open in fullscreen and be beautiful.<br />
-To be 100% PWA it must be secured with TLS and must have a service worker.</p>
+<p>On both android and iPhone is possible to use PWA.<br />
+To be 100% PWA it must be secured with TLS and must have a service worker.<br />
+I added also the PWA manifest and png images for icons and now the game is a full PWA.</p>
 <p><strong>Very important :</strong>
-On Android Chrome to <code>Clear &amp; reset</code> the cached data of the website you must click on the icon of the URL address (the lock) and choose <code>Site Settings</code>.</p>
+On Android Chrome to <code>Clear &amp; reset</code> the cached data of the website you must click on the icon of the URL address (the lock) and choose <code>Site Settings</code>.<br />
+Sometimes even that does not work. Than I go in the Menu to Settings - Privacy - Clear browser data and delete all. Very aggressive, but the only thing that works.</p>
 <h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
 <p>Rust code is splitted into modules. They are not exactly like classes, but can be similar.<br />
 Rust has much more freedom to group code in different ways. So that is best suits the problem.<br />
 I splitted the rendering into sub-components.<br />
 And then I splitted the User Actions by the Status1 to easy follow the flow of the game.</p>
 <h2 id="clippy" class="section-header"><a href="#clippy">Clippy</a></h2>
-<p>Clippy is very useful to teach us how to program in a better way.<br />
+<p>Clippy is very useful to teach us how to program Rust in a better way.<br />
 These are not syntax errors, but hints how to do it in a more Rusty way (idiomatic).<br />
 Some lints are problematic and they are explicitly allowed here.</p>
-<h2 id="cargo-make" class="section-header"><a href="#cargo-make">Cargo make</a></h2>
-<p>I prepared some flows and tasks for Cargo make.<br />
-<code>cargo make</code> - lists the possible available/public flows/tasks<br />
-<code>cargo make dev</code> - builds the development version and runs the server and the browser<br />
-<code>cargo make release</code> - builds the release version and runs the server and the browser<br />
-<code>cargo make doc</code> - build the <code>/target/doc</code> folder and copy to the <code>../docs</code> folder.</p>
 <h2 id="font-size" class="section-header"><a href="#font-size">font-size</a></h2>
 <p>Browsers have 2 types of zoom:</p>
 <ul>
-<li>zoom everything proportionally (like it)</li>
+<li>zoom everything proportionally (I like it)</li>
 <li>zoom only the text (this breaks the layout completely)</li>
 </ul>
 <p>When the font-size in android is increased (accessibility) it applies somehow also to the browser rendering.<br />
-I have tried many different things, but it looks this cannot be overridden from the css or javascript.  </p>
+I have tried many different things, but it looks this cannot be overridden from the css or javascript. Only the user can change this setting in his phone.  </p>
 </div><h2 id='modules-1' class='section-header'><a href="#modules-1">Modules</a></h2>
 <table><tr class='module-item'><td><a class="mod" href="ackmsgmod/index.html" title='mem5::ackmsgmod mod'>ackmsgmod</a></td><td class='docblock-short'><p>ackmsgmod.rs - ack msg</p>
 </td></tr><tr class='module-item'><td><a class="mod" href="divcardmonikermod/index.html" title='mem5::divcardmonikermod mod'>divcardmonikermod</a></td><td class='docblock-short'><p>divcardmonikermod.rs - renders the card moniker (card name/title)</p>

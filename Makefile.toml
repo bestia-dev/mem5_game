@@ -15,6 +15,7 @@ skip_core_tasks = true
     [tasks.dev]
     description = "cargo make dev for every workspace member"
     workspace = true
+    clear = true
     command = "cargo"
     args = ["make","dev"]
 
@@ -27,6 +28,7 @@ skip_core_tasks = true
 
     [tasks.audit]
     description = "cargo audit _ for warning dependencies"
+    workspace = true
     clear = true
     dependencies = [
         "cargo_audit",
@@ -42,14 +44,12 @@ skip_core_tasks = true
 
     [tasks.doc]
     description = "cargo make doc for every workspace member"
-    workspace = true
+    workspace = false
     clear=true
     dependencies = [
         "cargo_doc",
         "cargo_docs_copy",
     ]
-
-
 
     [tasks.sshadd]
     description = "remember my ssh passphrase"
@@ -88,6 +88,7 @@ skip_core_tasks = true
 
 [tasks.cargo_audit]
 description = "cargo audit"
+workspace=false
 clear = true
 private = true
 command = "cargo"
@@ -105,16 +106,15 @@ args = ["make","audit"]
 description = "cargo make doc for every workspace member"
 workspace = true
 clear=true
-private=true
+private=false
 command = "cargo"
 args = ["make","doc"]
-
 
 [tasks.cargo_docs_copy]
 description = "copy folder `/target/doc` to /docs folder (github standard)"
 workspace=false
 clear = true
-private = true
+private = false
 script = [
     "\\rsync -avz --delete-after ~/rustprojects/mem5_game/target/doc/*  ~/rustprojects/mem5_game/docs/",
 ]

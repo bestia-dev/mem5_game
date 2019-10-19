@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["div_invite_asked","render asked"],["div_invite_asked_on_click","on click"],["div_play_accepted","render play accepted"],["on_msg_play_accept","msg accept play"]]});

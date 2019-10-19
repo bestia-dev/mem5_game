@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["div_take_turn_begin","render take turn"],["on_msg_ack_take_turn_end","all the players must acknowledge that they received the msg"],["on_msg_take_turn_begin","on msg take turn begin"],["on_msg_take_turn_end","msg player change"],["update","fn on change for both click and we msg."],["update_take_turn_begin","update take turn begin"]]});

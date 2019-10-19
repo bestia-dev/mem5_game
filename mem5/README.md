@@ -99,7 +99,7 @@ It is a little bit different from the game flow. The first player broadcast an i
 All other players that are in the first status receive that and are asked if they accept.  
 When the user Accepts it sends a msg to the first player.  
 The first player waits to receive msgs from all other users.  
-After that he starts the game. This calculats the game_data and send this init data to all other players.  
+After that he starts the game. This calculates the game_data and send this init data to all other players.  
 
 | Game Status1             | Render                     | User action                                 | GameStatus2 p.p.         | Sends Msg             | On rcv Msg o.p.              | GameStatus2 o.p.                   |
 | ------------------------ | -------------------------- | ------------------------------------------- | ----------------         | ----------------      | --------------------------   | --------------------------------   |
@@ -110,7 +110,9 @@ After that he starts the game. This calculats the game_data and send this init d
 
 This starts the game flow, that repeats until the game is over.  
   
-In one moment the game is in a certain Game Status. The user then makes an action on the GUI.
+In one moment the game is in a one Game Status for all players.  
+One player is the playing player and all others are awaiting.  
+The active user then makes an action on the GUI.
 This action will eventually change the GameData and the GameStatus. But before that there is communication.  
 A message is sent to other players so they can also change their local GameData and GameStatus.  
 Because of unreliable networks ther must be an acknowledge ack msg to confirm, that the msg is received to continue the game.  
@@ -131,7 +133,6 @@ p.p. = playing player,   o.p. = other players,  rrc = rrc, rcv = receive
 1. Some actions can have different results. For example the condition if card match or if card don’t match.  
 2. one action must be only for one status1. This action changes Status for this player and sends Msg to other players.  
 3. on receive msg can produce only one status2.  
-4. in this table I ignore msgs for the server like GetConfig  
 
 ## Futures and Promises, Rust and JavaScript
 
@@ -140,34 +141,36 @@ So everything is asynchronous too. This is pretty hard to grasp. Everything is P
 There is a constant jumping from thinking in Rust to thinking is JavaScript and back. That is pretty confusing.  
 JavaScript does not have a good idea of Rust datatypes. All there is is a generic JSValue type.  
 The library `wasm-bindgen` has made a fantastic job of giving Rust the ability to call
-anything JavaScript can call, but the way of doing it is sometimes very hard to understand.  
+anything JavaScript can call, but the way of doing it is sometimes cumbersome.  
 
 ## Typed html
 
 Writing html inside Rust code is much easier with the macro `html!` from the `crate typed-html`  
 <https://github.com/bodil/typed-html>  
 It has also a macro `dodrio!` created exclusively for the dodrio vdom.  
-Everything is done in compile time, so the runtime is nothing slower.
+Everything is done in compile time, so the runtime is nothing slower.  
+TODO: what if an attribute is not covered by the macro. Can I add it later?
 
 ## Browser console
 
 At least in modern browsers (Firefox and Chrome) we have the developer tools F12 and there is a
 console we can output to. So we can debug what is going on with our Wasm program.
-But not on smartphones that are the only target for this app.  
+But not on smartphones !! I save the eroor and log messages in sessionStorage and this is displayed on the screen.  
 
 ## Safari on iOS and FullScreen
 
 Apple is very restrictive and does not allow fullscreen Safari on iPhones.  
-The workaround is to make a shortcut for the webapp on the homescreen.  
+The workaround is to `Add to Homescreen` the webapp.  
 
 ## PWA (Progressive Web App)
 
-On both android and iPhone is possible to "Add to homescreen" the webapp.  
-Then it will open in fullscreen and be beautiful.  
+On both android and iPhone is possible to use PWA.  
 To be 100% PWA it must be secured with TLS and must have a service worker.  
+I added also the PWA manifest and png images for icons and now the game is a full PWA.  
 
 **Very important :**
 On Android Chrome to `Clear & reset` the cached data of the website you must click on the icon of the URL address (the lock) and choose `Site Settings`.  
+Sometimes even that does not work. Than I go in the Menu to Settings - Privacy - Clear browser data and delete all. Very aggressive, but the only thing that works.  
 
 ## Modules
 
@@ -178,24 +181,16 @@ And then I splitted the User Actions by the Status1 to easy follow the flow of t
 
 ## Clippy
 
-Clippy is very useful to teach us how to program in a better way.  
+Clippy is very useful to teach us how to program Rust in a better way.  
 These are not syntax errors, but hints how to do it in a more Rusty way (idiomatic).  
 Some lints are problematic and they are explicitly allowed here.
-
-## Cargo make
-
-I prepared some flows and tasks for Cargo make.  
-`cargo make` - lists the possible available/public flows/tasks  
-`cargo make dev` - builds the development version and runs the server and the browser  
-`cargo make release` - builds the release version and runs the server and the browser  
-`cargo make doc` - build the `/target/doc` folder and copy to the `../docs` folder.  
 
 ## font-size
 
 Browsers have 2 types of zoom:
 
-- zoom everything proportionally (like it)
+- zoom everything proportionally (I like it)
 - zoom only the text (this breaks the layout completely)
 
 When the font-size in android is increased (accessibility) it applies somehow also to the browser rendering.  
-I have tried many different things, but it looks this cannot be overridden from the css or javascript.  
+I have tried many different things, but it looks this cannot be overridden from the css or javascript. Only the user can change this setting in his phone.  

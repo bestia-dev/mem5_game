@@ -45,7 +45,7 @@ skip_core_tasks = true
     clear=true
     dependencies = [
         "insert-readme",
-        "cargo-doc"
+        "cargo_doc"
     ]
 #endregion
 
@@ -82,12 +82,12 @@ private = true
 description = "copy the content of readme.md into *.rs comments (for the docs)"
 script= ["../../utils_linux/lmake_readme"]
 
-[tasks.cargo-doc]
+[tasks.cargo_doc]
 clear = true
 private = true
 description = "call cargo doc"
 command="cargo"
-args=["doc","--no-deps","--document-private-items","--open"]
+args=["doc","--no-deps","--document-private-items"]
 
 [tasks.lmake_version_from_date]
 clear = true

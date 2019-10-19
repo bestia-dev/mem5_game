@@ -3,7 +3,7 @@
 //! 
 //! version: 19.10.18-17.47  
 //! 
-//! **commons for mem5 wasm and server**
+//! **commons for mem5 wasm and server**  
 //! Learning to code Rust for a http + WebSocket.  
 //! Here are just the structures, that are in common between frontend and backend.  
 //! Mostly because of the Messages.  

@@ -123,7 +123,7 @@ description = "call cargo doc"
 clear = true
 private = true
 command="cargo"
-args=["doc","--no-deps","--document-private-items","--open"]
+args=["doc","--no-deps","--document-private-items"]
 
 [tasks.lmake_version_from_date]
 description = "in cargo.toml change version to today date"
