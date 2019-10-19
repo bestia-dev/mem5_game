@@ -186,8 +186,8 @@ pub fn div_grid_item<'a, 'bump>(
         //The method render will later use that for rendering the new html.
         let rrc = root.unwrap_mut::<RootRenderingComponent>();
         //only if the gamestatus is play (1 or 2)
-        if rrc.game_data.game_status.as_ref() == GameStatus::StatusPlayBefore1stCard.as_ref()
-        || rrc.game_data.game_status.as_ref() == GameStatus::StatusPlayBefore2ndCard.as_ref() {
+        match rrc.game_data.game_status{
+        GameStatus::StatusPlayBefore1stCard | GameStatus::StatusPlayBefore2ndCard => {
             // If the event's target is our image...
             let img = match event
                 .target()
@@ -209,25 +209,29 @@ pub fn div_grid_item<'a, 'bump>(
                 rrc.game_data.card_grid_data.get(this_click_card_index),
                 "error this_click_card_index"
             ).status.as_ref()==CardStatusCardFace::Down.as_ref(){
-                div_grid_item_on_click(rrc,&vdom,this_click_card_index);
-
+                match rrc.game_data.game_status{
+                    GameStatus::StatusPlayBefore1stCard=>{
+                        statusplaybefore1stcardmod::on_click_1st_card(rrc, &vdom, this_click_card_index);
+                    },
+                    GameStatus::StatusPlayBefore2ndCard=>{
+                        statusplaybefore2ndcardmod::on_click_2nd_card(rrc, &vdom, this_click_card_index);
+                    },
+                    _ => unreachable!("This click is not expected in this status."),
+                }
                 // Finally, re-render the component on the next animation frame.
                 vdom.schedule_render();
             }
-        }
+        },
+        _ => unreachable!("This click is not expected in this status."),
+            }
     }}>
     </img>
     </div>
     )
 }
 
-/// on click
-fn div_grid_item_on_click(
-    rrc: &mut RootRenderingComponent,
-    vdom: &dodrio::VdomWeak,
-    this_click_card_index: usize,
-) {
-    //region: audio play
+///
+pub fn play_sound(rrc: &RootRenderingComponent, this_click_card_index: usize) {
     //prepare the audio element with src filename of mp3
     let audio_element = web_sys::HtmlAudioElement::new_with_src(
         format!(
@@ -251,17 +255,6 @@ fn div_grid_item_on_click(
         unwrap!(audio_element, "Error: HtmlAudioElement new.").play(),
         "Error: HtmlAudioElement.play() "
     );
-    //endregion
-
-    let game_status = rrc.game_data.game_status.clone();
-
-    if game_status.as_ref() == GameStatus::StatusPlayBefore1stCard.as_ref() {
-        statusplaybefore1stcardmod::on_click_1st_card(rrc, vdom, this_click_card_index)
-    } else if game_status.as_ref() == GameStatus::StatusPlayBefore2ndCard.as_ref() {
-        statusplaybefore2ndcardmod::on_click_2nd_card(rrc, vdom, this_click_card_index)
-    } else {
-        panic!("this else must never be reached!");
-    }
 }
 
 ///grid width in pixels

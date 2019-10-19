@@ -6,6 +6,7 @@ use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 use crate::logmod;
 use crate::ackmsgmod;
+use crate::divgridcontainermod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -55,8 +56,10 @@ pub fn on_click_1st_card(
     vdom: &dodrio::VdomWeak,
     this_click_card_index: usize,
 ) {
+    
     //change card status and game status
     rrc.game_data.card_index_of_first_click = this_click_card_index;
+    divgridcontainermod::play_sound(rrc,this_click_card_index);
 
     let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc, vdom);
     let msg = WsMessage::MsgPlayerClick1stCard {

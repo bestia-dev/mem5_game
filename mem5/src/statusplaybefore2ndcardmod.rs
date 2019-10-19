@@ -8,6 +8,7 @@ use crate::statustaketurnbeginmod;
 use crate::statusplayagainmod;
 use crate::ackmsgmod;
 use crate::logmod;
+use crate::divgridcontainermod;
 
 use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 
@@ -63,7 +64,7 @@ pub fn on_click_2nd_card(
     this_click_card_index: usize,
 ) {
     rrc.game_data.card_index_of_second_click = this_click_card_index;
-
+    divgridcontainermod::play_sound(rrc,this_click_card_index);
     //3 possible outcomes: 1) same player, 2) Next Player 3) end game/play again
     //that changes: game status,CardStatusCardFace, points or/and player_turn
     //if the cards match, player get one point and continues another turn

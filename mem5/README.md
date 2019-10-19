@@ -3,7 +3,6 @@
 mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web App).  
 
 [comment]: # (lmake_readme version)  
-Look also at the workspace readme on <https://github.com/LucianoBestia/mem5_game>  
 
 ## Idea
 
@@ -12,8 +11,8 @@ Playing it with friends is better.
 But if all friends just stare in their smartphones, it is still boring.  
 What makes memory games (and other board games) entertaining is the company of friends.  
 There must be many friends around the table watching one another and stealing moves and laughing and screaming at each other.  
-Today I assume everybody has a decent smartphone. If all friends open the mem5 game and put their smartphones on the center of the table one near the other so that everybody can see them and touch them, this is the closest it gets to a classic board game.  
-All the phones will have a small card grid (ex. 3x3). But the combined card grid from all these phones together is not so small anymore. It is now much more interesting to play for the players.  
+Today I assume everybody has a decent smartphone. If all friends open the mem5 game and put their smartphones on the center of the table one near the other so that everybody can see them and touch them, this is the closest it gets to a **classic board game**.  
+All the phones will have a small card grid (ex. 3x3). But the combined card grid from all these phones together is not so small anymore. It is now much more interesting to play for many players.  
 It can be played with as many friends as there are: 3,4,5,...  
 More friends - more fun.  
 
@@ -32,18 +31,15 @@ I have a lot of hope here.
 
 ## Virtual DOM
 
-Constructing a HTML page with Virtual DOM (vdom) is easier  
-because it is rendered completely on every tick (animation frame).  
-Sometimes is hard for the developer to think what should change in the UI when some data changes.  
+Constructing a HTML page with Virtual DOM (vdom) is easier because it is rendered completely on every tick (animation frame).  
+Sometimes is very complex what should change in the UI when some data changes.  
 The data can change from many different events and very chaotically (asynchronously).  
-It is easier to think how to render the complete DOM for the given data.  
-The Rust Dodrio library has ticks, time intervals when it do something.  
-If a rendering is scheduled, it will be done on the next tick.  
-If a rendering is not scheduled I believe nothing happens.  
+It is easier to think how to render the complete DOM for a given state of data.  
+The Rust Dodrio library has ticks, time intervals when it does something. If a rendering is scheduled, it will be done on the next tick. If a rendering is not scheduled I believe nothing happens.  
 This enables asynchronous changing of data and rendering. They cannot happen theoretically in the
 same exact moment. So, no data race here.  
 When GameData change and we know it will affect the DOM, then rendering must be scheduled.  
-The main component of the Dodrio Virtual Dom is the root rendering component.  
+The main component of the Dodrio Virtual Dom is the Root Rendering Component (rrc).  
 It is the component that renders the complete user interface (HTML).  
 The root rendering component is easily splitted  into sub-components.  
 ![subcomponents](https://github.com/LucianoBestia/mem5_game/raw/master/docs/img/subcomponents.png)  
@@ -61,63 +57,78 @@ All the game data are in this simple struct.
 
 HTML5 has finally bring a true stateful bidirectional communication.  
 Most of the programming problems are more easily and effectively solved this way.  
-The old unidirectional stateless communication is very good for static html pages,  
-but is terrible for any dynamic page. The WebSocket is very rudimental and often the  
-communication breaks for many different reasons. The programmer must deal with it inside the application. On any network problem it is possible that the message is sent but not received. This is not working well for this game. So I must implement that the receiver sends a confirmation message. The sender must wait for this message to continue the workflow.  
-The protocol has nothing that can be used to deal with reconnections.  
-I send simple structs text messages in json format between the players.  
-They are all in the WsMsg enum and therefore interchangeable.  
-The WebSocket server is coded especially for this game and recognizes 3 types of msg:
+The old unidirectional stateless communication is very good for static html pages, but is terrible for any dynamic page. The WebSocket is very rudimental and often the communication breaks for many different reasons. The programmer must deal with it inside the application.  
+I send simple structs text messages in json format between the players. They are all in the WsMsg enum and therefore easy to use by the server and client.  
+The WebSocket server is coded especially for this game and recognizes 2 types of msg:
+TODO: decide on the client what the server will do with the msg.
 
 - msg to broadcast to every other player
 - msg to send only to the actual game players
 
-## WS is not reliable
+## WebSockets is not reliable
 
-Simple messaging is not reliable. On mobiles it is even worse. There is a lot of possibilities that something goes wrong and the message doesn't reach the destination. That means that I need to always reply and acknowledgement "ack" that the message is delivered.  
+Simple messaging is not reliable. On mobiles it is even worse. There is a lot of possibilities that something goes wrong and the message doesn't reach the destination. The protocol has nothing that can be used to deal with reconnections or lost messages.  
+That means that I need additional work on the application level - always reply one acknowledgement "ack" message.  
 Workflow:  
 
-- sender sends one message to more players (more ws_uid) with one random number
-    push to a vector more items with ws_uid and msg_id
+- sender sends one message to more players (more ws_uid) with one random number msg_id
+    push to a vector (msg queue) more items with ws_uid and msg_id
     blocks the continuation of the workflow untill receives all ACK from all players
 
 - receiver on receive send the ACK aknowledge msg with his ws_uid and msg_id
 
 - the sender receives the ACK and removes one item from the vector
     if there is no more items for that msg_id, the workflow can continue.
-    if after 3 seconds the ACK is not received and error message is shown to the player.
+    TODO: if after 3 seconds the ACK is not received and error message is shown to the player.
 
-This is very similar to message a queue, but with a time limit.  
+This is very similar to a message queue...  
 
 ## gRPC, WebRTC datachannel
 
 The new shiny protocol gRPC for web communication is great for server-to-server communication. But it is still very limited inside the browser. When it eventually becomes stable I would like to change Websockets for gRPC.  
-The WebRTC datachannel sounds great for perr-to-peer commnication. Expecting, that the players will be all on the same wifi network, this solves all latency issues. But everybody say it is too complicated. Will wait and see.  
+The WebRTC datachannel sounds great for peer-to-peer commnication. Very probably the players will be all on the same wifi network, this solves all latency issues. TODO: in version 6.  
 
 ## The game flow
 
-In a few words: Status1 - User action - Status2, Status1 - WsMessage - Status2
-In one moment the game is in a certain Game Status. The user then makes an action.
-This action changes the GameData and the GameStatus.  
-Then a message is sent to other players so they can also change their local GameData and GameStatus.  
+In a few words:  
+Playing player : Status1 - user action - send msg - await for ack msgs - update game data - Status2  
+Other players: Status1 - receive WsMessage - send ack msg - update game data - Status2  
+  
+Before the actual game there is the `invitation and accepting` flow.  
+It is a little bit different from the game flow. The first player broadcast an invitation msg.  
+All other players that are in the first status receive that and are asked if they accept.  
+When the user Accepts it sends a msg to the first player.  
+The first player waits to receive msgs from all other users.  
+After that he starts the game. This calculats the game_data and send this init data to all other players.  
+
+| Game Status1             | Render                     | User action                                 | GameStatus2 p.p.         | Sends Msg             | On rcv Msg o.p.              | GameStatus2 o.p.                   |
+| ------------------------ | -------------------------- | ------------------------------------------- | ----------------         | ----------------      | --------------------------   | --------------------------------   |
+| StatusInviteAskBegin     | div_invite_ask_begin       | div_invite_ask_begin_on_click               | StatusInviteAsking       | MsgInvite             | on_msg_invite                | StatusInviteAsked                  |
+| StatusInviteAsked        | div_invite_asked           | div_invite_asked_on_click                   | StatusPlayAccepted       | MsgPlayAccept         | on_msg_play_accept           | -                                  |
+| StatusPlayAccepted       | div_play_accepted          |                                             |                          |                       |                              | -                                  |
+| StatusInviteAsking       | div_invite_asking          | game_data_init                              | StatusPlayBefore1stCard  | MsgGameDataInit       | on_msg_game_data_init        | StatusPlayBefore1stCard            |
+
+This starts the game flow, that repeats until the game is over.  
+  
+In one moment the game is in a certain Game Status. The user then makes an action on the GUI.
+This action will eventually change the GameData and the GameStatus. But before that there is communication.  
+A message is sent to other players so they can also change their local GameData and GameStatus.  
+Because of unreliable networks ther must be an acknowledge ack msg to confirm, that the msg is received to continue the game.  
 The rendering is scheduled and it will happen shortly (async).  
 
-| Game Status1       | Render                     | User action                                 | Condition                            | GameStatus2 t.p.   | Sends Msg          | On rcv Msg o.p.              | GameStatus2 o.p.                   |
-| ------------------ | -------------------------- | ------------------------------------------- | ------------------------------------ | ----------------   | ----------------   | --------------------------   | --------------------------------   |
-| StatusInviteAskBegin     | div_invite_ask_begin       | div_invite_ask_begin_on_click               | -                                    | StatusInviteAsking       | MsgInvite             | on_msg_invite                | StatusInviteAsked                        |
-| StatusInviteAsked        | div_invite_asked, div_play_accepted | div_invite_asked_on_click          | -                                    | StatusPlayAccepted       | MsgPlayAccept         | on_msg_play_accept           | -                                  |
-| StatusInviteAsking       | div_invite_asking          | game_data_init                              | -                                    | StatusPlayBefore1stCard  | MsgGameDataInit       | on_msg_game_data_init        | StatusPlayBefore1stCard                  |
-| StatusPlayBefore1stCard  | div_grid_container         | div_grid_item_on_click, on_click_1st_card();| -                                    | StatusPlayBefore2ndCard  | MsgPlayerClick1stCard | on_msg_player_click_1st_card | StatusPlayBefore2ndCard                  |
-| StatusPlayBefore2ndCard  | div_grid_container         | div_grid_item_on_click, on_click_2nd_card();| If card match and points<all point   | StatusPlayBefore1stCard  | MsgPlayerClick2ndCardPoint | on_msg_player_click_2nd_card | StatusPlayBefore1stCard                  |
-| -II-               | -II-                       | -II-                                        | If card match and points=>all points | StatusGameOverPlayAgainBegin | StatusGameOverPlayAgainBegin  | on_msg_play_again   | StatusGameOverPlayAgainBegin             |
-| -II-               | -II-                       | -II-                                        | else                                 | MsgPlayerClick2ndCardTakeTurnBegin      | MsgPlayerClick2ndCardTakeTurnBegin      | on_msg_take_turn             | MsgPlayerClick2ndCardTakeTurnBegin                      |
-| MsgPlayerClick2ndCardTakeTurnBegin      | div_take_turn_begin        | div_take_turn_begin_on_click                | -                                    | StatusPlayBefore1stCard  | MsgTakeTurnEnd        | on_msg_take_turn_end         | StatusPlayBefore1stCard, the next player |
-| StatusGameOverPlayAgainBegin | div_play_again         | window.location().reload()                  | -                                    | -                  | -                  | -                            | -                                  |
+| Game Status1                        | Render                     | User action                                 | Condition                            | GameStatus2 p.p.                   | Sends Msg                          | On rcv Msg o.p.                    | GameStatus2 o.p.                   |
+| ------------------------            | -------------------------- | ------------------------------------------- | ------------------------------------ | ----------------                   | ----------------                   | --------------------------         | --------------------------------   |
+| StatusPlayBefore1stCard             | div_grid_container         | on_click_1st_card()                         | -                                    | StatusPlayBefore2ndCard            | MsgPlayerClick1stCard              | on_msg_player_click_1st_card       | StatusPlayBefore2ndCard            |
+| StatusPlayBefore2ndCard             | div_grid_container         | on_click_2nd_card()                         | If cards match                       | StatusPlayBefore1stCard            | MsgPlayerClick2ndCardPoint         | on_msg_player_click_2nd_card_point | StatusPlayBefore1stCard            |
+| -                                   | -                          | continues on ack msgs received              | if all cards permanently up          | StatusGameOverPlayAgainBegin       | StatusGameOverPlayAgainBegin       | on_msg_play_again                  | StatusGameOverPlayAgainBegin       |
+| StatusPlayBefore2ndCard             | div_grid_container         | on_click_2nd_card()                         | else cards don't match               | MsgPlayerClick2ndCardTakeTurnBegin | MsgPlayerClick2ndCardTakeTurnBegin | on_msg_take_turn                   | MsgPlayerClick2ndCardTakeTurnBegin |
+| MsgPlayerClick2ndCardTakeTurnBegin  | div_take_turn_begin        | div_take_turn_begin_on_click                | -                                    | StatusPlayBefore1stCard            | MsgTakeTurnEnd                     | on_msg_take_turn_end               | StatusPlayBefore1stCard, the next player |
+| StatusGameOverPlayAgainBegin        | div_play_again             | window.location().reload()                  | -                                    | -                                  | -                                  | -                                  | -                                  |
 |  |  |  |  |  |  |  |  |
 
-t.p. = this player,   o.p. = other players,  rrc = rrc, rcv = receive
+p.p. = playing player,   o.p. = other players,  rrc = rrc, rcv = receive
 
-1. Some actions can have different results. For example the condition card match or card don’t match.  
+1. Some actions can have different results. For example the condition if card match or if card don’t match.  
 2. one action must be only for one status1. This action changes Status for this player and sends Msg to other players.  
 3. on receive msg can produce only one status2.  
 4. in this table I ignore msgs for the server like GetConfig  
@@ -188,4 +199,3 @@ Browsers have 2 types of zoom:
 
 When the font-size in android is increased (accessibility) it applies somehow also to the browser rendering.  
 I have tried many different things, but it looks this cannot be overridden from the css or javascript.  
-
