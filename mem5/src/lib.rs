@@ -1,9 +1,9 @@
 //region: lmake_readme insert "readme.md"
 //! # mem5
 //! 
-//! mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web App).  
-//! 
 //! version: 19.10.19-9.56  
+//! 
+//! mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web App).  
 //! 
 //! ## Idea
 //! 
@@ -43,7 +43,9 @@
 //! The main component of the Dodrio Virtual Dom is the Root Rendering Component (rrc).  
 //! It is the component that renders the complete user interface (HTML).  
 //! The root rendering component is easily splitted  into sub-components.  
+//! 
 //! ![subcomponents](https://github.com/LucianoBestia/mem5_game/blob/master/webfolder/mem5/images/subcomponents.png)  
+//! 
 //! Some subcomponents don't need any extra data and can be coded as simple functions.  
 //! The subcomponent "players and scores" has its own data. This data is cached from the GameData.  
 //! When this data does not match, invalidation is called to cache them.
