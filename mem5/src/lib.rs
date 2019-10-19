@@ -44,7 +44,7 @@
 //! It is the component that renders the complete user interface (HTML).  
 //! The root rendering component is easily splitted  into sub-components.  
 //! 
-//! ![subcomponents](https://github.com/LucianoBestia/mem5_game/blob/master/webfolder/mem5/images/subcomponents.png)  
+//! ![subcomponents](https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/subcomponents.png)  
 //! 
 //! Some subcomponents don't need any extra data and can be coded as simple functions.  
 //! The subcomponent "players and scores" has its own data. This data is cached from the GameData.  
