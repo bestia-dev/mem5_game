@@ -1,16 +1,12 @@
 //region: lmake_readme insert "readme.md"
-//! **mem5_common - commons for mem5 wasm and server**
-//!
-//! version: 19.9.9  
-//! Look also at the workspace readme https://github.com/LucianoBestia/mem5_game  
-//!
-//! ## mem5_common
+//! # mem5_common
+//! 
+//! version: 19.10.18-17.47  
+//! 
+//! **commons for mem5 wasm and server**
 //! Learning to code Rust for a http + WebSocket.  
 //! Here are just the structures, that are in common between frontend and backend.  
-//!
-//!
-//!
-//!
+//! Mostly because of the Messages.  
 
 //endregion: lmake_readme insert "readme.md"
 
