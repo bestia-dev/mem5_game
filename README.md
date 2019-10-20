@@ -10,7 +10,6 @@
 
 Documentation generated from source code:  
 <https://lucianobestia.github.io/mem5_game/mem5/index.html>  
-<https://lucianobestia.github.io/mem5_game/mem5_server/index.html>  
 The workspace mem5_game is made of:  
 
 1. Wasm/WebAssembly (for browsers) frontend - mem5  
@@ -37,12 +36,15 @@ I prepared some flows and tasks for Cargo make for the workspace.
 `cargo make` - lists the possible available/public flows/tasks  
 `cargo make dev` - builds the development version and runs the server and the browser  
 `cargo make release` - builds the release version and runs the server and the browser  
-`cargo make audit` - check dependencies  
+`cargo make audit` - cargo audit warnings about dependencies  
 `cargo make fmt` - format source code  
 `cargo make doc` - build the `/target/docs` folder and copy to the `/docs` folder  
 `cargo make sshadd` - adds identity to ssh-agent for git and publish operations  
-`cargo make gitpush` - push the commits to github  
+`cargo make gitpush` - push the commits to github, uses ssh agent  
 `cargo make publish` - publish the webfolder to google vm  
+`cargo make udeps` - lists unused dependencies  
+`cargo make loc` - Lines Of Rust Code with tokei  
+`cargo make depver` - list of not latest dependencies  
 
 ## TODO and CHANGELOG
 

@@ -1,4 +1,5 @@
-//! ackmsgmod.rs - ack msg
+//ackmsgmod.rs
+//! acknowledge msg
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

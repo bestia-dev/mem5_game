@@ -27,7 +27,7 @@ skip_core_tasks = true
     args = ["make","release"]
 
     [tasks.audit]
-    description = "cargo audit _ for warning dependencies"
+    description = "cargo audit warnings about dependencies"
     workspace = true
     clear = true
     dependencies = [
@@ -36,14 +36,14 @@ skip_core_tasks = true
     ]
 
     [tasks.fmt]
-    description = "cargo fmt for every workspace member"
+    description = "format source code"
     workspace = true
     clear=true
     command = "cargo"
     args = ["make","fmt"]
 
     [tasks.doc]
-    description = "cargo make doc for every workspace member"
+    description = "build the `/target/docs` folder and copy to the `/docs` folder"
     workspace = false
     clear=true
     dependencies = [
@@ -52,7 +52,7 @@ skip_core_tasks = true
     ]
 
     [tasks.sshadd]
-    description = "remember my ssh passphrase"
+    description = "adds identity to ssh-agent for git and publish operations"
     workspace = false
     clear = true
     script = [
@@ -62,7 +62,7 @@ skip_core_tasks = true
     ]
 
     [tasks.gitpush]
-    description = "Push to github. Uses the sshagesnt."
+    description = "push the commits to github, uses ssh agent"
     workspace = false
     clear = true
     script = [
@@ -70,7 +70,8 @@ skip_core_tasks = true
     ]
 
     [tasks.publish]
-    description = "Copy the content of /mem5_game/webfolder to //googlecloud/ folder and then to google vm with use of sshagent."
+    description = "publish the webfolder to google vm"
+    # Firt copies the content of /mem5_game/webfolder to //googlecloud/ folder and then to google vm with use of sshagent."
     workspace = false
     clear = true
     # backslash is the escape character for all other special characters.
@@ -85,7 +86,7 @@ skip_core_tasks = true
     ]
 
     [tasks.udeps]
-    description = "udpe - unused dependencies"
+    description = "lists unused dependencies"
     workspace = false
     clear = true
     script = [
@@ -93,7 +94,7 @@ skip_core_tasks = true
     ]
 
     [tasks.loc]
-    description = "Lines Of Code with tokei"
+    description = "Lines Of Rust Code with tokei"
     workspace = false
     clear = true
     script = [

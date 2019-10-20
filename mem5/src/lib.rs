@@ -3,7 +3,7 @@
 //region: lmake_readme insert "readme.md"
 //! # mem5
 //! 
-//! version: 19.10.19-9.56  
+//! version: 19.10.20-15.35  
 //! 
 //! mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web App).  
 //! 
