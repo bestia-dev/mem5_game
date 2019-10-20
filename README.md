@@ -1,7 +1,7 @@
 # mem5_game
 
 ![loc](https://img.shields.io/badge/lines_of_Rust_code-4591-success)
-
+![loc](https://img.shields.io/badge/lines_of_comments-1231-informational)
 
 **Learning Rust Wasm/WebAssembly, Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web Apps) - part five**  
 *Things are changing fast. This is the situation on 2019-10-18.*
