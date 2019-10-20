@@ -79,24 +79,6 @@ type Users = Arc<Mutex<HashMap<usize, mpsc::UnboundedSender<Message>>>>;
 
 ///main function of the binary
 fn main() {
-    //region: ansi terminal color output (for log also)
-    //only windows need this line
-    enable_ansi_support();
-    /*
-    //region: examples
-    eprintln!(
-        "This is in red: {}",
-        ansi_term::Colour::Red.paint("a red string")
-    );
-
-    eprintln!(
-        "How about some {} and {}?",
-        ansi_term::Style::new().bold().paint("bold"),
-        ansi_term::Style::new().underline().paint("underline")
-    );
-    //endregion
-    */
-    //endregion
 
     //region: env_logger log text to stdout depend on ENV variable
     //in Linux : RUST_LOG=info ./mem5_server.exe
@@ -493,15 +475,3 @@ pub fn local_ip_get() -> Option<IpAddr> {
     None
 }
 //endregion
-
-//region: only windows need enable ansi support
-#[cfg(target_family = "windows")]
-///ansi support
-pub fn enable_ansi_support() {
-    let _enabled = ansi_term::enable_ansi_support();
-}
-#[cfg(target_family = "unix")]
-///ansi support
-pub const fn enable_ansi_support() {
-    //do nothing
-}
