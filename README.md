@@ -1,6 +1,6 @@
 # mem5_game
 
-[![loc](https://img.shields.io/static/v1?label=lines_of_Rust_code&message=4591&color=success)]
+![loc](https://img.shields.io/static/v1?label=lines_of_Rust_code&message=4591&color=success)
 
 
 **Learning Rust Wasm/WebAssembly, Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web Apps) - part five**  
