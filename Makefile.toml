@@ -84,6 +84,30 @@ skip_core_tasks = true
         "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@34.87.17.103 screen -dr mem5-8085 -X stuff 'sudo\\ \\.\\/mem5_server\\\\n'",
     ]
 
+    [tasks.udeps]
+    description = "udpe - unused dependencies"
+    workspace = false
+    clear = true
+    script = [
+        "cargo +nightly udeps",
+    ]
+
+    [tasks.loc]
+    description = "Lines Of Code with tokei"
+    workspace = false
+    clear = true
+    script = [
+        "tokei  -t 'Rust'",
+    ]
+
+    [tasks.depver]
+    description = "list of not latest dependencies"
+    workspace = false
+    clear = true
+    script = [
+        "cargo update --dry-run",
+    ]
+
 #endregion
 
 [tasks.cargo_audit]

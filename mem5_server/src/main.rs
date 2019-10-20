@@ -86,7 +86,7 @@ fn main() {
     //default for env variable info
     let mut builder = env_logger::from_env(Env::default().default_filter_or("info"));
     //nanoseconds in the logger
-    builder.default_format_timestamp_nanos(true);
+    builder.format_timestamp_nanos();
     builder.init();
     //endregion
 

@@ -1,9 +1,10 @@
 # mem5_game
 
+[![loc](https://img.shields.io/static/v1?label=lines of rust code&message=4591&color=success)]
+
+
 **Learning Rust Wasm/WebAssembly, Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web Apps) - part five**  
 *Things are changing fast. This is the situation on 2019-10-18.*
-
-[![code](https://tokei.rs/b1/github/LucianoBestia/mem5_game?category=code)](https://github.com/LucianoBestia/mem5_game)
 
 ## Documentation
 

@@ -1,6 +1,6 @@
 [package]
 name = "mem5_common"
-version = "19.10.18-17.47" #no need for semver if it is not a library
+version = "19.10.20-15.32" #no need for semver if it is not a library
 description = "commons for mem5 wasm and server"
 authors = ["Luciano Bestia"]
 edition = "2018"
@@ -13,6 +13,6 @@ keywords = ["warp", "server", "http", "websocket"]
 [dependencies]
 serde = "1.0.101"
 serde_derive = "1.0.101"
-serde_json = "1.0"
-strum = "0.16.0"
+#serde_json = "1.0"
+#strum = "0.16.0"
 strum_macros = "0.16.0"
