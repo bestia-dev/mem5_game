@@ -1,4 +1,5 @@
-//! divgridcontainermod.rs - renders the grid container with the images
+// divgridcontainermod.rs
+//! renders the grid container with the images
 //! and most important the on click event
 
 //region: use, const

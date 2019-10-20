@@ -1,4 +1,5 @@
-//! rootrenderingcomponentmod.rs - renders the web page
+// rootrenderingcomponentmod.rs
+//! renders the web page
 
 //region: use, const
 use crate::divcardmonikermod;

@@ -1,4 +1,5 @@
-//! WebSocketcommunication.rs  - module that cares about WebSocket communication
+// websocketcommunication.rs
+//! module that cares about WebSocket communication
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

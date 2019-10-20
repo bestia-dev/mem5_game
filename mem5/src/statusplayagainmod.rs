@@ -1,4 +1,5 @@
-//! statusplayagainmod.rs - code flow from this status
+// statusplayagainmod.rs
+//! code flow from this status
 
 //region: use
 use mem5_common::GameStatus;

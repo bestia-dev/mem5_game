@@ -1,4 +1,5 @@
-//! fetchgamesmetadatamod.rs - fetch the names of all games
+// fetchgamesmetadatamod.rs
+//! fetch the names of all games
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

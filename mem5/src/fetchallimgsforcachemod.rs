@@ -1,4 +1,5 @@
-//! fetchallimgsforcachemod.rs - fetch all imgs for cache
+// fetchallimgsforcachemod.rs
+//! fetch all imgs for cache
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

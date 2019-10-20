@@ -1,4 +1,5 @@
-//! logmod.rs - logging in wasm
+// logmod.rs
+//! logging in wasm
 
 use crate::sessionstoragemod;
 

@@ -1,4 +1,5 @@
-//! divplayeractionsmod.rs - renders the div to inform player what to do next
+// divplayeractionsmod.rs
+//! renders the div to inform player what to do next
 //! and get a click action from the user
 
 //region: use

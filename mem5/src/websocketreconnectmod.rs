@@ -1,4 +1,5 @@
-//! websocketreconnectmod.rs - reconnection for websocket must be part of the application.
+// websocketreconnectmod.rs
+//! reconnection for websocket must be part of the application.
 
 // Websocket has a lot of problems with maintaining a stable connection.
 // When a player is out of sync with others it is probably because

@@ -1,4 +1,5 @@
-//! **fetchmod - isolate/encapsulate fetch api in a module because it is all async**
+// fetchmod.rs
+//! **isolate/encapsulate fetch api in a module because it is all async**
 //region description
 //! ## Async world
 //! The coding style is "strange" because this is completely async. It is async because

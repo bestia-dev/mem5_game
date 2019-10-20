@@ -1,4 +1,5 @@
-//! statusgamedatainitmod.rs - code flow from this status
+// statusgamedatainitmod.rs
+//! code flow from this status
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

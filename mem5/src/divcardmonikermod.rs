@@ -1,4 +1,6 @@
-//! divcardmonikermod.rs - renders the card moniker (card name/title)
+// divcardmonikermod.rs
+//! renders the card moniker (card name/title)
+
 
 //region: use, const
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

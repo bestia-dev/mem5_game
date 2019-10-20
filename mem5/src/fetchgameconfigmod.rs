@@ -1,4 +1,5 @@
-//! fetchgameconfigmod.rs - fetch game_config
+// fetchgameconfigmod.rs
+//! fetch game_config
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

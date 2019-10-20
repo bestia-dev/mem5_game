@@ -1,4 +1,5 @@
-//! javascriptimport.rs - one single module to import javascript functions and objects
+// javascriptimportmod.rs
+//! one single module to import javascript functions and objects
 //! this are examples how to call a javascript function from rust
 
 use wasm_bindgen::prelude::*;

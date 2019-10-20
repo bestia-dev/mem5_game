@@ -1,4 +1,5 @@
-//! statuswaitingackmsgmod.rs - code flow from this status
+// statuswaitingackmsgmod.rs
+//! code flow from this status
 
 //region: use
 //use mem5_common::GameStatus;

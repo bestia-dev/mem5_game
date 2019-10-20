@@ -1,4 +1,5 @@
-//! **sessionstoragemod.rs - for debugging texts accessible everywhere**
+// sessionstoragemod.rs
+//! **for debugging texts accessible everywhere**
 
 //region: use
 use crate::logmod;

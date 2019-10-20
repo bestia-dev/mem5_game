@@ -1,4 +1,5 @@
-//! statusinviteaskbeginmod.rs - code flow from this status
+// statusinviteaskbeginmod.rs
+//! code flow from this status
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

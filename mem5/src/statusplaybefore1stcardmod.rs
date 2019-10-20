@@ -1,4 +1,5 @@
-//! statusplaybefore1stcardmod.rs - code flow from this status
+// statusplaybefore1stcardmod.rs
+//! code flow from this status
 
 //region: use
 use crate::gamedatamod::CardStatusCardFace;

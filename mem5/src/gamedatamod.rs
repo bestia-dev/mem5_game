@@ -1,4 +1,5 @@
-//! game data - structs and methods around game data
+// gamedatamod.rs
+//! structs and methods around game data
 
 //region: use
 use crate::localstoragemod;

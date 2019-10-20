@@ -1,4 +1,5 @@
-//! divfordebuggingmod.rs - information for debugging
+// divfordebuggingmod.rs
+//! information for debugging
 
 //region: use, const
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

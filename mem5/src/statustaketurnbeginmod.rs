@@ -1,4 +1,5 @@
-//! statustaketurnbeginmod.rs - code flow from this status
+// statustaketurnbeginmod.rs
+//! code flow from this status
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;

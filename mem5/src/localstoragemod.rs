@@ -1,4 +1,5 @@
-//! **localstoragemod.rs - the player nickname is saved in the LocalStorage of the browser**
+// localstoragemod.rs
+//! **the player nickname is saved in the LocalStorage of the browser**
 
 //region: use
 //use crate::logmod;
