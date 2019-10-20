@@ -22,13 +22,14 @@ Every project has its own readme.md.
 https://github.com/LucianoBestia/mem5_game/blob/master/mem5/README.md)  
 - [mem5_common/README.md](https://github.com/LucianoBestia/mem5_game/blob/master/mem5_common/README.md)  
 - [mem5_server/README.md](https://github.com/LucianoBestia/mem5_game/blob/master/mem5_server/README.md)  
+  
+Read also my `Previous projects` on Github:  
+<https://github.com/LucianoBestia/mem4_game>  
 
-## Info and working game
+## Working game server
 
 You can play the game here (hosted on google cloud platform):  
 <https://bestia.dev/mem5>  
-Read the `Previous project`:  
-<https://github.com/LucianoBestia/mem4_game>  
 
 ## Cargo make
 
