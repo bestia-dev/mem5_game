@@ -7,6 +7,7 @@ use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 use crate::gamedatamod::{CardStatusCardFace};
 use crate::logmod;
 use crate::ackmsgmod;
+use crate::utilsmod;
 
 use unwrap::unwrap;
 use dodrio::builder::text;
@@ -58,7 +59,7 @@ where
                 {vec![text(
                     bumpalo::format!(in bump, "{} {}, click here to take your turn !",
                         unwrap!(rrc.game_data.players.get(rrc.game_data.my_player_number-1)).nickname,
-                        crate::ordinal_numbers(rrc.game_data.my_player_number)
+                        utilsmod::ordinal_numbers(rrc.game_data.my_player_number)
                     )
                         .into_bump_str(),
                 )]}
@@ -71,7 +72,7 @@ where
         <h2 class="h2_user_must_wait">
             {vec![text(bumpalo::format!(in bump, "Wait for {} {} !",
             unwrap!(rrc.game_data.players.get(next_player-1)).nickname,
-            crate::ordinal_numbers(next_player)
+            utilsmod::ordinal_numbers(next_player)
             ).into_bump_str())]}
         </h2>
         )

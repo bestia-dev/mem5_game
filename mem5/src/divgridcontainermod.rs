@@ -231,7 +231,7 @@ pub fn div_grid_item<'a, 'bump>(
     )
 }
 
-///
+/// play sound mp3
 pub fn play_sound(rrc: &RootRenderingComponent, this_click_card_index: usize) {
     //prepare the audio element with src filename of mp3
     let audio_element = web_sys::HtmlAudioElement::new_with_src(

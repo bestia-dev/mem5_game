@@ -10,7 +10,7 @@ use crate::statusplayagainmod;
 use crate::ackmsgmod;
 use crate::logmod;
 use crate::divgridcontainermod;
-
+use crate::utilsmod;
 use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 
 use unwrap::unwrap;
@@ -35,7 +35,7 @@ where
             <h2 class="h2_must_do_something">
                 {vec![text(bumpalo::format!(in bump, "Play {} {} !",
                 unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
-                crate::ordinal_numbers(rrc.game_data.player_turn)
+                utilsmod::ordinal_numbers(rrc.game_data.player_turn)
                 ).into_bump_str())]}
             </h2>
         </div>
@@ -46,7 +46,7 @@ where
         <h2 class="h2_user_must_wait">
             {vec![text(bumpalo::format!(in bump, "Wait for {} {} !",
             unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
-            crate::ordinal_numbers(rrc.game_data.player_turn)
+            utilsmod::ordinal_numbers(rrc.game_data.player_turn)
             ).into_bump_str())]}
         </h2>
         )

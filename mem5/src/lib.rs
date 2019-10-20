@@ -289,6 +289,7 @@ mod statusplaybefore1stcardmod;
 mod statusplaybefore2ndcardmod;
 mod statustaketurnbeginmod;
 mod statuswaitingackmsgmod;
+mod utilsmod;
 mod websocketcommunicationmod;
 mod websocketreconnectmod;
 //endregion
@@ -301,7 +302,6 @@ use rand::Rng;
 use wasm_bindgen::prelude::*;
 //endregion
 
-//region: wasm_bindgen(start) is where everything starts
 #[wasm_bindgen(start)]
 #[allow(clippy::shadow_same)]
 ///To start the Wasm application, wasm_bindgen runs this functions
@@ -364,34 +364,4 @@ pub fn run() -> Result<(), JsValue> {
     vdom.forget();
 
     Ok(())
-}
-//endregion
-
-/// Get the top-level window's session storage.
-/// TODO: to save user preferences maybe?
-pub fn session_storage() -> web_sys::Storage {
-    let window = unwrap!(web_sys::window(), "error: web_sys::window");
-    window.session_storage().unwrap_throw().unwrap_throw()
-}
-//endregion
-
-///format ordinal numbers as string 1st, 2nd,3rd,...
-#[allow(clippy::indexing_slicing, clippy::integer_arithmetic)]
-pub fn ordinal_numbers(number: usize) -> String {
-    //these are only ascii characters, so no problem with utf_8
-    let mut ord_str = format!("{}", number);
-    let places = ord_str.len();
-
-    let slice = &ord_str[places - 1..];
-    if slice == "1" {
-        ord_str.push_str("st");
-    } else if slice == "2" {
-        ord_str.push_str("nd");
-    } else if slice == "3" {
-        ord_str.push_str("rd");
-    } else {
-        ord_str.push_str("th");
-    }
-    //return
-    ord_str
 }

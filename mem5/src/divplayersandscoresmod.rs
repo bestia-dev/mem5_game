@@ -3,6 +3,7 @@
 
 //region: use
 use crate::gamedatamod::GameData;
+use crate::utilsmod;
 //use crate::logmod;
 
 use unwrap::unwrap;
@@ -103,7 +104,7 @@ impl Render for PlayersAndScores {
     {
         let text1 = bumpalo::format!(in bump, "{} {}: {} points",
         self.my_nickname,
-        crate::ordinal_numbers(self.my_player_number),
+        utilsmod::ordinal_numbers(self.my_player_number),
         self.my_points)
         .into_bump_str();
         //return
