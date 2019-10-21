@@ -55,7 +55,7 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fetch_game_config_request</span>(<span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">RootRenderingComponent</span>, <span class="ident">vdom_weak</span>: <span class="ident">dodrio</span>::<span class="ident">VdomWeak</span>) {
     <span class="kw">let</span> <span class="ident">url_config</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
         <span class="string">&quot;{}/content/{}/game_config.json&quot;</span>,
-        <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">href</span>, <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">asked_folder_name</span>
+        <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">href</span>, <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">asked_game_name</span>
     );
     <span class="comment">//logmod::debug_write(url_config.as_str());</span>
     <span class="kw">let</span> <span class="ident">webrequest</span> <span class="op">=</span> <span class="ident">create_webrequest</span>(<span class="ident">url_config</span>.<span class="ident">as_str</span>());

@@ -325,7 +325,7 @@
 <span class="doccomment">//! structs and methods around game data</span>
 
 <span class="comment">//region: use</span>
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">localstoragemod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divnicknamemod</span>;
 
 <span class="kw">use</span> <span class="ident">serde_derive</span>::{<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>};
 <span class="kw">use</span> <span class="ident">unwrap</span>::<span class="ident">unwrap</span>;
@@ -431,7 +431,7 @@
     <span class="kw">pub</span> <span class="ident">players</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Player</span><span class="op">&gt;</span>,
     <span class="doccomment">///the json string for the ws server to send msgs to other players only</span>
     <span class="kw">pub</span> <span class="ident">players_ws_uid</span>: <span class="ident">String</span>,
-    <span class="doccomment">///game status: StatusInviteAskBegin,StatusInviteAsking,StatusInviteAsked,Player1,Player2</span>
+    <span class="doccomment">///game status: StatusStartPage,StatusInviting,StatusInvited,Player1,Player2</span>
     <span class="kw">pub</span> <span class="ident">game_status</span>: <span class="ident">GameStatus</span>,
     <span class="doccomment">///vector of cards</span>
     <span class="kw">pub</span> <span class="ident">card_grid_data</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Card</span><span class="op">&gt;</span>,
@@ -440,9 +440,9 @@
     <span class="doccomment">///card index of second click</span>
     <span class="kw">pub</span> <span class="ident">card_index_of_second_click</span>: <span class="ident">usize</span>,
     <span class="doccomment">///content folder name</span>
-    <span class="kw">pub</span> <span class="ident">content_folder_name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">game_name</span>: <span class="ident">String</span>,
     <span class="doccomment">///invite asks for a specific game</span>
-    <span class="kw">pub</span> <span class="ident">asked_folder_name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">asked_game_name</span>: <span class="ident">String</span>,
 
     <span class="doccomment">///whose turn is now:  player 1,2,3,...</span>
     <span class="kw">pub</span> <span class="ident">player_turn</span>: <span class="ident">usize</span>,
@@ -560,7 +560,7 @@
     }
     <span class="doccomment">///asociated function: before Accept, there are not random numbers, just default cards.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">prepare_for_empty</span>() <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Card</span><span class="op">&gt;</span> {
-        <span class="comment">//prepare 32 empty cards. The random is calculated only on MsgPlayAccept.</span>
+        <span class="comment">//prepare 32 empty cards. The random is calculated only on MsgAccept.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">card_grid_data</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
         <span class="comment">//I must prepare the 0 index, but then I don&#39;t use it ever.</span>
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..=<span class="number">32</span> {
@@ -575,7 +575,7 @@
     }
     <span class="doccomment">///constructor of game data</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ws</span>: <span class="ident">WebSocket</span>, <span class="ident">my_ws_uid</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">my_nickname</span> <span class="op">=</span> <span class="ident">localstoragemod</span>::<span class="ident">load_nickname</span>();
+        <span class="kw">let</span> <span class="ident">my_nickname</span> <span class="op">=</span> <span class="ident">divnicknamemod</span>::<span class="ident">load_nickname</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">players</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
         <span class="ident">players</span>.<span class="ident">push</span>(<span class="ident">Player</span> {
             <span class="ident">ws_uid</span>: <span class="number">0</span>,
@@ -594,9 +594,9 @@
             <span class="ident">my_nickname</span>,
             <span class="ident">players</span>,
             <span class="ident">players_ws_uid</span>,
-            <span class="ident">game_status</span>: <span class="ident">GameStatus</span>::<span class="ident">StatusInviteAskBegin</span>,
-            <span class="ident">content_folder_name</span>: <span class="string">&quot;alphabet&quot;</span>.<span class="ident">to_string</span>(),
-            <span class="ident">asked_folder_name</span>: <span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>(),
+            <span class="ident">game_status</span>: <span class="ident">GameStatus</span>::<span class="ident">StatusStartPage</span>,
+            <span class="ident">game_name</span>: <span class="string">&quot;alphabet&quot;</span>.<span class="ident">to_string</span>(),
+            <span class="ident">asked_game_name</span>: <span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>(),
             <span class="ident">my_player_number</span>: <span class="number">1</span>,
             <span class="ident">player_turn</span>: <span class="number">0</span>,
             <span class="ident">content_folders</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;alphabet&quot;</span>)],
@@ -610,11 +610,11 @@
         }
     }
     <span class="comment">/*
-    ///check only if status StatusInviteAskBegin
-    pub fn is_status_invite_ask_begin(&amp;self) -&gt; bool {
+    ///check only if status StatusStartPage
+    pub fn is_status_start_page(&amp;self) -&gt; bool {
         #[allow(clippy::wildcard_enum_match_arm)]
         match self.game_status {
-            GameStatus::StatusInviteAskBegin =&gt; true,
+            GameStatus::StatusStartPage =&gt; true,
             _ =&gt; false,
         }
     }
@@ -623,12 +623,12 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_status_for_grid_container</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">wildcard_enum_match_arm</span>)]</span>
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">game_status</span> {
-            <span class="ident">GameStatus</span>::<span class="ident">StatusPlayBefore1stCard</span>
-            <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusPlayBefore2ndCard</span>
+            <span class="ident">GameStatus</span>::<span class="ident">Status1stCard</span>
+            <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">Status2ndCard</span>
             <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusTakeTurnBegin</span>
             <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusTakeTurnEnd</span>
             <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusWaitingAckMsg</span>
-            <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusGameOverPlayAgainBegin</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+            <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusGameOver</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
             <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
         }
     }

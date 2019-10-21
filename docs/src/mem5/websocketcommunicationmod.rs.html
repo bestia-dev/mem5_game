@@ -462,6 +462,7 @@
 <span id="462">462</span>
 <span id="463">463</span>
 <span id="464">464</span>
+<span id="465">465</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// websocketcommunication.rs</span>
 <span class="doccomment">//! module that cares about WebSocket communication</span>
@@ -469,13 +470,14 @@
 <span class="comment">//region: use</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rootrenderingcomponentmod</span>::<span class="ident">RootRenderingComponent</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusgamedatainitmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusinviteaskedmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusinviteaskbeginmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusplaybefore1stcardmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusplaybefore2ndcardmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusinvitedmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusstartpagemod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">status1stcardmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">status2ndcardmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statustaketurnbeginmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statustaketurnendmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">logmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusplayagainmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusgameovermod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">websocketreconnectmod</span>;
 
 <span class="kw">use</span> <span class="ident">unwrap</span>::<span class="ident">unwrap</span>;
@@ -606,7 +608,7 @@
             <span class="ident">WsMessage</span>::<span class="ident">MsgInvite</span> {
                 <span class="ident">my_ws_uid</span>,
                 <span class="ident">my_nickname</span>,
-                <span class="ident">asked_folder_name</span>,
+                <span class="ident">asked_game_name</span>,
             } <span class="op">=&gt;</span> {
                 <span class="ident">wasm_bindgen_futures</span>::<span class="ident">spawn_local</span>(
                     <span class="ident">weak</span>.<span class="ident">with_component</span>({
@@ -614,15 +616,15 @@
                         <span class="kw">move</span> <span class="op">|</span><span class="ident">root</span><span class="op">|</span> {
                             <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
 
-                            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusGameOverPlayAgainBegin</span>
-                            <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusInviteAskBegin</span>
-                            <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusInviteAsked</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span>
+                            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusGameOver</span>
+                            <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusStartPage</span>
+                            <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusInvited</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span>
                             {
-                                <span class="ident">statusinviteaskbeginmod</span>::<span class="ident">on_msg_invite</span>(
+                                <span class="ident">statusstartpagemod</span>::<span class="ident">on_msg_invite</span>(
                                     <span class="ident">rrc</span>,
                                     <span class="ident">my_ws_uid</span>,
                                     <span class="ident">my_nickname</span>,
-                                    <span class="ident">asked_folder_name</span>,
+                                    <span class="ident">asked_game_name</span>,
                                 );
                                 <span class="ident">v2</span>.<span class="ident">schedule_render</span>();
                             }
@@ -632,7 +634,7 @@
                 );
             }
 
-            <span class="ident">WsMessage</span>::<span class="ident">MsgPlayAccept</span> {
+            <span class="ident">WsMessage</span>::<span class="ident">MsgAccept</span> {
                 <span class="ident">my_ws_uid</span>,
                 <span class="ident">players_ws_uid</span>: <span class="kw">_</span>,
                 <span class="ident">my_nickname</span>,
@@ -642,14 +644,14 @@
                         <span class="kw">let</span> <span class="ident">v2</span> <span class="op">=</span> <span class="ident">weak</span>.<span class="ident">clone</span>();
                         <span class="kw">move</span> <span class="op">|</span><span class="ident">root</span><span class="op">|</span> {
                             <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
-                            <span class="ident">statusinviteaskedmod</span>::<span class="ident">on_msg_play_accept</span>(<span class="ident">rrc</span>, <span class="ident">my_ws_uid</span>, <span class="ident">my_nickname</span>);
+                            <span class="ident">statusinvitedmod</span>::<span class="ident">on_msg_accept</span>(<span class="ident">rrc</span>, <span class="ident">my_ws_uid</span>, <span class="ident">my_nickname</span>);
                             <span class="ident">v2</span>.<span class="ident">schedule_render</span>();
                         }
                     })
                     .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()),
                 );
             }
-            <span class="ident">WsMessage</span>::<span class="ident">MsgGameDataInit</span> {
+            <span class="ident">WsMessage</span>::<span class="ident">MsgStartGame</span> {
                 <span class="ident">my_ws_uid</span>: <span class="kw">_</span>,
                 <span class="ident">players_ws_uid</span>: <span class="kw">_</span>,
                 <span class="ident">card_grid_data</span>,
@@ -662,9 +664,9 @@
                         <span class="kw">move</span> <span class="op">|</span><span class="ident">root</span><span class="op">|</span> {
                             <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
 
-                            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusPlayAccepted</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
+                            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusAccepted</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
                                 <span class="kw">let</span> <span class="ident">v3</span> <span class="op">=</span> <span class="ident">v2</span>.<span class="ident">clone</span>();
-                                <span class="ident">statusgamedatainitmod</span>::<span class="ident">on_msg_game_data_init</span>(
+                                <span class="ident">statusgamedatainitmod</span>::<span class="ident">on_msg_start_game</span>(
                                     <span class="ident">rrc</span>,
                                     <span class="ident">v3</span>,
                                     <span class="kw-2">&amp;</span><span class="ident">card_grid_data</span>,
@@ -678,7 +680,7 @@
                     .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()),
                 );
             }
-            <span class="ident">WsMessage</span>::<span class="ident">MsgPlayerClick1stCard</span> {
+            <span class="ident">WsMessage</span>::<span class="ident">MsgClick1stCard</span> {
                 <span class="ident">my_ws_uid</span>,
                 <span class="ident">players_ws_uid</span>: <span class="kw">_</span>,
                 <span class="ident">card_index_of_first_click</span>,
@@ -689,7 +691,7 @@
                         <span class="kw">let</span> <span class="ident">v2</span> <span class="op">=</span> <span class="ident">weak</span>.<span class="ident">clone</span>();
                         <span class="kw">move</span> <span class="op">|</span><span class="ident">root</span><span class="op">|</span> {
                             <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
-                            <span class="ident">statusplaybefore1stcardmod</span>::<span class="ident">on_msg_player_click_1st_card</span>(
+                            <span class="ident">status1stcardmod</span>::<span class="ident">on_msg_click_1st_card</span>(
                                 <span class="ident">rrc</span>,
                                 <span class="ident">my_ws_uid</span>,
                                 <span class="ident">card_index_of_first_click</span>,
@@ -701,7 +703,7 @@
                     .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()),
                 );
             }
-            <span class="ident">WsMessage</span>::<span class="ident">MsgPlayerClick2ndCardPoint</span> {
+            <span class="ident">WsMessage</span>::<span class="ident">MsgClick2ndCardPoint</span> {
                 <span class="ident">my_ws_uid</span>,
                 <span class="ident">players_ws_uid</span>: <span class="kw">_</span>,
                 <span class="ident">card_index_of_second_click</span>,
@@ -712,7 +714,7 @@
                         <span class="kw">let</span> <span class="ident">v2</span> <span class="op">=</span> <span class="ident">weak</span>.<span class="ident">clone</span>();
                         <span class="kw">move</span> <span class="op">|</span><span class="ident">root</span><span class="op">|</span> {
                             <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
-                            <span class="ident">statusplaybefore2ndcardmod</span>::<span class="ident">on_msg_player_click_2nd_card_point</span>(
+                            <span class="ident">status2ndcardmod</span>::<span class="ident">on_msg_click_2nd_card_point</span>(
                                 <span class="ident">rrc</span>,
                                 <span class="ident">my_ws_uid</span>,
                                 <span class="ident">card_index_of_second_click</span>,
@@ -724,7 +726,7 @@
                     .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()),
                 );
             }
-            <span class="ident">WsMessage</span>::<span class="ident">MsgPlayerClick2ndCardTakeTurnBegin</span> {
+            <span class="ident">WsMessage</span>::<span class="ident">MsgTakeTurnBegin</span> {
                 <span class="ident">my_ws_uid</span>,
                 <span class="ident">players_ws_uid</span>: <span class="kw">_</span>,
                 <span class="ident">card_index_of_second_click</span>,
@@ -757,14 +759,14 @@
                         <span class="kw">let</span> <span class="ident">v2</span> <span class="op">=</span> <span class="ident">weak</span>.<span class="ident">clone</span>();
                         <span class="kw">move</span> <span class="op">|</span><span class="ident">root</span><span class="op">|</span> {
                             <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
-                            <span class="ident">statustaketurnbeginmod</span>::<span class="ident">on_msg_take_turn_end</span>(<span class="ident">rrc</span>, <span class="ident">my_ws_uid</span>, <span class="ident">msg_id</span>);
+                            <span class="ident">statustaketurnendmod</span>::<span class="ident">on_msg_take_turn_end</span>(<span class="ident">rrc</span>, <span class="ident">my_ws_uid</span>, <span class="ident">msg_id</span>);
                             <span class="ident">v2</span>.<span class="ident">schedule_render</span>();
                         }
                     })
                     .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()),
                 );
             }
-            <span class="ident">WsMessage</span>::<span class="ident">MsgPlayerClick2ndCardGameOverPlayAgainBegin</span> {
+            <span class="ident">WsMessage</span>::<span class="ident">MsgGameOver</span> {
                 <span class="ident">my_ws_uid</span>: <span class="kw">_</span>,
                 <span class="ident">players_ws_uid</span>: <span class="kw">_</span>,
             } <span class="op">=&gt;</span> {
@@ -773,7 +775,7 @@
                         <span class="kw">let</span> <span class="ident">v2</span> <span class="op">=</span> <span class="ident">weak</span>.<span class="ident">clone</span>();
                         <span class="kw">move</span> <span class="op">|</span><span class="ident">root</span><span class="op">|</span> {
                             <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
-                            <span class="ident">statusplayagainmod</span>::<span class="ident">on_msg_play_again</span>(<span class="ident">rrc</span>);
+                            <span class="ident">statusgameovermod</span>::<span class="ident">on_msg_game_over</span>(<span class="ident">rrc</span>);
                             <span class="ident">v2</span>.<span class="ident">schedule_render</span>();
                         }
                     })
@@ -823,22 +825,22 @@
                             <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
                             <span class="kw">match</span> <span class="ident">msg_ack_kind</span> {
                                 <span class="ident">MsgAckKind</span>::<span class="ident">MsgTakeTurnEnd</span> <span class="op">=&gt;</span> {
-                                    <span class="ident">statustaketurnbeginmod</span>::<span class="ident">on_msg_ack_take_turn_end</span>(
+                                    <span class="ident">statustaketurnendmod</span>::<span class="ident">on_msg_ack_take_turn_end</span>(
                                         <span class="ident">rrc</span>, <span class="ident">my_ws_uid</span>, <span class="ident">msg_id</span>,
                                     );
                                 }
-                                <span class="ident">MsgAckKind</span>::<span class="ident">MsgPlayerClick1stCard</span> <span class="op">=&gt;</span> {
-                                    <span class="ident">statusplaybefore1stcardmod</span>::<span class="ident">on_msg_ack_player_click1st_card</span>(
+                                <span class="ident">MsgAckKind</span>::<span class="ident">MsgClick1stCard</span> <span class="op">=&gt;</span> {
+                                    <span class="ident">status1stcardmod</span>::<span class="ident">on_msg_ack_click_1st_card</span>(
                                         <span class="ident">rrc</span>, <span class="ident">my_ws_uid</span>, <span class="ident">msg_id</span>,
                                     );
                                 }
-                                <span class="ident">MsgAckKind</span>::<span class="ident">MsgPlayerClick2ndCardPoint</span> <span class="op">=&gt;</span> {
-                                    <span class="ident">statusplaybefore2ndcardmod</span>::<span class="ident">on_msg_ack_player_click2nd_card_point</span>(
+                                <span class="ident">MsgAckKind</span>::<span class="ident">MsgClick2ndCardPoint</span> <span class="op">=&gt;</span> {
+                                    <span class="ident">status2ndcardmod</span>::<span class="ident">on_msg_ack_player_click2nd_card_point</span>(
                                         <span class="ident">rrc</span>, <span class="ident">my_ws_uid</span>, <span class="ident">msg_id</span>,
                                     );
                                 }
-                                <span class="ident">MsgAckKind</span>::<span class="ident">MsgPlayerClick2ndCardTakeTurnBegin</span> <span class="op">=&gt;</span> {
-                                    <span class="ident">statusplaybefore2ndcardmod</span>::<span class="ident">on_msg_ack_player_click2nd_card_take_turn_begin</span>(
+                                <span class="ident">MsgAckKind</span>::<span class="ident">MsgTakeTurnBegin</span> <span class="op">=&gt;</span> {
+                                    <span class="ident">statustaketurnbeginmod</span>::<span class="ident">on_msg_ack_take_turn_begin</span>(
                                         <span class="ident">rrc</span>, <span class="ident">my_ws_uid</span>, <span class="ident">msg_id</span>,
                                     );
                                 }

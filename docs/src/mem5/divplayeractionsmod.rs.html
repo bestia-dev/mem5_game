@@ -79,13 +79,13 @@
 
 <span class="comment">//region: use</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rootrenderingcomponentmod</span>::<span class="ident">RootRenderingComponent</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusplayagainmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusplaybefore1stcardmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusplaybefore2ndcardmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusgameovermod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">status1stcardmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">status2ndcardmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statustaketurnbeginmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusinviteaskbeginmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusinviteaskedmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusinviteaskingmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusstartpagemod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusinvitedmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusinvitingmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statuswaitingackmsgmod</span>;
 <span class="comment">//use crate::websocketreconnectmod;</span>
 
@@ -104,29 +104,29 @@
 <span class="kw">where</span>
     <span class="lifetime">&#39;a</span>: <span class="lifetime">&#39;bump</span>,
 {
-    <span class="comment">//if rrc.game_data.is_status_invite_ask_begin() {</span>
+    <span class="comment">//if rrc.game_data.is_status_start_page() {</span>
     <span class="comment">/*
         &amp;&amp; (rrc.game_data.is_reconnect || rrc.game_data.ws.ready_state() != 1)
     {
         //ready_state: 0	CONNECTING, 1	OPEN, 2	CLOSING, 3	CLOSED
         websocketreconnectmod::div_reconnect(rrc, bump)
     */</span>
-    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusInviteAskBegin</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
-        <span class="ident">statusinviteaskbeginmod</span>::<span class="ident">div_invite_ask_begin</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusInviteAsked</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
-        <span class="ident">statusinviteaskedmod</span>::<span class="ident">div_invite_asked</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusInviteAsking</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
-        <span class="ident">statusinviteaskingmod</span>::<span class="ident">div_invite_asking</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusPlayAccepted</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
-        <span class="ident">statusinviteaskedmod</span>::<span class="ident">div_play_accepted</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusPlayBefore1stCard</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
-        <span class="ident">statusplaybefore1stcardmod</span>::<span class="ident">div_click_1st_card</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusPlayBefore2ndCard</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
-        <span class="ident">statusplaybefore2ndcardmod</span>::<span class="ident">div_click_2nd_card</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
+    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusStartPage</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
+        <span class="ident">statusstartpagemod</span>::<span class="ident">div_start_page</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusInvited</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
+        <span class="ident">statusinvitedmod</span>::<span class="ident">div_invited</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusInviting</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
+        <span class="ident">statusinvitingmod</span>::<span class="ident">div_inviting</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusAccepted</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
+        <span class="ident">statusinvitedmod</span>::<span class="ident">div_invite_accepted</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">Status1stCard</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
+        <span class="ident">status1stcardmod</span>::<span class="ident">div_on_1st_card</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">Status2ndCard</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
+        <span class="ident">status2ndcardmod</span>::<span class="ident">div_click_2nd_card</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
     } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusTakeTurnBegin</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
         <span class="ident">statustaketurnbeginmod</span>::<span class="ident">div_take_turn_begin</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusGameOverPlayAgainBegin</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
-        <span class="ident">statusplayagainmod</span>::<span class="ident">div_play_again</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusGameOver</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
+        <span class="ident">statusgameovermod</span>::<span class="ident">div_game_over</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
     } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GameStatus</span>::<span class="ident">StatusWaitingAckMsg</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
         <span class="ident">statuswaitingackmsgmod</span>::<span class="ident">div_waiting_ack_msg</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)
     } <span class="kw">else</span> {

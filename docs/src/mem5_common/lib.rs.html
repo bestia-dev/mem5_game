@@ -243,7 +243,7 @@
 <span class="comment">//region: lmake_readme insert &quot;readme.md&quot;</span>
 <span class="doccomment">//! # mem5_common</span>
 <span class="doccomment">//! </span>
-<span class="doccomment">//! version: 19.10.18-17.47  </span>
+<span class="doccomment">//! version: 19.10.21-20.7  </span>
 <span class="doccomment">//! </span>
 <span class="doccomment">//! **commons for mem5 wasm and server**  </span>
 <span class="doccomment">//! Learning to code Rust for a http + WebSocket.  </span>
@@ -316,10 +316,10 @@
         <span class="doccomment">/// my nickname</span>
         <span class="ident">my_nickname</span>: <span class="ident">String</span>,
         <span class="doccomment">///content folder name</span>
-        <span class="ident">asked_folder_name</span>: <span class="ident">String</span>,
+        <span class="ident">asked_game_name</span>: <span class="ident">String</span>,
     },
-    <span class="doccomment">/// accept play</span>
-    <span class="ident">MsgPlayAccept</span> {
+    <span class="doccomment">/// accept invitation</span>
+    <span class="ident">MsgAccept</span> {
         <span class="doccomment">///ws client instance unique id. To not listen the echo to yourself.</span>
         <span class="ident">my_ws_uid</span>: <span class="ident">usize</span>,
         <span class="doccomment">///json of vector of players for the server to know whom to send msg</span>
@@ -329,7 +329,7 @@
     },
     <span class="doccomment">/// player1 initialize the game data and sends it to all players</span>
     <span class="doccomment">/// I will send json string to not confuse the server with vectors</span>
-    <span class="ident">MsgGameDataInit</span> {
+    <span class="ident">MsgStartGame</span> {
         <span class="doccomment">///ws client instance unique id. To not listen the echo to yourself.</span>
         <span class="ident">my_ws_uid</span>: <span class="ident">usize</span>,
         <span class="doccomment">///json of vector of players for the server to know whom to send msg</span>
@@ -342,7 +342,7 @@
         <span class="ident">game_config</span>: <span class="ident">String</span>,
     },
     <span class="doccomment">///player click</span>
-    <span class="ident">MsgPlayerClick1stCard</span> {
+    <span class="ident">MsgClick1stCard</span> {
         <span class="doccomment">///this identifies the smartphone, but not the player-in-turn</span>
         <span class="ident">my_ws_uid</span>: <span class="ident">usize</span>,
         <span class="doccomment">///all players for the server to know whom to send msg</span>
@@ -353,7 +353,7 @@
         <span class="ident">msg_id</span>: <span class="ident">usize</span>,
     },
     <span class="doccomment">///player click success</span>
-    <span class="ident">MsgPlayerClick2ndCardPoint</span> {
+    <span class="ident">MsgClick2ndCardPoint</span> {
         <span class="doccomment">///this identifies the smartphone, but not the player-in-turn</span>
         <span class="ident">my_ws_uid</span>: <span class="ident">usize</span>,
         <span class="doccomment">///all players for the server to know whom to send msg</span>
@@ -364,7 +364,7 @@
         <span class="ident">msg_id</span>: <span class="ident">usize</span>,
     },
     <span class="doccomment">///take turn begin</span>
-    <span class="ident">MsgPlayerClick2ndCardTakeTurnBegin</span> {
+    <span class="ident">MsgTakeTurnBegin</span> {
         <span class="doccomment">///this identifies the smartphone, but not the player-in-turn</span>
         <span class="ident">my_ws_uid</span>: <span class="ident">usize</span>,
         <span class="doccomment">///all players for the server to know whom to send msg</span>
@@ -375,7 +375,7 @@
         <span class="ident">msg_id</span>: <span class="ident">usize</span>,
     },
     <span class="doccomment">///Play Again</span>
-    <span class="ident">MsgPlayerClick2ndCardGameOverPlayAgainBegin</span> {
+    <span class="ident">MsgGameOver</span> {
         <span class="doccomment">///this identifies the smartphone, but not the player-in-turn</span>
         <span class="ident">my_ws_uid</span>: <span class="ident">usize</span>,
         <span class="doccomment">///all players for the server to know whom to send msg</span>
@@ -427,24 +427,24 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Display</span>, <span class="ident">AsRefStr</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>)]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">pub_enum_variant_names</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">GameStatus</span> {
-    <span class="doccomment">/// invite ask begin</span>
-    <span class="ident">StatusInviteAskBegin</span>,
-    <span class="doccomment">///Player1 MsgInvite Asking</span>
-    <span class="ident">StatusInviteAsking</span>,
-    <span class="doccomment">///Player2 MsgInvite Asked</span>
-    <span class="ident">StatusInviteAsked</span>,
-    <span class="doccomment">///StatusPlayAccepted</span>
-    <span class="ident">StatusPlayAccepted</span>,
-    <span class="doccomment">///Play before first card</span>
-    <span class="ident">StatusPlayBefore1stCard</span>,
-    <span class="doccomment">///Play before second card</span>
-    <span class="ident">StatusPlayBefore2ndCard</span>,
+    <span class="doccomment">/// start page</span>
+    <span class="ident">StatusStartPage</span>,
+    <span class="doccomment">///inviting</span>
+    <span class="ident">StatusInviting</span>,
+    <span class="doccomment">///invited</span>
+    <span class="ident">StatusInvited</span>,
+    <span class="doccomment">///InviteAccepted</span>
+    <span class="ident">StatusAccepted</span>,
+    <span class="doccomment">///before first card </span>
+    <span class="ident">Status1stCard</span>,
+    <span class="doccomment">///before second card</span>
+    <span class="ident">Status2ndCard</span>,
     <span class="doccomment">///take turn begin</span>
     <span class="ident">StatusTakeTurnBegin</span>,
     <span class="doccomment">///take turn end</span>
     <span class="ident">StatusTakeTurnEnd</span>,
-    <span class="doccomment">///end game</span>
-    <span class="ident">StatusGameOverPlayAgainBegin</span>,
+    <span class="doccomment">///game over</span>
+    <span class="ident">StatusGameOver</span>,
     <span class="doccomment">///StatusReconnect after a lost connection</span>
     <span class="ident">StatusReconnect</span>,
     <span class="doccomment">///waiting ack msg</span>
@@ -468,12 +468,12 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MsgAckKind</span> {
     <span class="doccomment">///ack for MsgTakeTurnEnd</span>
     <span class="ident">MsgTakeTurnEnd</span>,
-    <span class="doccomment">///ack for MsgPlayerClick1stCard</span>
-    <span class="ident">MsgPlayerClick1stCard</span>,
-    <span class="doccomment">///ack for MsgPlayerClick2ndCardPoint</span>
-    <span class="ident">MsgPlayerClick2ndCardPoint</span>,
+    <span class="doccomment">///ack for MsgClick1stCard</span>
+    <span class="ident">MsgClick1stCard</span>,
+    <span class="doccomment">///ack for MsgClick2ndCardPoint</span>
+    <span class="ident">MsgClick2ndCardPoint</span>,
     <span class="doccomment">///</span>
-    <span class="ident">MsgPlayerClick2ndCardTakeTurnBegin</span>,
+    <span class="ident">MsgTakeTurnBegin</span>,
 }
 
 <span class="comment">//endregion</span>

@@ -117,6 +117,7 @@
 <span id="117">117</span>
 <span id="118">118</span>
 <span id="119">119</span>
+<span id="120">120</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// statusplaybefore1stcardmod.rs</span>
 <span class="doccomment">//! code flow from this status</span>
@@ -128,6 +129,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">logmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ackmsgmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divgridcontainermod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">utilsmod</span>;
 
 <span class="kw">use</span> <span class="ident">unwrap</span>::<span class="ident">unwrap</span>;
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">builder</span>::<span class="ident">text</span>;
@@ -151,7 +153,7 @@
             <span class="op">&lt;</span><span class="ident">h2</span> <span class="ident">class</span><span class="op">=</span><span class="string">&quot;h2_must_do_something&quot;</span><span class="op">&gt;</span>
                 {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(<span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;Play {} {} !&quot;</span>,
                 <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">players</span>.<span class="ident">get</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">player_turn</span><span class="op">-</span><span class="number">1</span>)).<span class="ident">nickname</span>,
-                <span class="kw">crate</span>::<span class="ident">ordinal_numbers</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">player_turn</span>))
+                <span class="ident">utilsmod</span>::<span class="ident">ordinal_numbers</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">player_turn</span>))
                 .<span class="ident">into_bump_str</span>())]}
             <span class="op">&lt;</span><span class="op">/</span><span class="ident">h2</span><span class="op">&gt;</span>
         <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
@@ -162,7 +164,7 @@
         <span class="op">&lt;</span><span class="ident">h2</span> <span class="ident">class</span><span class="op">=</span><span class="string">&quot;h2_user_must_wait&quot;</span><span class="op">&gt;</span>
             {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(<span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;Wait for {} {} !&quot;</span>,
             <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">players</span>.<span class="ident">get</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">player_turn</span><span class="op">-</span><span class="number">1</span>)).<span class="ident">nickname</span>,
-            <span class="kw">crate</span>::<span class="ident">ordinal_numbers</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">player_turn</span>)
+            <span class="ident">utilsmod</span>::<span class="ident">ordinal_numbers</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">player_turn</span>)
             ).<span class="ident">into_bump_str</span>())]}
         <span class="op">&lt;</span><span class="op">/</span><span class="ident">h2</span><span class="op">&gt;</span>
         )

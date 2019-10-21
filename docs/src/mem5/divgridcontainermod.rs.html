@@ -359,8 +359,6 @@
 <span id="359">359</span>
 <span id="360">360</span>
 <span id="361">361</span>
-<span id="362">362</span>
-<span id="363">363</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// divgridcontainermod.rs</span>
 <span class="doccomment">//! renders the grid container with the images</span>
@@ -369,9 +367,9 @@
 <span class="comment">//region: use, const</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">gamedatamod</span>::{<span class="ident">CardStatusCardFace</span>, <span class="ident">Size2d</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rootrenderingcomponentmod</span>::<span class="ident">RootRenderingComponent</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusplaybefore1stcardmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">statusplaybefore2ndcardmod</span>;
-<span class="comment">//use crate::logmod;</span>
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">status1stcardmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">status2ndcardmod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">logmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rootrenderingcomponentmod</span>;
 
 <span class="kw">use</span> <span class="ident">unwrap</span>::<span class="ident">unwrap</span>;
@@ -491,12 +489,12 @@
             .<span class="ident">status</span>
             {
                 <span class="ident">CardStatusCardFace</span>::<span class="ident">Down</span> <span class="op">=&gt;</span> <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;content/{}/{}&quot;</span>,
-                                        <span class="ident">game_data</span>.<span class="ident">content_folder_name</span>,
+                                        <span class="ident">game_data</span>.<span class="ident">game_name</span>,
                                         <span class="ident">SRC_FOR_CARD_FACE_DOWN</span>)
                 .<span class="ident">into_bump_str</span>(),
                 <span class="ident">CardStatusCardFace</span>::<span class="ident">UpTemporary</span> <span class="op">|</span> <span class="ident">CardStatusCardFace</span>::<span class="ident">UpPermanently</span> <span class="op">=&gt;</span> {
                     <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;content/{}/img/{}&quot;</span>,
-                    <span class="ident">game_data</span>.<span class="ident">content_folder_name</span>,
+                    <span class="ident">game_data</span>.<span class="ident">game_name</span>,
                     <span class="macro">unwrap</span><span class="macro">!</span>(
                         <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">game_data</span>.<span class="ident">game_config</span>.<span class="ident">as_ref</span>())
                         .<span class="ident">img_filename</span>.<span class="ident">get</span>(
@@ -513,10 +511,8 @@
                 .<span class="ident">into_bump_str</span>();
 
             <span class="kw">let</span> <span class="ident">opacity</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">img_src</span>
-                <span class="op">==</span> <span class="macro">format</span><span class="macro">!</span>(
-                    <span class="string">&quot;content/{}/{}&quot;</span>,
-                    <span class="ident">game_data</span>.<span class="ident">content_folder_name</span>, <span class="ident">SRC_FOR_CARD_FACE_DOWN</span>
-                ) {
+                <span class="op">==</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;content/{}/{}&quot;</span>, <span class="ident">game_data</span>.<span class="ident">game_name</span>, <span class="ident">SRC_FOR_CARD_FACE_DOWN</span>)
+            {
                 <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;opacity:{}&quot;</span>, <span class="number">0.2</span>).<span class="ident">into_bump_str</span>()
             } <span class="kw">else</span> {
                 <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;opacity:{}&quot;</span>, <span class="number">1</span>).<span class="ident">into_bump_str</span>()
@@ -552,7 +548,7 @@
         <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
         <span class="comment">//only if the gamestatus is play (1 or 2)</span>
         <span class="kw">match</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span>{
-        <span class="ident">GameStatus</span>::<span class="ident">StatusPlayBefore1stCard</span> <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">StatusPlayBefore2ndCard</span> <span class="op">=&gt;</span> {
+        <span class="ident">GameStatus</span>::<span class="ident">Status1stCard</span> <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">Status2ndCard</span> <span class="op">=&gt;</span> {
             <span class="comment">// If the event&#39;s target is our image...</span>
             <span class="kw">let</span> <span class="ident">img</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">event</span>
                 .<span class="ident">target</span>()
@@ -575,11 +571,11 @@
                 <span class="string">&quot;error this_click_card_index&quot;</span>
             ).<span class="ident">status</span>.<span class="ident">as_ref</span>()<span class="op">==</span><span class="ident">CardStatusCardFace</span>::<span class="ident">Down</span>.<span class="ident">as_ref</span>(){
                 <span class="kw">match</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span>{
-                    <span class="ident">GameStatus</span>::<span class="ident">StatusPlayBefore1stCard</span><span class="op">=&gt;</span>{
-                        <span class="ident">statusplaybefore1stcardmod</span>::<span class="ident">on_click_1st_card</span>(<span class="ident">rrc</span>, <span class="kw-2">&amp;</span><span class="ident">vdom</span>, <span class="ident">this_click_card_index</span>);
+                    <span class="ident">GameStatus</span>::<span class="ident">Status1stCard</span><span class="op">=&gt;</span>{
+                        <span class="ident">status1stcardmod</span>::<span class="ident">on_click_1st_card</span>(<span class="ident">rrc</span>, <span class="kw-2">&amp;</span><span class="ident">vdom</span>, <span class="ident">this_click_card_index</span>);
                     },
-                    <span class="ident">GameStatus</span>::<span class="ident">StatusPlayBefore2ndCard</span><span class="op">=&gt;</span>{
-                        <span class="ident">statusplaybefore2ndcardmod</span>::<span class="ident">on_click_2nd_card</span>(<span class="ident">rrc</span>, <span class="kw-2">&amp;</span><span class="ident">vdom</span>, <span class="ident">this_click_card_index</span>);
+                    <span class="ident">GameStatus</span>::<span class="ident">Status2ndCard</span><span class="op">=&gt;</span>{
+                        <span class="ident">status2ndcardmod</span>::<span class="ident">on_click_2nd_card</span>(<span class="ident">rrc</span>, <span class="kw-2">&amp;</span><span class="ident">vdom</span>, <span class="ident">this_click_card_index</span>);
                     },
                     <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;This click is not expected in this status.&quot;</span>),
                 }
@@ -587,7 +583,7 @@
                 <span class="ident">vdom</span>.<span class="ident">schedule_render</span>();
             }
         },
-        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;This click is not expected in this status.&quot;</span>),
+        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">logmod</span>::<span class="ident">debug_write</span>(<span class="string">&quot;This click on img is not expected in this status.&quot;</span>),
             }
     }}<span class="op">&gt;</span>
     <span class="op">&lt;</span><span class="op">/</span><span class="ident">img</span><span class="op">&gt;</span>
@@ -595,13 +591,13 @@
     )
 }
 
-<span class="doccomment">///</span>
+<span class="doccomment">/// play sound mp3</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">play_sound</span>(<span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="ident">RootRenderingComponent</span>, <span class="ident">this_click_card_index</span>: <span class="ident">usize</span>) {
     <span class="comment">//prepare the audio element with src filename of mp3</span>
     <span class="kw">let</span> <span class="ident">audio_element</span> <span class="op">=</span> <span class="ident">web_sys</span>::<span class="ident">HtmlAudioElement</span>::<span class="ident">new_with_src</span>(
         <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;content/{}/sound/{}&quot;</span>,
-            <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">content_folder_name</span>,
+            <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_name</span>,
             <span class="macro">unwrap</span><span class="macro">!</span>(<span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_config</span>.<span class="ident">as_ref</span>())
                 .<span class="ident">sound_filename</span>
                 .<span class="ident">get</span>(

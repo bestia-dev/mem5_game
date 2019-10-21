@@ -3,7 +3,7 @@
 //region: lmake_readme insert "readme.md"
 //! # mem5_common
 //! 
-//! version: 19.10.18-17.47  
+//! version: 19.10.21-20.7  
 //! 
 //! **commons for mem5 wasm and server**  
 //! Learning to code Rust for a http + WebSocket.  

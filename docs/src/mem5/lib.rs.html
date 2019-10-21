@@ -370,38 +370,17 @@
 <span id="370">370</span>
 <span id="371">371</span>
 <span id="372">372</span>
-<span id="373">373</span>
-<span id="374">374</span>
-<span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
-<span id="385">385</span>
-<span id="386">386</span>
-<span id="387">387</span>
-<span id="388">388</span>
-<span id="389">389</span>
-<span id="390">390</span>
-<span id="391">391</span>
-<span id="392">392</span>
-<span id="393">393</span>
-<span id="394">394</span>
-<span id="395">395</span>
-<span id="396">396</span>
-<span id="397">397</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_favicon_url</span> <span class="op">=</span> <span class="string">&quot;https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-16.png&quot;</span>)]</span>
-<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-192.png&quot;</span>)]</span>
+<span class="attribute">#![<span class="ident">doc</span>(
+    <span class="ident">html_favicon_url</span> <span class="op">=</span> <span class="string">&quot;https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-16.png&quot;</span>
+)]</span>
+<span class="attribute">#![<span class="ident">doc</span>(
+    <span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-192.png&quot;</span>
+)]</span>
 <span class="comment">//region: lmake_readme insert &quot;readme.md&quot;</span>
 <span class="doccomment">//! # mem5</span>
 <span class="doccomment">//! </span>
-<span class="doccomment">//! version: 19.10.20-15.35  </span>
+<span class="doccomment">//! version: 19.10.21-20.11  </span>
 <span class="doccomment">//! </span>
 <span class="doccomment">//! mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web App).  </span>
 <span class="doccomment">//! </span>
@@ -504,12 +483,12 @@
 <span class="doccomment">//! The first player waits to receive msgs from all other users.  </span>
 <span class="doccomment">//! After that he starts the game. This calculates the game_data and send this init data to all other players.  </span>
 <span class="doccomment">//! </span>
-<span class="doccomment">//! | Game Status1             | Render                     | User action                                 | GameStatus2 p.p.         | Sends Msg             | On rcv Msg o.p.              | GameStatus2 o.p.                   |</span>
-<span class="doccomment">//! | ------------------------ | -------------------------- | ------------------------------------------- | ----------------         | ----------------      | --------------------------   | --------------------------------   |</span>
-<span class="doccomment">//! | StatusInviteAskBegin     | div_invite_ask_begin       | div_invite_ask_begin_on_click               | StatusInviteAsking       | MsgInvite             | on_msg_invite                | StatusInviteAsked                  |</span>
-<span class="doccomment">//! | StatusInviteAsked        | div_invite_asked           | div_invite_asked_on_click                   | StatusPlayAccepted       | MsgPlayAccept         | on_msg_play_accept           | -                                  |</span>
-<span class="doccomment">//! | StatusPlayAccepted       | div_play_accepted          |                                             |                          |                       |                              | -                                  |</span>
-<span class="doccomment">//! | StatusInviteAsking       | div_invite_asking          | game_data_init                              | StatusPlayBefore1stCard  | MsgGameDataInit       | on_msg_game_data_init        | StatusPlayBefore1stCard            |</span>
+<span class="doccomment">//! | Game Status1         | Render               | User action           | GameStatus2 p.p. | Sends Msg       | On rcv Msg o.p.       | GameStatus2 o.p. |</span>
+<span class="doccomment">//! | -------------------- | -------------------- | --------------------- | ---------------- | --------------  | -------------------   | --------------   |</span>
+<span class="doccomment">//! | StatusStartPage      | div_start_page       | on_click_invite       | StatusInviting   | MsgInvite       | on_msg_invite         | StatusInvited    |</span>
+<span class="doccomment">//! | StatusInvited        | div_invited          | on_click_accept       | StatusAccepted   | MsgAccept       | on_msg_accept         | -                |</span>
+<span class="doccomment">//! | StatusAccepted       | div_invite_accepted  |                       |                  |                 |                       | -                |</span>
+<span class="doccomment">//! | StatusInviting       | div_inviting         | on_click_start_game   | Status1stCard    | MsgStartGame    | on_msg_start_game     | Status1stCard    |</span>
 <span class="doccomment">//! </span>
 <span class="doccomment">//! This starts the game flow, that repeats until the game is over.  </span>
 <span class="doccomment">//!   </span>
@@ -521,14 +500,14 @@
 <span class="doccomment">//! Because of unreliable networks ther must be an acknowledge ack msg to confirm, that the msg is received to continue the game.  </span>
 <span class="doccomment">//! The rendering is scheduled and it will happen shortly (async).  </span>
 <span class="doccomment">//! </span>
-<span class="doccomment">//! | Game Status1                        | Render                     | User action                                 | Condition                            | GameStatus2 p.p.                   | Sends Msg                          | On rcv Msg o.p.                    | GameStatus2 o.p.                   |</span>
-<span class="doccomment">//! | ------------------------            | -------------------------- | ------------------------------------------- | ------------------------------------ | ----------------                   | ----------------                   | --------------------------         | --------------------------------   |</span>
-<span class="doccomment">//! | StatusPlayBefore1stCard             | div_grid_container         | on_click_1st_card()                         | -                                    | StatusPlayBefore2ndCard            | MsgPlayerClick1stCard              | on_msg_player_click_1st_card       | StatusPlayBefore2ndCard            |</span>
-<span class="doccomment">//! | StatusPlayBefore2ndCard             | div_grid_container         | on_click_2nd_card()                         | If cards match                       | StatusPlayBefore1stCard            | MsgPlayerClick2ndCardPoint         | on_msg_player_click_2nd_card_point | StatusPlayBefore1stCard            |</span>
-<span class="doccomment">//! | -                                   | -                          | continues on ack msgs received              | if all cards permanently up          | StatusGameOverPlayAgainBegin       | StatusGameOverPlayAgainBegin       | on_msg_play_again                  | StatusGameOverPlayAgainBegin       |</span>
-<span class="doccomment">//! | StatusPlayBefore2ndCard             | div_grid_container         | on_click_2nd_card()                         | else cards don&#39;t match               | MsgPlayerClick2ndCardTakeTurnBegin | MsgPlayerClick2ndCardTakeTurnBegin | on_msg_take_turn                   | MsgPlayerClick2ndCardTakeTurnBegin |</span>
-<span class="doccomment">//! | MsgPlayerClick2ndCardTakeTurnBegin  | div_take_turn_begin        | div_take_turn_begin_on_click                | -                                    | StatusPlayBefore1stCard            | MsgTakeTurnEnd                     | on_msg_take_turn_end               | StatusPlayBefore1stCard, the next player |</span>
-<span class="doccomment">//! | StatusGameOverPlayAgainBegin        | div_play_again             | window.location().reload()                  | -                                    | -                                  | -                                  | -                                  | -                                  |</span>
+<span class="doccomment">//! | Game Status1      | Render                     | User action                    | Condition                     | GameStatus2 p.p. | Sends Msg            | On rcv Msg o.p.             | GameStatus2 o.p.               |</span>
+<span class="doccomment">//! | ----------------  | -------------------------- | ------------------------------ | ----------------------------- | ---------------- | ----------------     | --------------------------  | ----------------------------   |</span>
+<span class="doccomment">//! | Status1stCard     | div_grid_container         | on_click_1st_card()            | -                             | Status2ndCard    | MsgClick1stCard      | on_msg_click_1st_card       | Status2ndCard                  |</span>
+<span class="doccomment">//! | Status2ndCard     | div_grid_container         | on_click_2nd_card()            | If cards match                | Status1stCard    | MsgClick2ndCardPoint | on_msg_click_2nd_card_point | Status1stCard                  |</span>
+<span class="doccomment">//! | -                 | -                          | continues on ack msgs received | if all cards permanently up   | StatusGameOver   | StatusGameOver       | on_msg_game_over            | StatusGameOver                 |</span>
+<span class="doccomment">//! | Status2ndCard     | div_grid_container         | on_click_2nd_card()            | else cards don&#39;t match        | MsgTakeTurnBegin | MsgTakeTurnBegin     | on_msg_take_turn            | MsgTakeTurnBegin               |</span>
+<span class="doccomment">//! | MsgTakeTurnBegin  | div_take_turn_begin        | on_click_take_turn_begin       | -                             | Status1stCard    | MsgTakeTurnEnd       | on_msg_take_turn_end        | Status1stCard, the next player |</span>
+<span class="doccomment">//! | StatusGameOver    | div_game_over              | window.location().reload()     | -                             | -                | -                    | -                           | -                              |</span>
 <span class="doccomment">//! |  |  |  |  |  |  |  |  |</span>
 <span class="doccomment">//! </span>
 <span class="doccomment">//! p.p. = playing player,   o.p. = other players,  rrc = rrc, rcv = receive</span>
@@ -674,19 +653,21 @@
 <span class="kw">mod</span> <span class="ident">fetchallimgsforcachemod</span>;
 <span class="kw">mod</span> <span class="ident">gamedatamod</span>;
 <span class="kw">mod</span> <span class="ident">javascriptimportmod</span>;
-<span class="kw">mod</span> <span class="ident">localstoragemod</span>;
+<span class="kw">mod</span> <span class="ident">divnicknamemod</span>;
 <span class="kw">mod</span> <span class="ident">logmod</span>;
 <span class="kw">mod</span> <span class="ident">rootrenderingcomponentmod</span>;
 <span class="kw">mod</span> <span class="ident">sessionstoragemod</span>;
 <span class="kw">mod</span> <span class="ident">statusgamedatainitmod</span>;
-<span class="kw">mod</span> <span class="ident">statusinviteaskbeginmod</span>;
-<span class="kw">mod</span> <span class="ident">statusinviteaskedmod</span>;
-<span class="kw">mod</span> <span class="ident">statusinviteaskingmod</span>;
-<span class="kw">mod</span> <span class="ident">statusplayagainmod</span>;
-<span class="kw">mod</span> <span class="ident">statusplaybefore1stcardmod</span>;
-<span class="kw">mod</span> <span class="ident">statusplaybefore2ndcardmod</span>;
+<span class="kw">mod</span> <span class="ident">statusstartpagemod</span>;
+<span class="kw">mod</span> <span class="ident">statusinvitedmod</span>;
+<span class="kw">mod</span> <span class="ident">statusinvitingmod</span>;
+<span class="kw">mod</span> <span class="ident">statusgameovermod</span>;
+<span class="kw">mod</span> <span class="ident">status1stcardmod</span>;
+<span class="kw">mod</span> <span class="ident">status2ndcardmod</span>;
 <span class="kw">mod</span> <span class="ident">statustaketurnbeginmod</span>;
+<span class="kw">mod</span> <span class="ident">statustaketurnendmod</span>;
 <span class="kw">mod</span> <span class="ident">statuswaitingackmsgmod</span>;
+<span class="kw">mod</span> <span class="ident">utilsmod</span>;
 <span class="kw">mod</span> <span class="ident">websocketcommunicationmod</span>;
 <span class="kw">mod</span> <span class="ident">websocketreconnectmod</span>;
 <span class="comment">//endregion</span>
@@ -699,7 +680,6 @@
 <span class="kw">use</span> <span class="ident">wasm_bindgen</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
 <span class="comment">//endregion</span>
 
-<span class="comment">//region: wasm_bindgen(start) is where everything starts</span>
 <span class="attribute">#[<span class="ident">wasm_bindgen</span>(<span class="ident">start</span>)]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">shadow_same</span>)]</span>
 <span class="doccomment">///To start the Wasm application, wasm_bindgen runs this functions</span>
@@ -762,36 +742,6 @@
     <span class="ident">vdom</span>.<span class="ident">forget</span>();
 
     <span class="prelude-val">Ok</span>(())
-}
-<span class="comment">//endregion</span>
-
-<span class="doccomment">/// Get the top-level window&#39;s session storage.</span>
-<span class="doccomment">/// TODO: to save user preferences maybe?</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">session_storage</span>() <span class="op">-&gt;</span> <span class="ident">web_sys</span>::<span class="ident">Storage</span> {
-    <span class="kw">let</span> <span class="ident">window</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">web_sys</span>::<span class="ident">window</span>(), <span class="string">&quot;error: web_sys::window&quot;</span>);
-    <span class="ident">window</span>.<span class="ident">session_storage</span>().<span class="ident">unwrap_throw</span>().<span class="ident">unwrap_throw</span>()
-}
-<span class="comment">//endregion</span>
-
-<span class="doccomment">///format ordinal numbers as string 1st, 2nd,3rd,...</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">indexing_slicing</span>, <span class="ident">clippy</span>::<span class="ident">integer_arithmetic</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ordinal_numbers</span>(<span class="ident">number</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
-    <span class="comment">//these are only ascii characters, so no problem with utf_8</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ord_str</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">number</span>);
-    <span class="kw">let</span> <span class="ident">places</span> <span class="op">=</span> <span class="ident">ord_str</span>.<span class="ident">len</span>();
-
-    <span class="kw">let</span> <span class="ident">slice</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">ord_str</span>[<span class="ident">places</span> <span class="op">-</span> <span class="number">1</span>..];
-    <span class="kw">if</span> <span class="ident">slice</span> <span class="op">==</span> <span class="string">&quot;1&quot;</span> {
-        <span class="ident">ord_str</span>.<span class="ident">push_str</span>(<span class="string">&quot;st&quot;</span>);
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">slice</span> <span class="op">==</span> <span class="string">&quot;2&quot;</span> {
-        <span class="ident">ord_str</span>.<span class="ident">push_str</span>(<span class="string">&quot;nd&quot;</span>);
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">slice</span> <span class="op">==</span> <span class="string">&quot;3&quot;</span> {
-        <span class="ident">ord_str</span>.<span class="ident">push_str</span>(<span class="string">&quot;rd&quot;</span>);
-    } <span class="kw">else</span> {
-        <span class="ident">ord_str</span>.<span class="ident">push_str</span>(<span class="string">&quot;th&quot;</span>);
-    }
-    <span class="comment">//return</span>
-    <span class="ident">ord_str</span>
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "mem5";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

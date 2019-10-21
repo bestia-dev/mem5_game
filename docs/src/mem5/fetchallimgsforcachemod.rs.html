@@ -72,7 +72,7 @@
         <span class="kw">if</span> <span class="ident">x</span>.<span class="ident">card_index_and_id</span> <span class="op">!=</span> <span class="number">0</span> {
             <span class="kw">let</span> <span class="ident">url_img</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
                 <span class="string">&quot;content/{}/img/{}&quot;</span>,
-                <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">content_folder_name</span>,
+                <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_name</span>,
                 <span class="macro">unwrap</span><span class="macro">!</span>(<span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_config</span>.<span class="ident">as_ref</span>())
                     .<span class="ident">img_filename</span>
                     .<span class="ident">get</span>(<span class="ident">x</span>.<span class="ident">card_number_and_img_src</span>))
