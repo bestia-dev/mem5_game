@@ -294,7 +294,7 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         WsMessage::MsgInvite { .. } => broadcast(users, ws_uid_of_message, &new_msg),
         WsMessage::MsgResponseWsUid { .. } => info!("MsgResponseWsUid: {}", ""),
         WsMessage::MsgAccept { players_ws_uid, .. }
-        | WsMessage::MsgGameDataInit { players_ws_uid, .. }
+        | WsMessage::MsgStartGame { players_ws_uid, .. }
         | WsMessage::MsgClick1stCard { players_ws_uid, .. }
         | WsMessage::MsgClick2ndCardPoint { players_ws_uid, .. }
         | WsMessage::MsgTakeTurnBegin { players_ws_uid, .. }

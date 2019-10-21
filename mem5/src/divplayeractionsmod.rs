@@ -42,7 +42,7 @@ where
         statusinvitedmod::div_invited(rrc, bump)
     } else if let GameStatus::StatusInviting = rrc.game_data.game_status {
         statusinvitingmod::div_inviting(rrc, bump)
-    } else if let GameStatus::StatusInviteAccepted = rrc.game_data.game_status {
+    } else if let GameStatus::StatusAccepted = rrc.game_data.game_status {
         statusinvitedmod::div_invite_accepted(rrc, bump)
     } else if let GameStatus::Status1stCard = rrc.game_data.game_status {
         status1stcardmod::div_on_1st_card(rrc, bump)

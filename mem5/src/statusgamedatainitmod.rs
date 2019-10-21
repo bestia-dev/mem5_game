@@ -11,7 +11,7 @@ use mem5_common::GameStatus;
 //endregion
 
 ///prepares the game data
-pub fn game_data_init(rrc: &mut RootRenderingComponent) {
+pub fn on_click_start_game(rrc: &mut RootRenderingComponent) {
     rrc.game_data.game_name = rrc.game_data.asked_game_name.clone();
     rrc.game_data.prepare_random_data();
     rrc.game_data.game_status = GameStatus::Status1stCard;
@@ -19,14 +19,14 @@ pub fn game_data_init(rrc: &mut RootRenderingComponent) {
 }
 
 ///on game data init
-pub fn on_msg_game_data_init(
+pub fn on_msg_start_game(
     rrc: &mut RootRenderingComponent,
     v2: dodrio::VdomWeak,
     card_grid_data: &str,
     game_config: &str,
     players: &str,
 ) {
-    //logmod::debug_write(&format!("on_msg_game_data_init {}", players));
+    //logmod::debug_write(&format!("on_msg_start_game {}", players));
     rrc.game_data.game_name = rrc.game_data.asked_game_name.clone();
     rrc.game_data.game_status = GameStatus::Status1stCard;
     rrc.game_data.player_turn = 1;

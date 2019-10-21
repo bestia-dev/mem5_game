@@ -25,11 +25,11 @@ where
         <div class="div_clickable" onclick={move |root, vdom, _event| {
             let rrc = root.unwrap_mut::<RootRenderingComponent>();
             //region: send WsMessage over WebSocket
-            statusgamedatainitmod::game_data_init(rrc);
-            //logmod::debug_write(&format!("MsgGameDataInit send {}",rrc.game_data.players_ws_uid));
+            statusgamedatainitmod::on_click_start_game(rrc);
+            //logmod::debug_write(&format!("MsgStartGame send {}",rrc.game_data.players_ws_uid));
             websocketcommunicationmod::ws_send_msg(
                 &rrc.game_data.ws,
-                &WsMessage::MsgGameDataInit {
+                &WsMessage::MsgStartGame {
                     my_ws_uid: rrc.game_data.my_ws_uid,
                     players_ws_uid: rrc.game_data.players_ws_uid.to_string(),
                     players: unwrap!(serde_json::to_string(&rrc.game_data.players)),

@@ -89,7 +89,7 @@ pub enum WsMessage {
     },
     /// player1 initialize the game data and sends it to all players
     /// I will send json string to not confuse the server with vectors
-    MsgGameDataInit {
+    MsgStartGame {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
         ///json of vector of players for the server to know whom to send msg
@@ -194,7 +194,7 @@ pub enum GameStatus {
     ///invited
     StatusInvited,
     ///InviteAccepted
-    StatusInviteAccepted,
+    StatusAccepted,
     ///before first card 
     Status1stCard,
     ///before second card

@@ -178,14 +178,14 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statusinvitedmod::on_msg_play_accept(rrc, my_ws_uid, my_nickname);
+                            statusinvitedmod::on_msg_accept(rrc, my_ws_uid, my_nickname);
                             v2.schedule_render();
                         }
                     })
                     .map_err(|_| ()),
                 );
             }
-            WsMessage::MsgGameDataInit {
+            WsMessage::MsgStartGame {
                 my_ws_uid: _,
                 players_ws_uid: _,
                 card_grid_data,
@@ -198,9 +198,9 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
 
-                            if let GameStatus::StatusInviteAccepted = rrc.game_data.game_status {
+                            if let GameStatus::StatusAccepted = rrc.game_data.game_status {
                                 let v3 = v2.clone();
-                                statusgamedatainitmod::on_msg_game_data_init(
+                                statusgamedatainitmod::on_msg_start_game(
                                     rrc,
                                     v3,
                                     &card_grid_data,

@@ -23,7 +23,7 @@ where
     dodrio!(bump,
     <div class="div_clickable" onclick={move |root, vdom, _event| {
                 let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                div_invited_on_click(rrc);
+                on_click_accept(rrc);
                 vdom.schedule_render();
             }}>
         <h2 class="h2_user_must_click">
@@ -42,9 +42,9 @@ where
 }
 
 /// on click
-pub fn div_invited_on_click(rrc: &mut RootRenderingComponent) {
-    rrc.game_data.game_status = GameStatus::StatusInviteAccepted;
-    //logmod::debug_write(&format!("StatusInviteAccepted send {}",rrc.game_data.players_ws_uid));
+pub fn on_click_accept(rrc: &mut RootRenderingComponent) {
+    rrc.game_data.game_status = GameStatus::StatusAccepted;
+    //logmod::debug_write(&format!("StatusAccepted send {}",rrc.game_data.players_ws_uid));
     websocketcommunicationmod::ws_send_msg(
         &rrc.game_data.ws,
         &WsMessage::MsgAccept {
@@ -56,12 +56,12 @@ pub fn div_invited_on_click(rrc: &mut RootRenderingComponent) {
 }
 
 ///msg accept play
-pub fn on_msg_play_accept(
+pub fn on_msg_accept(
     rrc: &mut RootRenderingComponent,
     his_ws_uid: usize,
     his_nickname: String,
 ) {
-    //logmod::debug_write(&format!("on_msg_play_accept {}",his_ws_uid));
+    //logmod::debug_write(&format!("on_msg_accept {}",his_ws_uid));
     if rrc.game_data.my_player_number == 1 {
         rrc.game_data.players.push(Player {
             ws_uid: his_ws_uid,

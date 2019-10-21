@@ -113,9 +113,9 @@
 //! | Game Status1             | Render                     | User action                                 | GameStatus2 p.p.         | Sends Msg             | On rcv Msg o.p.              | GameStatus2 o.p.                   |
 //! | ------------------------ | -------------------------- | ------------------------------------------- | ----------------         | ----------------      | --------------------------   | --------------------------------   |
 //! | StatusStartPage     | div_start_page       | on_click_invite               | StatusInviting       | MsgInvite             | on_msg_invite                | StatusInvited                  |
-//! | StatusInvited        | div_invited           | div_invited_on_click                   | StatusInviteAccepted       | MsgAccept         | on_msg_play_accept           | -                                  |
-//! | StatusInviteAccepted       | div_invite_accepted          |                                             |                          |                       |                              | -                                  |
-//! | StatusInviting       | div_inviting          | game_data_init                              | Status1stCard  | MsgGameDataInit       | on_msg_game_data_init        | Status1stCard            |
+//! | StatusInvited        | div_invited           | on_click_accept                   | StatusAccepted       | MsgAccept         | on_msg_accept           | -                                  |
+//! | StatusAccepted       | div_invite_accepted          |                                             |                          |                       |                              | -                                  |
+//! | StatusInviting       | div_inviting          | on_click_start_game                              | Status1stCard  | MsgStartGame       | on_msg_start_game        | Status1stCard            |
 //!
 //! This starts the game flow, that repeats until the game is over.  
 //!   

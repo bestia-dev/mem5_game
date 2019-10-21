@@ -103,12 +103,12 @@ When the user Accepts it sends a msg to the first player.
 The first player waits to receive msgs from all other users.  
 After that he starts the game. This calculates the game_data and send this init data to all other players.  
 
-| Game Status1             | Render                     | User action                                 | GameStatus2 p.p.         | Sends Msg             | On rcv Msg o.p.              | GameStatus2 o.p.                   |
-| ------------------------ | -------------------------- | ------------------------------------------- | ----------------         | ----------------      | --------------------------   | --------------------------------   |
-| StatusStartPage      | div_start_page       | on_click_invite               | StatusInviting       | MsgInvite             | on_msg_invite                | StatusInvited                  |
-| StatusInvited        | div_invited           | div_invited_on_click                   | StatusInviteAccepted       | MsgAccept         | on_msg_play_accept           | -                                  |
-| StatusInviteAccepted | div_invite_accepted          |                                             |                          |                       |                              | -                                  |
-| StatusInviting       | div_inviting          | game_data_init                              | Status1stCard  | MsgGameDataInit       | on_msg_game_data_init        | Status1stCard            |
+| Game Status1         | Render               | User action           | GameStatus2 p.p. | Sends Msg       | On rcv Msg o.p.       | GameStatus2 o.p. |
+| -------------------- | -------------------- | --------------------- | ---------------- | --------------  | -------------------   | --------------   |
+| StatusStartPage      | div_start_page       | on_click_invite       | StatusInviting   | MsgInvite       | on_msg_invite         | StatusInvited    |
+| StatusInvited        | div_invited          | on_click_accept       | StatusAccepted   | MsgAccept       | on_msg_accept         | -                |
+| StatusAccepted       | div_invite_accepted  |                       |                  |                 |                       | -                |
+| StatusInviting       | div_inviting         | on_click_start_game   | Status1stCard    | MsgStartGame    | on_msg_start_game     | Status1stCard    |
 
 This starts the game flow, that repeats until the game is over.  
   
@@ -120,14 +120,14 @@ A message is sent to other players so they can also change their local GameData 
 Because of unreliable networks ther must be an acknowledge ack msg to confirm, that the msg is received to continue the game.  
 The rendering is scheduled and it will happen shortly (async).  
 
-| Game Status1      | Render                     | User action                    | Condition                            | GameStatus2 p.p. | Sends Msg            | On rcv Msg o.p.             | GameStatus2 o.p.               |
-| ----------------  | -------------------------- | ------------------------------ | ------------------------------------ | ---------------- | ----------------     | --------------------------  | ----------------------------   |
-| Status1stCard     | div_grid_container         | on_click_1st_card()            | -                                    | Status2ndCard    | MsgClick1stCard      | on_msg_click_1st_card       | Status2ndCard                  |
-| Status2ndCard     | div_grid_container         | on_click_2nd_card()            | If cards match                       | Status1stCard    | MsgClick2ndCardPoint | on_msg_click_2nd_card_point | Status1stCard                  |
-| -                 | -                          | continues on ack msgs received | if all cards permanently up          | StatusGameOver   | StatusGameOver       | on_msg_game_over            | StatusGameOver                 |
-| Status2ndCard     | div_grid_container         | on_click_2nd_card()            | else cards don't match               | MsgTakeTurnBegin | MsgTakeTurnBegin     | on_msg_take_turn            | MsgTakeTurnBegin               |
-| MsgTakeTurnBegin  | div_take_turn_begin        | on_click_take_turn_begin       | -                                    | Status1stCard    | MsgTakeTurnEnd       | on_msg_take_turn_end        | Status1stCard, the next player |
-| StatusGameOver    | div_game_over              | window.location().reload()     | -                                    | -                | -                    | -                           | -                              |
+| Game Status1      | Render                     | User action                    | Condition                     | GameStatus2 p.p. | Sends Msg            | On rcv Msg o.p.             | GameStatus2 o.p.               |
+| ----------------  | -------------------------- | ------------------------------ | ----------------------------- | ---------------- | ----------------     | --------------------------  | ----------------------------   |
+| Status1stCard     | div_grid_container         | on_click_1st_card()            | -                             | Status2ndCard    | MsgClick1stCard      | on_msg_click_1st_card       | Status2ndCard                  |
+| Status2ndCard     | div_grid_container         | on_click_2nd_card()            | If cards match                | Status1stCard    | MsgClick2ndCardPoint | on_msg_click_2nd_card_point | Status1stCard                  |
+| -                 | -                          | continues on ack msgs received | if all cards permanently up   | StatusGameOver   | StatusGameOver       | on_msg_game_over            | StatusGameOver                 |
+| Status2ndCard     | div_grid_container         | on_click_2nd_card()            | else cards don't match        | MsgTakeTurnBegin | MsgTakeTurnBegin     | on_msg_take_turn            | MsgTakeTurnBegin               |
+| MsgTakeTurnBegin  | div_take_turn_begin        | on_click_take_turn_begin       | -                             | Status1stCard    | MsgTakeTurnEnd       | on_msg_take_turn_end        | Status1stCard, the next player |
+| StatusGameOver    | div_game_over              | window.location().reload()     | -                             | -                | -                    | -                           | -                              |
 |  |  |  |  |  |  |  |  |
 
 p.p. = playing player,   o.p. = other players,  rrc = rrc, rcv = receive
