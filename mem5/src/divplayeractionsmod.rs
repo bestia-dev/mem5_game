@@ -4,13 +4,13 @@
 
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
-use crate::statusplayagainmod;
-use crate::statusplaybefore1stcardmod;
-use crate::statusplaybefore2ndcardmod;
+use crate::statusgameovermod;
+use crate::status1stcardmod;
+use crate::status2ndcardmod;
 use crate::statustaketurnbeginmod;
-use crate::statusinviteaskbeginmod;
-use crate::statusinviteaskedmod;
-use crate::statusinviteaskingmod;
+use crate::statusstartpagemod;
+use crate::statusinvitedmod;
+use crate::statusinvitingmod;
 use crate::statuswaitingackmsgmod;
 //use crate::websocketreconnectmod;
 
@@ -29,29 +29,29 @@ pub fn div_player_actions_from_game_status<'a, 'bump>(
 where
     'a: 'bump,
 {
-    //if rrc.game_data.is_status_invite_ask_begin() {
+    //if rrc.game_data.is_status_start_page() {
     /*
         && (rrc.game_data.is_reconnect || rrc.game_data.ws.ready_state() != 1)
     {
         //ready_state: 0	CONNECTING, 1	OPEN, 2	CLOSING, 3	CLOSED
         websocketreconnectmod::div_reconnect(rrc, bump)
     */
-    if let GameStatus::StatusInviteAskBegin = rrc.game_data.game_status {
-        statusinviteaskbeginmod::div_invite_ask_begin(rrc, bump)
-    } else if let GameStatus::StatusInviteAsked = rrc.game_data.game_status {
-        statusinviteaskedmod::div_invite_asked(rrc, bump)
-    } else if let GameStatus::StatusInviteAsking = rrc.game_data.game_status {
-        statusinviteaskingmod::div_invite_asking(rrc, bump)
-    } else if let GameStatus::StatusPlayAccepted = rrc.game_data.game_status {
-        statusinviteaskedmod::div_play_accepted(rrc, bump)
-    } else if let GameStatus::StatusPlayBefore1stCard = rrc.game_data.game_status {
-        statusplaybefore1stcardmod::div_click_1st_card(rrc, bump)
-    } else if let GameStatus::StatusPlayBefore2ndCard = rrc.game_data.game_status {
-        statusplaybefore2ndcardmod::div_click_2nd_card(rrc, bump)
+    if let GameStatus::StatusStartPage = rrc.game_data.game_status {
+        statusstartpagemod::div_start_page(rrc, bump)
+    } else if let GameStatus::StatusInvited = rrc.game_data.game_status {
+        statusinvitedmod::div_invited(rrc, bump)
+    } else if let GameStatus::StatusInviting = rrc.game_data.game_status {
+        statusinvitingmod::div_inviting(rrc, bump)
+    } else if let GameStatus::StatusInviteAccepted = rrc.game_data.game_status {
+        statusinvitedmod::div_invite_accepted(rrc, bump)
+    } else if let GameStatus::Status1stCard = rrc.game_data.game_status {
+        status1stcardmod::div_on_1st_card(rrc, bump)
+    } else if let GameStatus::Status2ndCard = rrc.game_data.game_status {
+        status2ndcardmod::div_click_2nd_card(rrc, bump)
     } else if let GameStatus::StatusTakeTurnBegin = rrc.game_data.game_status {
         statustaketurnbeginmod::div_take_turn_begin(rrc, bump)
-    } else if let GameStatus::StatusGameOverPlayAgainBegin = rrc.game_data.game_status {
-        statusplayagainmod::div_play_again(rrc, bump)
+    } else if let GameStatus::StatusGameOver = rrc.game_data.game_status {
+        statusgameovermod::div_game_over(rrc, bump)
     } else if let GameStatus::StatusWaitingAckMsg = rrc.game_data.game_status {
         statuswaitingackmsgmod::div_waiting_ack_msg(rrc, bump)
     } else {

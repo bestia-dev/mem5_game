@@ -4,13 +4,14 @@
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::statusgamedatainitmod;
-use crate::statusinviteaskedmod;
-use crate::statusinviteaskbeginmod;
-use crate::statusplaybefore1stcardmod;
-use crate::statusplaybefore2ndcardmod;
+use crate::statusinvitedmod;
+use crate::statusstartpagemod;
+use crate::status1stcardmod;
+use crate::status2ndcardmod;
 use crate::statustaketurnbeginmod;
+use crate::statustaketurnendmod;
 use crate::logmod;
-use crate::statusplayagainmod;
+use crate::statusgameovermod;
 use crate::websocketreconnectmod;
 
 use unwrap::unwrap;
@@ -141,7 +142,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
             WsMessage::MsgInvite {
                 my_ws_uid,
                 my_nickname,
-                asked_folder_name,
+                asked_game_name,
             } => {
                 wasm_bindgen_futures::spawn_local(
                     weak.with_component({
@@ -149,15 +150,15 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
 
-                            if let GameStatus::StatusGameOverPlayAgainBegin
-                            | GameStatus::StatusInviteAskBegin
-                            | GameStatus::StatusInviteAsked = rrc.game_data.game_status
+                            if let GameStatus::StatusGameOver
+                            | GameStatus::StatusStartPage
+                            | GameStatus::StatusInvited = rrc.game_data.game_status
                             {
-                                statusinviteaskbeginmod::on_msg_invite(
+                                statusstartpagemod::on_msg_invite(
                                     rrc,
                                     my_ws_uid,
                                     my_nickname,
-                                    asked_folder_name,
+                                    asked_game_name,
                                 );
                                 v2.schedule_render();
                             }
@@ -167,7 +168,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 );
             }
 
-            WsMessage::MsgPlayAccept {
+            WsMessage::MsgAccept {
                 my_ws_uid,
                 players_ws_uid: _,
                 my_nickname,
@@ -177,7 +178,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statusinviteaskedmod::on_msg_play_accept(rrc, my_ws_uid, my_nickname);
+                            statusinvitedmod::on_msg_play_accept(rrc, my_ws_uid, my_nickname);
                             v2.schedule_render();
                         }
                     })
@@ -197,7 +198,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
 
-                            if let GameStatus::StatusPlayAccepted = rrc.game_data.game_status {
+                            if let GameStatus::StatusInviteAccepted = rrc.game_data.game_status {
                                 let v3 = v2.clone();
                                 statusgamedatainitmod::on_msg_game_data_init(
                                     rrc,
@@ -213,7 +214,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
-            WsMessage::MsgPlayerClick1stCard {
+            WsMessage::MsgClick1stCard {
                 my_ws_uid,
                 players_ws_uid: _,
                 card_index_of_first_click,
@@ -224,7 +225,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statusplaybefore1stcardmod::on_msg_player_click_1st_card(
+                            status1stcardmod::on_msg_click_1st_card(
                                 rrc,
                                 my_ws_uid,
                                 card_index_of_first_click,
@@ -236,7 +237,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
-            WsMessage::MsgPlayerClick2ndCardPoint {
+            WsMessage::MsgClick2ndCardPoint {
                 my_ws_uid,
                 players_ws_uid: _,
                 card_index_of_second_click,
@@ -247,7 +248,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statusplaybefore2ndcardmod::on_msg_player_click_2nd_card_point(
+                            status2ndcardmod::on_msg_click_2nd_card_point(
                                 rrc,
                                 my_ws_uid,
                                 card_index_of_second_click,
@@ -259,7 +260,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
-            WsMessage::MsgPlayerClick2ndCardTakeTurnBegin {
+            WsMessage::MsgTakeTurnBegin {
                 my_ws_uid,
                 players_ws_uid: _,
                 card_index_of_second_click,
@@ -292,14 +293,14 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statustaketurnbeginmod::on_msg_take_turn_end(rrc, my_ws_uid, msg_id);
+                            statustaketurnendmod::on_msg_take_turn_end(rrc, my_ws_uid, msg_id);
                             v2.schedule_render();
                         }
                     })
                     .map_err(|_| ()),
                 );
             }
-            WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin {
+            WsMessage::MsgGameOver {
                 my_ws_uid: _,
                 players_ws_uid: _,
             } => {
@@ -308,7 +309,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         let v2 = weak.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            statusplayagainmod::on_msg_play_again(rrc);
+                            statusgameovermod::on_msg_game_over(rrc);
                             v2.schedule_render();
                         }
                     })
@@ -358,22 +359,22 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             match msg_ack_kind {
                                 MsgAckKind::MsgTakeTurnEnd => {
-                                    statustaketurnbeginmod::on_msg_ack_take_turn_end(
+                                    statustaketurnendmod::on_msg_ack_take_turn_end(
                                         rrc, my_ws_uid, msg_id,
                                     );
                                 }
-                                MsgAckKind::MsgPlayerClick1stCard => {
-                                    statusplaybefore1stcardmod::on_msg_ack_player_click1st_card(
+                                MsgAckKind::MsgClick1stCard => {
+                                    status1stcardmod::on_msg_ack_click_1st_card(
                                         rrc, my_ws_uid, msg_id,
                                     );
                                 }
-                                MsgAckKind::MsgPlayerClick2ndCardPoint => {
-                                    statusplaybefore2ndcardmod::on_msg_ack_player_click2nd_card_point(
+                                MsgAckKind::MsgClick2ndCardPoint => {
+                                    status2ndcardmod::on_msg_ack_player_click2nd_card_point(
                                         rrc, my_ws_uid, msg_id,
                                     );
                                 }
-                                MsgAckKind::MsgPlayerClick2ndCardTakeTurnBegin => {
-                                    statusplaybefore2ndcardmod::on_msg_ack_player_click2nd_card_take_turn_begin(
+                                MsgAckKind::MsgTakeTurnBegin => {
+                                    statustaketurnbeginmod::on_msg_ack_take_turn_begin(
                                         rrc, my_ws_uid, msg_id,
                                     );
                                 }

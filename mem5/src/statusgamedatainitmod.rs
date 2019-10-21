@@ -12,9 +12,9 @@ use mem5_common::GameStatus;
 
 ///prepares the game data
 pub fn game_data_init(rrc: &mut RootRenderingComponent) {
-    rrc.game_data.content_folder_name = rrc.game_data.asked_folder_name.clone();
+    rrc.game_data.game_name = rrc.game_data.asked_game_name.clone();
     rrc.game_data.prepare_random_data();
-    rrc.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
+    rrc.game_data.game_status = GameStatus::Status1stCard;
     rrc.game_data.player_turn = 1;
 }
 
@@ -27,8 +27,8 @@ pub fn on_msg_game_data_init(
     players: &str,
 ) {
     //logmod::debug_write(&format!("on_msg_game_data_init {}", players));
-    rrc.game_data.content_folder_name = rrc.game_data.asked_folder_name.clone();
-    rrc.game_data.game_status = GameStatus::StatusPlayBefore1stCard;
+    rrc.game_data.game_name = rrc.game_data.asked_game_name.clone();
+    rrc.game_data.game_status = GameStatus::Status1stCard;
     rrc.game_data.player_turn = 1;
 
     rrc.game_data.game_config = unwrap!(

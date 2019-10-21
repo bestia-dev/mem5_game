@@ -13,7 +13,7 @@ use web_sys::{Request, RequestInit};
 pub fn fetch_game_config_request(rrc: &mut RootRenderingComponent, vdom_weak: dodrio::VdomWeak) {
     let url_config = format!(
         "{}/content/{}/game_config.json",
-        rrc.game_data.href, rrc.game_data.asked_folder_name
+        rrc.game_data.href, rrc.game_data.asked_game_name
     );
     //logmod::debug_write(url_config.as_str());
     let webrequest = create_webrequest(url_config.as_str());

@@ -58,11 +58,9 @@ use env_logger::Env;
 use futures::sync::mpsc;
 use futures::{Future, Stream};
 use mem5_common::{WsMessage};
-use regex::Regex;
 use std::collections::HashMap;
 use std::net::SocketAddr;
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
-use std::process::Command;
+use std::net::{IpAddr, Ipv4Addr};
 use std::sync::{Arc, Mutex};
 use warp::ws::{Message, WebSocket};
 use warp::Filter;
@@ -98,7 +96,7 @@ fn main() {
         .arg(
             Arg::with_name("prm_ip")
                 .value_name("ip")
-                .default_value("0.0.0.0")
+                .default_value("127.0.0.1")
                 .help("ip address for listening"),
         )
         .arg(
@@ -110,25 +108,14 @@ fn main() {
         .get_matches();
 
     //from string parameters to strong types
-    let mut fnl_prm_ip = matches
+    let fnl_prm_ip = matches
         .value_of("prm_ip")
         .expect("error on prm_ip")
         .to_lowercase();
-    let mut fnl_prm_port = matches
+    let fnl_prm_port = matches
         .value_of("prm_port")
         .expect("error on prm_port")
         .to_lowercase();
-
-    //if not cmd parameters, then use default local address
-    //let's try the new defaults that work good with docker 0.0.0.0:8085
-    if fnl_prm_ip == "" {
-        let df_local_ip = local_ip_get().expect("cannot get local ip");
-        fnl_prm_ip.push_str(&df_local_ip.to_string());
-    }
-    if fnl_prm_port == "" {
-        let df_local_port = 80;
-        fnl_prm_port.push_str(&df_local_port.to_string());
-    }
 
     let local_ip = IpAddr::V4(fnl_prm_ip.parse::<Ipv4Addr>().expect("not an ip address"));
     let local_port = u16::from_str_radix(&fnl_prm_port, 10).expect("not a number");
@@ -303,47 +290,16 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
             //send to other users for reconnect. Do nothing if there is not yet other users.
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
-        /* obsolete, but keep it as an example how to return a text file over websocket
-        WsMessage::RequestGameConfig { filename } => {
-            info!("RequestGameConfig: {}", filename);
-            // read the file
-            let mut pathbuf = env::current_dir().expect("env::current_dir()");
-            pathbuf.push("mem5");
-            pathbuf.push(filename);
-            let filename =
-                String::from(pathbuf.as_path().to_str().expect("path.as_path().to_str()"));
-            info!("filename: {}", filename);
-            let mut file = File::open(filename).expect("Unable to open the file");
-            let mut contents = String::new();
-            file.read_to_string(&mut contents)
-                .expect("Unable to read the file");
-            info!("read file : {}", contents);
-            let j = serde_json::to_string(&WsMessage::ResponseGameConfigJson { json: contents })
-                .expect(
-                    "serde_json::to_string(&WsMessage::ResponseGameConfigJson { json: contents })",
-                );
-            info!("send ResponseGameConfigJson: {}", j);
-            match users
-                .lock()
-                .expect("error users.lock()")
-                .get(&ws_uid_of_message)
-                .unwrap()
-                .unbounded_send(Message::text(j))
-            {
-                Ok(()) => (),
-                Err(_disconnected) => {}
-            }
-        }
-        */
+        
         WsMessage::MsgInvite { .. } => broadcast(users, ws_uid_of_message, &new_msg),
         WsMessage::MsgResponseWsUid { .. } => info!("MsgResponseWsUid: {}", ""),
-        WsMessage::MsgPlayAccept { players_ws_uid, .. }
+        WsMessage::MsgAccept { players_ws_uid, .. }
         | WsMessage::MsgGameDataInit { players_ws_uid, .. }
-        | WsMessage::MsgPlayerClick1stCard { players_ws_uid, .. }
-        | WsMessage::MsgPlayerClick2ndCardPoint { players_ws_uid, .. }
-        | WsMessage::MsgPlayerClick2ndCardTakeTurnBegin { players_ws_uid, .. }
+        | WsMessage::MsgClick1stCard { players_ws_uid, .. }
+        | WsMessage::MsgClick2ndCardPoint { players_ws_uid, .. }
+        | WsMessage::MsgTakeTurnBegin { players_ws_uid, .. }
         | WsMessage::MsgTakeTurnEnd { players_ws_uid, .. }
-        | WsMessage::MsgPlayerClick2ndCardGameOverPlayAgainBegin { players_ws_uid, .. }
+        | WsMessage::MsgGameOver { players_ws_uid, .. }
         | WsMessage::MsgAllGameData { players_ws_uid, .. }
         | WsMessage::MsgAck { players_ws_uid, .. } => {
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
@@ -409,69 +365,5 @@ fn user_disconnected(my_id: usize, users: &Users) {
 
     // Stream closed up, so remove from the user list
     users.lock().expect("users.lock").remove(&my_id);
-}
-//endregion
-
-//region: local ip (Linux and windows distinct versions)
-#[cfg(target_family = "unix")]
-///get local ip for Unix with ifconfig
-pub fn local_ip_get() -> Option<IpAddr> {
-    info!("local_ip_get for unix{}", "");
-    let output = Command::new("ifconfig")
-        .output()
-        .expect("failed to execute `ifconfig`");
-
-    let stdout = unwrap!(String::from_utf8(output.stdout));
-
-    let re = unwrap!(Regex::new(
-        r#"(?m)^.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*$"#
-    ));
-    for cap in re.captures_iter(&stdout) {
-        let host = cap.get(2).map_or("", |m| m.as_str());
-        if host != "127.0.0.1" {
-            if let Ok(addr) = host.parse::<Ipv4Addr>() {
-                return Some(IpAddr::V4(addr));
-            }
-            if let Ok(addr) = host.parse::<Ipv6Addr>() {
-                return Some(IpAddr::V6(addr));
-            }
-        }
-    }
-    //return
-    None
-}
-
-#[cfg(target_family = "windows")]
-///get local ip for windows with ipconfig
-pub fn local_ip_get() -> Option<IpAddr> {
-    info!("local_ip_get for windows{}", "");
-    let output = Command::new("ipconfig")
-        .output()
-        .expect("failed to execute `ipconfig`");
-
-    let stdout = String::from_utf8(output.stdout).expect("failed stdout");
-    //variables are block scope and will not interfere with the other block
-    {
-        let re =
-            Regex::new(r"(?m)^   IPv4 Address\. \. \. \. \. \. \. \. \. \. \. : ([0-9\.]*)\s*$")
-                .expect("failed regex");
-        let cap = re.captures(&stdout).expect("failed capture");
-        let host = cap.get(1).map_or("", |m| m.as_str());
-        if let Ok(addr) = host.parse::<Ipv4Addr>() {
-            return Some(IpAddr::V4(addr));
-        }
-    }
-    //variables are block scope and will not interfere with the other block
-    {
-        let re =
-            Regex::new(r"(?m)^   Link-local IPv6 Address \. \. \. \. \. : ([:%a-f0-9\.]*)\s*$")
-                .expect("failed regex");
-        let cap = re.captures(&stdout).expect("capture");
-        let host = cap.get(1).map_or("", |m| m.as_str());
-        if let Ok(addr) = host.parse::<Ipv6Addr>() {
-            return Some(IpAddr::V6(addr));
-        }
-    }
-    None
 }
 //endregion

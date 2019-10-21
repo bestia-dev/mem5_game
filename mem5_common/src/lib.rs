@@ -76,10 +76,10 @@ pub enum WsMessage {
         /// my nickname
         my_nickname: String,
         ///content folder name
-        asked_folder_name: String,
+        asked_game_name: String,
     },
-    /// accept play
-    MsgPlayAccept {
+    /// accept invitation
+    MsgAccept {
         ///ws client instance unique id. To not listen the echo to yourself.
         my_ws_uid: usize,
         ///json of vector of players for the server to know whom to send msg
@@ -102,7 +102,7 @@ pub enum WsMessage {
         game_config: String,
     },
     ///player click
-    MsgPlayerClick1stCard {
+    MsgClick1stCard {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
@@ -113,7 +113,7 @@ pub enum WsMessage {
         msg_id: usize,
     },
     ///player click success
-    MsgPlayerClick2ndCardPoint {
+    MsgClick2ndCardPoint {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
@@ -124,7 +124,7 @@ pub enum WsMessage {
         msg_id: usize,
     },
     ///take turn begin
-    MsgPlayerClick2ndCardTakeTurnBegin {
+    MsgTakeTurnBegin {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
@@ -135,7 +135,7 @@ pub enum WsMessage {
         msg_id: usize,
     },
     ///Play Again
-    MsgPlayerClick2ndCardGameOverPlayAgainBegin {
+    MsgGameOver {
         ///this identifies the smartphone, but not the player-in-turn
         my_ws_uid: usize,
         ///all players for the server to know whom to send msg
@@ -187,24 +187,24 @@ pub enum WsMessage {
 #[derive(Display, AsRefStr, Serialize, Deserialize, Clone)]
 #[allow(clippy::pub_enum_variant_names)]
 pub enum GameStatus {
-    /// invite ask begin
-    StatusInviteAskBegin,
-    ///Player1 MsgInvite Asking
-    StatusInviteAsking,
-    ///Player2 MsgInvite Asked
-    StatusInviteAsked,
-    ///StatusPlayAccepted
-    StatusPlayAccepted,
-    ///Play before first card
-    StatusPlayBefore1stCard,
-    ///Play before second card
-    StatusPlayBefore2ndCard,
+    /// start page
+    StatusStartPage,
+    ///inviting
+    StatusInviting,
+    ///invited
+    StatusInvited,
+    ///InviteAccepted
+    StatusInviteAccepted,
+    ///before first card 
+    Status1stCard,
+    ///before second card
+    Status2ndCard,
     ///take turn begin
     StatusTakeTurnBegin,
     ///take turn end
     StatusTakeTurnEnd,
-    ///end game
-    StatusGameOverPlayAgainBegin,
+    ///game over
+    StatusGameOver,
     ///StatusReconnect after a lost connection
     StatusReconnect,
     ///waiting ack msg
@@ -228,12 +228,12 @@ pub struct Player {
 pub enum MsgAckKind {
     ///ack for MsgTakeTurnEnd
     MsgTakeTurnEnd,
-    ///ack for MsgPlayerClick1stCard
-    MsgPlayerClick1stCard,
-    ///ack for MsgPlayerClick2ndCardPoint
-    MsgPlayerClick2ndCardPoint,
+    ///ack for MsgClick1stCard
+    MsgClick1stCard,
+    ///ack for MsgClick2ndCardPoint
+    MsgClick2ndCardPoint,
     ///
-    MsgPlayerClick2ndCardTakeTurnBegin,
+    MsgTakeTurnBegin,
 }
 
 //endregion

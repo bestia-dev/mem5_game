@@ -1,5 +1,5 @@
 //utilsmod.rs
-//! small generic helper functions  
+//! small generic helper functions
 
 ///format ordinal numbers as string 1st, 2nd,3rd,...
 #[allow(clippy::indexing_slicing, clippy::integer_arithmetic)]

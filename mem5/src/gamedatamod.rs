@@ -2,7 +2,7 @@
 //! structs and methods around game data
 
 //region: use
-use crate::localstoragemod;
+use crate::divnicknamemod;
 
 use serde_derive::{Serialize, Deserialize};
 use unwrap::unwrap;
@@ -108,7 +108,7 @@ pub struct GameData {
     pub players: Vec<Player>,
     ///the json string for the ws server to send msgs to other players only
     pub players_ws_uid: String,
-    ///game status: StatusInviteAskBegin,StatusInviteAsking,StatusInviteAsked,Player1,Player2
+    ///game status: StatusStartPage,StatusInviting,StatusInvited,Player1,Player2
     pub game_status: GameStatus,
     ///vector of cards
     pub card_grid_data: Vec<Card>,
@@ -117,9 +117,9 @@ pub struct GameData {
     ///card index of second click
     pub card_index_of_second_click: usize,
     ///content folder name
-    pub content_folder_name: String,
+    pub game_name: String,
     ///invite asks for a specific game
-    pub asked_folder_name: String,
+    pub asked_game_name: String,
 
     ///whose turn is now:  player 1,2,3,...
     pub player_turn: usize,
@@ -237,7 +237,7 @@ impl GameData {
     }
     ///asociated function: before Accept, there are not random numbers, just default cards.
     pub fn prepare_for_empty() -> Vec<Card> {
-        //prepare 32 empty cards. The random is calculated only on MsgPlayAccept.
+        //prepare 32 empty cards. The random is calculated only on MsgAccept.
         let mut card_grid_data = Vec::new();
         //I must prepare the 0 index, but then I don't use it ever.
         for i in 0..=32 {
@@ -252,7 +252,7 @@ impl GameData {
     }
     ///constructor of game data
     pub fn new(ws: WebSocket, my_ws_uid: usize) -> Self {
-        let my_nickname = localstoragemod::load_nickname();
+        let my_nickname = divnicknamemod::load_nickname();
         let mut players = Vec::new();
         players.push(Player {
             ws_uid: 0,
@@ -271,9 +271,9 @@ impl GameData {
             my_nickname,
             players,
             players_ws_uid,
-            game_status: GameStatus::StatusInviteAskBegin,
-            content_folder_name: "alphabet".to_string(),
-            asked_folder_name: "".to_string(),
+            game_status: GameStatus::StatusStartPage,
+            game_name: "alphabet".to_string(),
+            asked_game_name: "".to_string(),
             my_player_number: 1,
             player_turn: 0,
             content_folders: vec![String::from("alphabet")],
@@ -287,11 +287,11 @@ impl GameData {
         }
     }
     /*
-    ///check only if status StatusInviteAskBegin
-    pub fn is_status_invite_ask_begin(&self) -> bool {
+    ///check only if status StatusStartPage
+    pub fn is_status_start_page(&self) -> bool {
         #[allow(clippy::wildcard_enum_match_arm)]
         match self.game_status {
-            GameStatus::StatusInviteAskBegin => true,
+            GameStatus::StatusStartPage => true,
             _ => false,
         }
     }
@@ -300,12 +300,12 @@ impl GameData {
     pub fn is_status_for_grid_container(&self) -> bool {
         #[allow(clippy::wildcard_enum_match_arm)]
         match self.game_status {
-            GameStatus::StatusPlayBefore1stCard
-            | GameStatus::StatusPlayBefore2ndCard
+            GameStatus::Status1stCard
+            | GameStatus::Status2ndCard
             | GameStatus::StatusTakeTurnBegin
             | GameStatus::StatusTakeTurnEnd
             | GameStatus::StatusWaitingAckMsg
-            | GameStatus::StatusGameOverPlayAgainBegin => true,
+            | GameStatus::StatusGameOver => true,
             _ => false,
         }
     }

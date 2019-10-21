@@ -3,10 +3,10 @@
 /*region elements - styles accross all the elements */
 
 html {
-    box-sizing: border-box;
-    overflow-x: hidden;
-    text-size-adjust: None;
+    margin:    2 auto;
     /* 32px at 600 width, 16px at 300 width */
+    /* on crome android the font is rendered bigger than this property, 
+    if the accessibility is more than 150% */
     font-size: calc(100vw / 30);
 }
 
@@ -17,17 +17,17 @@ html {
 }
 
 body {
+    max-width: 600px;
+    min-width: 300px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    text-size-adjust: None;
+
+
     background-color: #000000;
-    margin: 0;
     font-family: Verdana, sans-serif;
-    font-size: 1.6rem;
     line-height: 1.5;
     color: #FBF462 !important;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
     user-select: none;
 }
 
@@ -190,12 +190,4 @@ img {
     }
   }
 
-/*region obsolete
-img {
-    -webkit-transition: all 2s ease-in-out;
-    -moz-transition: all 2s ease-in-out;
-    -ms-transition: all 2s ease-in-out;
-    -o-transition: all 2s ease-in-out;
-    transition: all 2s ease-in-out;
-}
-*/
+

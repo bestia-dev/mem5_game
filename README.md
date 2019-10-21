@@ -10,7 +10,7 @@
 
 Documentation generated from source code:  
 <https://lucianobestia.github.io/mem5_game/mem5/index.html>  
-The workspace mem5_game is made of:  
+The workspace mem5_game is made of projects:  
 
 1. Wasm/WebAssembly (for browsers) frontend - mem5  
 2. web server Warp backend - mem5_server  
@@ -28,7 +28,7 @@ Read also my `Previous projects` on Github:
 
 ## Working game server
 
-You can play the game here (hosted on google cloud platform):  
+You can play the game (mobile only) hosted on google cloud platform:  
 <https://bestia.dev/mem5>  
 
 ## Cargo make

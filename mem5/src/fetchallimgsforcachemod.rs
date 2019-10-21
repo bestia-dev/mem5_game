@@ -20,7 +20,7 @@ pub fn fetch_all_img_for_cache_request(
         if x.card_index_and_id != 0 {
             let url_img = format!(
                 "content/{}/img/{}",
-                rrc.game_data.content_folder_name,
+                rrc.game_data.game_name,
                 unwrap!(unwrap!(rrc.game_data.game_config.as_ref())
                     .img_filename
                     .get(x.card_number_and_img_src))

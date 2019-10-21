@@ -5,9 +5,9 @@
 //region: use, const
 use crate::gamedatamod::{CardStatusCardFace, Size2d};
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
-use crate::statusplaybefore1stcardmod;
-use crate::statusplaybefore2ndcardmod;
-//use crate::logmod;
+use crate::status1stcardmod;
+use crate::status2ndcardmod;
+use crate::logmod;
 use crate::rootrenderingcomponentmod;
 
 use unwrap::unwrap;
@@ -127,12 +127,12 @@ pub fn div_grid_items<'a, 'bump>(
             .status
             {
                 CardStatusCardFace::Down => bumpalo::format!(in bump, "content/{}/{}",
-                                        game_data.content_folder_name,
+                                        game_data.game_name,
                                         SRC_FOR_CARD_FACE_DOWN)
                 .into_bump_str(),
                 CardStatusCardFace::UpTemporary | CardStatusCardFace::UpPermanently => {
                     bumpalo::format!(in bump, "content/{}/img/{}",
-                    game_data.content_folder_name,
+                    game_data.game_name,
                     unwrap!(
                         unwrap!(game_data.game_config.as_ref())
                         .img_filename.get(
@@ -149,10 +149,8 @@ pub fn div_grid_items<'a, 'bump>(
                 .into_bump_str();
 
             let opacity = if img_src
-                == format!(
-                    "content/{}/{}",
-                    game_data.content_folder_name, SRC_FOR_CARD_FACE_DOWN
-                ) {
+                == format!("content/{}/{}", game_data.game_name, SRC_FOR_CARD_FACE_DOWN)
+            {
                 bumpalo::format!(in bump, "opacity:{}", 0.2).into_bump_str()
             } else {
                 bumpalo::format!(in bump, "opacity:{}", 1).into_bump_str()
@@ -188,7 +186,7 @@ pub fn div_grid_item<'a, 'bump>(
         let rrc = root.unwrap_mut::<RootRenderingComponent>();
         //only if the gamestatus is play (1 or 2)
         match rrc.game_data.game_status{
-        GameStatus::StatusPlayBefore1stCard | GameStatus::StatusPlayBefore2ndCard => {
+        GameStatus::Status1stCard | GameStatus::Status2ndCard => {
             // If the event's target is our image...
             let img = match event
                 .target()
@@ -211,11 +209,11 @@ pub fn div_grid_item<'a, 'bump>(
                 "error this_click_card_index"
             ).status.as_ref()==CardStatusCardFace::Down.as_ref(){
                 match rrc.game_data.game_status{
-                    GameStatus::StatusPlayBefore1stCard=>{
-                        statusplaybefore1stcardmod::on_click_1st_card(rrc, &vdom, this_click_card_index);
+                    GameStatus::Status1stCard=>{
+                        status1stcardmod::on_click_1st_card(rrc, &vdom, this_click_card_index);
                     },
-                    GameStatus::StatusPlayBefore2ndCard=>{
-                        statusplaybefore2ndcardmod::on_click_2nd_card(rrc, &vdom, this_click_card_index);
+                    GameStatus::Status2ndCard=>{
+                        status2ndcardmod::on_click_2nd_card(rrc, &vdom, this_click_card_index);
                     },
                     _ => unreachable!("This click is not expected in this status."),
                 }
@@ -223,7 +221,7 @@ pub fn div_grid_item<'a, 'bump>(
                 vdom.schedule_render();
             }
         },
-        _ => unreachable!("This click is not expected in this status."),
+        _ => logmod::debug_write("This click on img is not expected in this status."),
             }
     }}>
     </img>
@@ -237,7 +235,7 @@ pub fn play_sound(rrc: &RootRenderingComponent, this_click_card_index: usize) {
     let audio_element = web_sys::HtmlAudioElement::new_with_src(
         format!(
             "content/{}/sound/{}",
-            rrc.game_data.content_folder_name,
+            rrc.game_data.game_name,
             unwrap!(unwrap!(rrc.game_data.game_config.as_ref())
                 .sound_filename
                 .get(
