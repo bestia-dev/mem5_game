@@ -14,10 +14,11 @@ use crate::statusinvitingmod;
 use crate::statuswaitingackmsgmod;
 //use crate::websocketreconnectmod;
 
+use mem5_common::{GameStatus};
+
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
-use mem5_common::{GameStatus};
 use typed_html::dodrio;
 //endregion
 

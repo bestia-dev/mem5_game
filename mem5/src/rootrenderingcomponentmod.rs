@@ -10,33 +10,30 @@ use crate::divplayersandscoresmod;
 use crate::divrulesanddescriptionmod;
 use crate::gamedatamod;
 
-use unwrap::unwrap;
+use mem5_common::GameStatus;
+
+//use unwrap::unwrap;
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::{Cached, Node, Render};
-use mem5_common::GameStatus;
 use typed_html::dodrio;
 use web_sys::WebSocket;
-use conv::{ConvAsUtil};
 //endregion
 
-///Root Render Component: the card grid struct has all the needed data for play logic and rendering
+/// Root Rendering Component has all 
+/// the data needed for play logic and rendering
 pub struct RootRenderingComponent {
     ///game data will be inside of Root
     pub game_data: gamedatamod::GameData,
-    ///subComponent: players and scores. The data is a cached copy of GameData.
+    ///subComponent 1: players and scores. The data is a cached copy of GameData.
     pub cached_players_and_scores: Cached<divplayersandscoresmod::PlayersAndScores>,
-    ///subComponent: the static parts can be cached.
+    ///subComponent 2: the static parts can be cached.
     pub cached_rules_and_description: Cached<divrulesanddescriptionmod::RulesAndDescription>,
 }
 
-//region:RootRenderingComponent struct is the only persistent data we have in Rust Virtual Dom.dodrio
-//in the constructor we initialize that data.
-//Later on click we change this data.
-//at every animation frame we use only this data to render the virtual Dom.
-//It knows nothing about HTML and Virtual dom.
+///methods
 impl RootRenderingComponent {
-    /// Construct a new `RootRenderingComponent` component. Only once at the beginning.
+    /// Construct a new `RootRenderingComponent` at the beginning only once.
     pub fn new(ws: WebSocket, my_ws_uid: usize) -> Self {
         let game_data = gamedatamod::GameData::new(ws, my_ws_uid);
 
@@ -75,24 +72,12 @@ impl RootRenderingComponent {
 
         self.check_invalidate_for_all_components();
     }
-    //region: all functions for receive message (like events)
-    // I separate the code into functions to avoid looking at all that boilerplate in the big match around futures and components.
-    // All the data changing must be encapsulated inside these functions.
-    ///msg response with uid, just to check. because the WebSocket server
-    ///gets the uid from the client in the url_param. The client generates a random number.
-    pub fn on_response_ws_uid(&mut self, your_ws_uid: usize) {
-        if self.game_data.my_ws_uid != your_ws_uid {
-            self.game_data.error_text = "my_ws_uid is incorrect!".to_string();
-        }
-    }
 }
 //endregion
 
 //region: `Render` trait implementation on RootRenderingComponent struct
 ///It is called for every Dodrio animation frame to render the vdom.
-///Probably only when something changes. Here it is a click on the cards.
-///Not sure about that, but I don't see a reason to make execute it otherwise.
-///It is the only place where I create HTML elements in Virtual Dom.
+///Only when render is scheduled after aomw change id the game data.
 impl Render for RootRenderingComponent {
     #[inline]
     fn render<'a, 'bump>(&'a self, bump: &'bump Bump) -> Node<'bump>
@@ -102,55 +87,36 @@ impl Render for RootRenderingComponent {
         //the card grid is a html css grid object (like a table) with <img> inside
         //other html elements are pretty simple.
 
-        //region: private helper fn for Render()
-        //here I use private functions for readability only, to avoid deep code nesting.
-        //I don't understand closures enough to use them properly.
-        //These private functions are not in the "impl Render forRootRenderingComponent" because of the error
-        //method `from_card_number_to_img_src` is not a member of trait `Render`
-        //there is not possible to write private and public methods in one impl block there are only pub methods.
-        //`pub` not permitted there because it's implied
-        //so I have to write functions outside of the impl block but inside my "module"
-
         //region: create the whole virtual dom. The verbose stuff is in private functions
-
+        //the UI has different 'pages' for playing or errors
         if self.game_data.error_text == "" {
             let xmax_grid_size = divgridcontainermod::max_grid_size(self);
-            //let xmax_grid_size_add_two = unwrap!(xmax_grid_size.hor.checked_add(2));
-            //let xstyle2 = format!("width:{}px;", xmax_grid_size_add_two);
-            //logmod::debug_write(&format!("width m_container {}", xmax_grid_size_add_two));
-
-            //the main HTML render
-            dodrio!(bump,
-            <div class= "m_container" >
-                {
-                    if self.game_data.is_status_for_grid_container(){
-                        vec![divgridcontainermod::div_grid_container(self,bump,&xmax_grid_size)]
-                    }else {
-                        vec![dodrio!(bump,
-                            <div>
-                            </div>
-                        )]
-                    }
-                }
-                {vec![divplayeractionsmod::div_player_actions_from_game_status(self, bump)]}
-                {
-                    if self.game_data.is_status_for_grid_container(){
-                        vec![self.cached_players_and_scores.render(bump)]
-                    }else {
-                        vec![dodrio!(bump,
-                            <div>
-                            </div>
-                        )]
-                    }
-                }
-                {divcardmonikermod::div_grid_card_moniker(self, bump)}
-                {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
-                {vec![self.cached_rules_and_description.render(bump)]}
-            </div>
-            )
+           
+            //the UI has 2 different 'pages', depends on the status
+            if self.game_data.is_status_for_grid_container(){
+                //page2: the game grid
+                dodrio!(bump,
+                <div class= "m_container" >
+                    {vec![divgridcontainermod::div_grid_container(self,bump,&xmax_grid_size)]}
+                    {vec![divplayeractionsmod::div_player_actions_from_game_status(self, bump)]}
+                    {vec![self.cached_players_and_scores.render(bump)]}
+                    {divcardmonikermod::div_grid_card_moniker(self, bump)}
+                    {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
+                </div>
+                )
+            }
+            else{
+                //page1: the startpage with invitation and instructions
+                dodrio!(bump,
+                <div class= "m_container" >
+                    {vec![divplayeractionsmod::div_player_actions_from_game_status(self, bump)]}    
+                    {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
+                    {vec![self.cached_rules_and_description.render(bump)]}
+                </div>
+                )
+            }
         } else {
-            //render only the error text to the screen.
-            //because I want to debug the WebSocket lost connection
+            //page3: on error
             dodrio!(bump,
                 <div>
                     <h2 class="h2_user_must_wait">
@@ -167,46 +133,3 @@ impl Render for RootRenderingComponent {
 }
 //endregion
 
-/// return window inner height
-/// the size of  the visible part of the window
-pub fn usize_window_inner_height() -> usize {
-    let window = unwrap!(web_sys::window(), "error: web_sys::window");
-    let jsvalue_inner_height = unwrap!(window.inner_height(), "window.inner_height");
-
-    let f64_inner_height = unwrap!(
-        jsvalue_inner_height.as_f64(),
-        "jsValue_inner_height.as_f64()"
-    );
-    let usize_inner_height: usize = unwrap!(f64_inner_height.approx());
-    //return
-    usize_inner_height
-}
-
-/// return window inner width
-/// the size of  the visible part of the window
-pub fn usize_window_inner_width() -> usize {
-    let window = unwrap!(web_sys::window(), "error: web_sys::window");
-
-    let jsvalue_inner_width = unwrap!(window.inner_width(), "window.inner_width");
-
-    let f64_inner_width = unwrap!(
-        jsvalue_inner_width.as_f64(),
-        "jsValue_inner_width.as_string()"
-    );
-    let usize_inner_width: usize = unwrap!(f64_inner_width.approx());
-    //return
-    usize_inner_width
-}
-
-/// return window inner width, but maximum 600px
-/// the size of  the visible part of the window
-pub fn usize_window_inner_width_but_max_600() -> usize {
-    let x = usize_window_inner_width();
-    if x > 600 {
-        //return
-        600
-    } else {
-        //return
-        x
-    }
-}

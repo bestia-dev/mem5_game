@@ -12,6 +12,7 @@
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
 use crate::logmod;
+
 use mem5_common::{GameStatus, WsMessage};
 
 use unwrap::unwrap;
@@ -19,10 +20,10 @@ use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
 use typed_html::dodrio;
+//endregion
 
 ///render reconnect
-pub fn div_reconnect<'b>(_rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'b>
-{
+pub fn div_reconnect<'b>(_rrc: &RootRenderingComponent, bump: &'b Bump) -> Node<'b> {
     dodrio!(bump,
     <div>
       <h4>

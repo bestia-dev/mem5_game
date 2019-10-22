@@ -4,8 +4,8 @@
 //region: use
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
-use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 use crate::gamedatamod;
+use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 
 use unwrap::unwrap;
 use rand::Rng;

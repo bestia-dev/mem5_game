@@ -14,10 +14,11 @@ use crate::logmod;
 use crate::statusgameovermod;
 use crate::websocketreconnectmod;
 
+use mem5_common::{GameStatus, WsMessage, MsgAckKind};
+
 use unwrap::unwrap;
 use futures::Future;
 use js_sys::Reflect;
-use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{ErrorEvent, WebSocket};
@@ -132,7 +133,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             //logmod::debug_write(&format!("MsgResponseWsUid: {}  ", your_ws_uid));
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            rrc.on_response_ws_uid(your_ws_uid);
+                            on_response_ws_uid(rrc,your_ws_uid);
                         }
                     })
                     .map_err(|_| ()),
@@ -462,4 +463,11 @@ pub fn ws_send_msg(ws: &WebSocket, ws_message: &WsMessage) {
         ),),
         "Failed to send"
     );
+}
+
+///msg response with ws_uid, just to check.
+pub fn on_response_ws_uid(rrc: &mut RootRenderingComponent, your_ws_uid: usize) {
+    if rrc.game_data.my_ws_uid != your_ws_uid {
+        rrc.game_data.error_text = "my_ws_uid is incorrect!".to_string();
+    }
 }

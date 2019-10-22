@@ -8,13 +8,14 @@ use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::status1stcardmod;
 use crate::status2ndcardmod;
 use crate::logmod;
-use crate::rootrenderingcomponentmod;
+
+use mem5_common::GameStatus;
 
 use unwrap::unwrap;
 use conv::{ConvUtil};
+use conv::{ConvAsUtil};
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
-use mem5_common::GameStatus;
 use typed_html::dodrio;
 //use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast; //don't remove this. It is needed for dyn_into.
@@ -257,7 +258,7 @@ pub fn play_sound(rrc: &RootRenderingComponent, this_click_card_index: usize) {
 ///grid width in pixels
 pub fn grid_width() -> usize {
     //the size of  the visible part of the window
-    let usize_inner_width = rootrenderingcomponentmod::usize_window_inner_width();
+    let usize_inner_width = usize_window_inner_width();
     //width min: 300px, max: 600 px in between width=visible width
     //3 columnsdelimiter 5px wide
     let grid_width: usize;
@@ -274,7 +275,7 @@ pub fn grid_width() -> usize {
 ///grid height in pixels
 pub fn grid_height() -> usize {
     //the size of  the visible part of the window
-    let usize_inner_height = rootrenderingcomponentmod::usize_window_inner_height();
+    let usize_inner_height = usize_window_inner_height();
 
     //height minimum 300, max 1000, else 0.8*visible height
     //3 row separetors 5px wide
@@ -295,8 +296,8 @@ pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
     //if the game_config is None, then return full screen
     if rrc.game_data.game_config.is_none() {
         Size2d {
-            hor: rootrenderingcomponentmod::usize_window_inner_width_but_max_600(),
-            ver: rootrenderingcomponentmod::usize_window_inner_height(),
+            hor: usize_window_inner_width_but_max_600(),
+            ver: usize_window_inner_height(),
         }
     } else {
         //grid_container width and height
@@ -355,5 +356,48 @@ pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
             hor: max_grid_width,
             ver: max_grid_height,
         }
+    }
+}
+/// return window inner height
+/// the size of  the visible part of the window
+pub fn usize_window_inner_height() -> usize {
+    let window = unwrap!(web_sys::window(), "error: web_sys::window");
+    let jsvalue_inner_height = unwrap!(window.inner_height(), "window.inner_height");
+
+    let f64_inner_height = unwrap!(
+        jsvalue_inner_height.as_f64(),
+        "jsValue_inner_height.as_f64()"
+    );
+    let usize_inner_height: usize = unwrap!(f64_inner_height.approx());
+    //return
+    usize_inner_height
+}
+
+/// return window inner width
+/// the size of  the visible part of the window
+pub fn usize_window_inner_width() -> usize {
+    let window = unwrap!(web_sys::window(), "error: web_sys::window");
+
+    let jsvalue_inner_width = unwrap!(window.inner_width(), "window.inner_width");
+
+    let f64_inner_width = unwrap!(
+        jsvalue_inner_width.as_f64(),
+        "jsValue_inner_width.as_string()"
+    );
+    let usize_inner_width: usize = unwrap!(f64_inner_width.approx());
+    //return
+    usize_inner_width
+}
+
+/// return window inner width, but maximum 600px
+/// the size of  the visible part of the window
+pub fn usize_window_inner_width_but_max_600() -> usize {
+    let x = usize_window_inner_width();
+    if x > 600 {
+        //return
+        600
+    } else {
+        //return
+        x
     }
 }

@@ -22,6 +22,7 @@ pub fn div_for_debugging<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump) ->
     )
     .into_bump_str();
 
+    if rrc.ga
     dodrio!(bump,
     <div >
         <pre style="color: white; white-space: pre-wrap; word-break: break-all;">

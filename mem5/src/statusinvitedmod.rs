@@ -6,11 +6,12 @@ use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
 use crate::gamedatamod;
 
+use mem5_common::{GameStatus, Player, WsMessage};
+
 use unwrap::unwrap;
 use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
-use mem5_common::{GameStatus, Player, WsMessage};
 use typed_html::dodrio;
 //endregion
 

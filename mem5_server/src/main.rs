@@ -1,19 +1,23 @@
-#![doc(html_favicon_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-16.png")]
-#![doc(html_logo_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-192.png")]
+#![doc(
+    html_favicon_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-16.png"
+)]
+#![doc(
+    html_logo_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-192.png"
+)]
 //region: lmake_readme insert "readme.md"
-//! # mem5_server 
-//! 
+//! # mem5_server
+//!
 //! version: 19.10.21-20.11  
-//! 
+//!
 //! **Html and WebSocket server for the mem5 game**  
 //! Primarily made for learning to code Rust for a http + WebSocket server on the same port.  
 //! Using Warp for a simple memory game for kids - mem5.  
 //! On the IP address on port 8085 listens to http and WebSocket.  
 //! Route for http `/` serves static files from folder `/mem5/`.  
 //! Route `/mem5ws/` broadcast all WebSocket msg to all connected clients except sender.  
-//! 
+//!
 //! ## Google vm
-//! 
+//!
 //! One working server is installed on my google vm.  
 //! There is a nginx server reverse proxy that accepts https http2 on 443 and relay to internal 8085.
 //! Nginx also redirects all http 80 to https 443.  
@@ -52,12 +56,13 @@
 //endregion
 
 //region: use statements
+use mem5_common::{WsMessage};
+
 use unwrap::unwrap;
 use clap::{App, Arg};
 use env_logger::Env;
 use futures::sync::mpsc;
 use futures::{Future, Stream};
-use mem5_common::{WsMessage};
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::net::{IpAddr, Ipv4Addr};
@@ -77,7 +82,6 @@ type Users = Arc<Mutex<HashMap<usize, mpsc::UnboundedSender<Message>>>>;
 
 ///main function of the binary
 fn main() {
-
     //region: env_logger log text to stdout depend on ENV variable
     //in Linux : RUST_LOG=info ./mem5_server.exe
     //in Windows I don't know yet.
@@ -290,7 +294,6 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
             //send to other users for reconnect. Do nothing if there is not yet other users.
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
-        
         WsMessage::MsgInvite { .. } => broadcast(users, ws_uid_of_message, &new_msg),
         WsMessage::MsgResponseWsUid { .. } => info!("MsgResponseWsUid: {}", ""),
         WsMessage::MsgAccept { players_ws_uid, .. }
