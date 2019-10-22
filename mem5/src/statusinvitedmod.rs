@@ -15,9 +15,7 @@ use typed_html::dodrio;
 //endregion
 
 ///render asked
-pub fn div_invited<'a, 'bump>(rrc: &'a RootRenderingComponent, bump: &'bump Bump) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_invited<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'b>
 {
     //return Click here to Accept play
     dodrio!(bump,
@@ -74,12 +72,10 @@ pub fn on_msg_accept(
 }
 
 ///render play accepted
-pub fn div_invite_accepted<'a, 'bump>(
-    rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
-) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_invite_accepted<'b>(
+    rrc: & RootRenderingComponent,
+    bump: &'b Bump,
+) -> Node<'b>
 {
     dodrio!(bump,
     <h2 class="h2_user_must_wait">

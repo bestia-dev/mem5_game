@@ -13,9 +13,7 @@ use typed_html::dodrio;
 //endregion
 
 ///play again
-pub fn div_game_over<'a, 'bump>(_rrc: &'a RootRenderingComponent, bump: &'bump Bump) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_game_over<'b>(_rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'b>
 {
     //end game ,Play again?  reload webpage
     dodrio!(bump,

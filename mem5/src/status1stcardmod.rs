@@ -78,9 +78,7 @@ pub fn update_on_1st_card(rrc: &mut RootRenderingComponent) {
 
 ///render div
 #[allow(clippy::integer_arithmetic)]
-pub fn div_on_1st_card<'a, 'bump>(rrc: &'a RootRenderingComponent, bump: &'bump Bump) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_on_1st_card<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'b>
 {
     if rrc.game_data.my_player_number == rrc.game_data.player_turn {
         dodrio!(bump,

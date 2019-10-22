@@ -16,9 +16,7 @@ use typed_html::dodrio;
 //endregion
 
 ///render
-pub fn div_inviting<'a, 'bump>(rrc: &'a RootRenderingComponent, bump: &'bump Bump) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_inviting<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'b>
 {
     dodrio!(bump,
     <div>

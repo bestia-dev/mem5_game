@@ -13,12 +13,10 @@ use typed_html::dodrio;
 //endregion
 
 ///waiting ack msg
-pub fn div_waiting_ack_msg<'a, 'bump>(
-    _rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
-) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_waiting_ack_msg<'b>(
+    _rrc: & RootRenderingComponent,
+    bump: &'b Bump,
+) -> Node<'b>
 {
     dodrio!(bump,
     <div>

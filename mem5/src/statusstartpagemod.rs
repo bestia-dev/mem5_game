@@ -19,9 +19,7 @@ use typed_html::dodrio;
 //endregion
 
 ///render invite ask begin, ask to play for multiple contents/folders
-pub fn div_start_page<'a, 'bump>(rrc: &'a RootRenderingComponent, bump: &'bump Bump) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_start_page<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'b>
 {
     let mut vec_of_nodes = Vec::new();
     //I don't know how to solve the lifetime problems. So I just clone the small data.

@@ -25,13 +25,11 @@ const SRC_FOR_CARD_FACE_DOWN: &str = "img/mem_cardfacedown.png";
 //endregion
 
 ///prepare the grid container
-pub fn div_grid_container<'a, 'bump>(
-    rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
+pub fn div_grid_container<'b>(
+    rrc: &RootRenderingComponent,
+    bump: &'b Bump,
     max_grid_size: &Size2d,
-) -> Node<'bump>
-where
-    'a: 'bump,
+) -> Node<'b>
 {
     let xstyle = format!(
         "width:{}px; height:{}px;grid-template-columns: {} {} {} {};",
@@ -69,14 +67,14 @@ where
 
 ///prepare a vector<Node> for the Virtual Dom for 'css grid' item with <img>
 ///the grid container needs only grid items. There is no need for rows and columns in 'css grid'.
-pub fn div_grid_items<'a, 'bump>(
-    rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
-) -> Vec<Node<'bump>> {
+pub fn div_grid_items<'b>(
+    rrc: & RootRenderingComponent,
+    bump: &'b Bump,
+) -> Vec<Node<'b>> {
     //this game_data mutable reference is dropped on the end of the function
     let game_data = &rrc.game_data;
 
-    let mut vec_grid_items: Vec<Node<'bump>> = Vec::new();
+    let mut vec_grid_items: Vec<Node<'b>> = Vec::new();
     if game_data.game_config.is_some() {
         //The format 4x4 was too small for the game with multiple smartphones on the table.
         //Now I can choose different sizes gx x gy
@@ -167,13 +165,13 @@ pub fn div_grid_items<'a, 'bump>(
     vec_grid_items
 }
 ///on click is the most important part and here is more or less isolated
-pub fn div_grid_item<'a, 'bump>(
-    _rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
+pub fn div_grid_item<'b>(
+    _rrc: & RootRenderingComponent,
+    bump: &'b Bump,
     img_src: &str,
     img_id: &str,
     opacity: &str,
-) -> Node<'bump> {
+) -> Node<'b> {
     dodrio!(bump,
     <div class= "grid_item">
     <img src={img_src} id={img_id} style={opacity} onclick={move |root, vdom, event| {

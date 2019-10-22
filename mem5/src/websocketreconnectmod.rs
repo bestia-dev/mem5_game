@@ -21,9 +21,7 @@ use dodrio::Node;
 use typed_html::dodrio;
 
 ///render reconnect
-pub fn div_reconnect<'a, 'bump>(_rrc: &'a RootRenderingComponent, bump: &'bump Bump) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_reconnect<'b>(_rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'b>
 {
     dodrio!(bump,
     <div>

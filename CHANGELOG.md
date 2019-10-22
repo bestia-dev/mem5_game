@@ -11,3 +11,4 @@
 2019-10-09 Save nickname to storage on every key up.  
 2019-10-16 PWA, screen-width, fullscreen, service worker fetch in cache  
 2019-10-18 acknowledge msg because of bad network  
+2019-10-21 renaming, refactoring, docs  

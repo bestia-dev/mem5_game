@@ -15,7 +15,8 @@ const GAME_TITLE: &str = "mem5";
 //endregion
 
 ///the header can show only the game title or two card monikers. Not everything together.
-pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump) -> Vec<Node<'a>> {
+//pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump) -> Vec<Node<'a>> {
+    pub fn div_grid_card_moniker<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Vec<Node<'b>> {
     //this game_data mutable reference is dropped on the end of the function
     let game_data = &rrc.game_data;
     let mut vec_node = Vec::new();

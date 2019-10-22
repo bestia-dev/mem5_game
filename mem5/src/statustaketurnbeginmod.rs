@@ -76,12 +76,10 @@ pub fn update_on_take_turn_begin(rrc: &mut RootRenderingComponent) {
 
 ///render div
 #[allow(clippy::integer_arithmetic)]
-pub fn div_take_turn_begin<'a, 'bump>(
-    rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
-) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_take_turn_begin<'b>(
+    rrc: & RootRenderingComponent,
+    bump: &'b Bump,
+) -> Node<'b>
 {
     logmod::debug_write(&format!(
         "div_take_turn_begin: player_turn {}  my_player_number {}",

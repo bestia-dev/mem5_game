@@ -147,12 +147,10 @@ pub fn update_click_2nd_card_point(rrc: &mut RootRenderingComponent) {
 
 ///render Play or Wait
 #[allow(clippy::integer_arithmetic)]
-pub fn div_click_2nd_card<'a, 'bump>(
-    rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
-) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_click_2nd_card<'b>(
+    rrc: & RootRenderingComponent,
+    bump: &'b Bump,
+) -> Node<'b>
 {
     if rrc.game_data.my_player_number == rrc.game_data.player_turn {
         dodrio!(bump,

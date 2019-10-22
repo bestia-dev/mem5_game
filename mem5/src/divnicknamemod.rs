@@ -16,12 +16,10 @@ use futures::Future;
 //endregion
 
 ///render the nickname input
-pub fn div_nickname_input<'a, 'bump>(
-    rrc: &'a RootRenderingComponent,
-    bump: &'bump Bump,
-) -> Node<'bump>
-where
-    'a: 'bump,
+pub fn div_nickname_input<'b>(
+    rrc: & RootRenderingComponent,
+    bump: &'b Bump,
+) -> Node<'b>
 {
     //if the user did not yet input his nickname than blink
     //all the code is the same except the class and the call to schedule_render
