@@ -18,7 +18,6 @@ pub fn div_grid_card_moniker<'b>(rrc: &RootRenderingComponent, bump: &'b Bump) -
     let mut vec_node = Vec::new();
     //if the card_monikers are visible, than don't show GameTitle, because there is not
     //enought space on smartphones
-    if game_data.card_index_of_first_click != 0 || game_data.card_index_of_second_click != 0 {
         let left_text = unwrap!(unwrap!(rrc.game_data.game_config.as_ref())
             .card_moniker
             .get(
@@ -57,7 +56,6 @@ pub fn div_grid_card_moniker<'b>(rrc: &RootRenderingComponent, bump: &'b Bump) -
             </div>
         </div>
         ));
-    }
     //return
     vec_node
 }

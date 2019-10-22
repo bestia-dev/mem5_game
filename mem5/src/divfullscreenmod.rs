@@ -79,7 +79,7 @@ pub fn div_fullscreen<'b>(is_fullscreen: bool, bump: &'b Bump) -> Vec<Node<'b>> 
             }}>
             <h2 id="h2_fullscreen" >
                 {vec![text(
-                        bumpalo::format!(in bump, "FullScreen{}!", "")
+                        bumpalo::format!(in bump, "FullScreen{}", "")
                     .into_bump_str(),
                 )]}
             </h2>
@@ -89,7 +89,7 @@ pub fn div_fullscreen<'b>(is_fullscreen: bool, bump: &'b Bump) -> Vec<Node<'b>> 
         <div>
             <h5>
                 {vec![text(
-                    bumpalo::format!(in bump, "or choose Add to Homescreen from your browser.{}", "")
+                    bumpalo::format!(in bump, "or choose 'Add to Homescreen' in your browser.{}", "")
                 .into_bump_str(),
                 )]}
             </h5>

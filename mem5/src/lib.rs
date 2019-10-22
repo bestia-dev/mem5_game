@@ -355,7 +355,7 @@ pub fn run() -> Result<(), JsValue> {
 
     let mut rrc = rootrenderingcomponentmod::RootRenderingComponent::new(ws_c, my_ws_uid);
     rrc.game_data.href = location_href.to_string();
-
+    rrc.game_data.is_fullscreen = divfullscreenmod::is_fullscreen(&rrc);
     // Mount the component to the `<div id="div_for_virtual_dom">`.
     let vdom = dodrio::Vdom::new(&div_for_virtual_dom, rrc);
 

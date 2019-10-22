@@ -39,10 +39,8 @@ impl RootRenderingComponent {
     pub fn new(ws: WebSocket, my_ws_uid: usize) -> Self {
         let game_data = gamedatamod::GameData::new(ws, my_ws_uid);
 
-        let game_rule_01 = divrulesanddescriptionmod::RulesAndDescription {
-            is_fullscreen:false,
-        };
-        let cached_rules_and_description = Cached::new(game_rule_01);
+        let cached_rules_and_description =
+            Cached::new(divrulesanddescriptionmod::RulesAndDescription::new());
         let cached_players_and_scores =
             Cached::new(divplayersandscoresmod::PlayersAndScores::new(my_ws_uid));
 
@@ -60,7 +58,7 @@ impl RootRenderingComponent {
         {
             Cached::invalidate(&mut self.cached_players_and_scores);
         }
-          if self
+        if self
             .cached_rules_and_description
             .update_intern_cache(&self.game_data)
         {
@@ -107,9 +105,9 @@ impl Render for RootRenderingComponent {
                 dodrio!(bump,
                 <div class= "m_container" >
                     {vec![divgridcontainermod::div_grid_container(self,bump,&xmax_grid_size)]}
-                    {vec![divplayeractionsmod::div_player_actions_from_game_status(self, bump)]}
-                    {vec![self.cached_players_and_scores.render(bump)]}
                     {divcardmonikermod::div_grid_card_moniker(self, bump)}
+                    {vec![self.cached_players_and_scores.render(bump)]}
+                    {vec![divplayeractionsmod::div_player_actions_from_game_status(self, bump)]}
                     {divgametitlemod::div_game_title(self, bump)}
                     {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
                 </div>

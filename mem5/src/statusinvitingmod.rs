@@ -21,6 +21,13 @@ pub fn div_inviting<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'
 {
     dodrio!(bump,
     <div>
+        <div>
+            <h2 class="h2_user_must_wait">
+                {vec![
+                    text(bumpalo::format!(in bump, "Players accepted: {}.", rrc.game_data.players.len()-1).into_bump_str()),
+                ]}
+            </h2>
+        </div>
         <div class="div_clickable" onclick={move |root, vdom, _event| {
             let rrc = root.unwrap_mut::<RootRenderingComponent>();
             //region: send WsMessage over WebSocket
@@ -45,13 +52,6 @@ pub fn div_inviting<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'
             <h2 class="h2_user_can_click">
                 {vec![
                     text(bumpalo::format!(in bump, "Start Game?{}", "").into_bump_str()),
-                ]}
-            </h2>
-        </div>
-        <div>
-            <h2 class="h2_user_must_wait">
-                {vec![
-                    text(bumpalo::format!(in bump, "Players accepted: {}.", rrc.game_data.players.len()-1).into_bump_str()),
                 ]}
             </h2>
         </div>
