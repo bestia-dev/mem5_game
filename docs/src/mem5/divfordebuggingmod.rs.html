@@ -31,6 +31,23 @@
 <span id="31">31</span>
 <span id="32">32</span>
 <span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// divfordebuggingmod.rs</span>
 <span class="doccomment">//! information for debugging</span>
@@ -49,21 +66,38 @@
 <span class="doccomment">///information for debugging</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_for_debugging</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">RootRenderingComponent</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="comment">//for debugging only</span>
-
-    <span class="kw">let</span> <span class="ident">text2</span> <span class="op">=</span> <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;debug info:\n{}&quot;</span>,
-    <span class="ident">sessionstoragemod</span>::<span class="ident">get_debug_text</span>()
-    )
-    .<span class="ident">into_bump_str</span>();
-
-    <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
-    <span class="op">&lt;</span><span class="ident">div</span> <span class="op">&gt;</span>
-        <span class="op">&lt;</span><span class="ident">pre</span> <span class="ident">style</span><span class="op">=</span><span class="string">&quot;color: white; white-space: pre-wrap; word-break: break-all;&quot;</span><span class="op">&gt;</span>
-            {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(<span class="ident">text2</span>)]}
-        <span class="op">&lt;</span><span class="op">/</span><span class="ident">pre</span><span class="op">&gt;</span>
-        {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">websocketreconnectmod</span>::<span class="ident">div_reconnect</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)]}
-    <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
-    )
+    <span class="kw">if</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">show_debug_info</span> {
+        <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
+        <span class="op">&lt;</span><span class="ident">div</span> <span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="ident">pre</span> <span class="ident">style</span><span class="op">=</span><span class="string">&quot;color: white; white-space: pre-wrap; word-break: break-all;&quot;</span><span class="op">&gt;</span>
+                {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(
+                    <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;debug info {}:\n{}&quot;</span>,
+                        <span class="macro">env</span><span class="macro">!</span>(<span class="string">&quot;CARGO_PKG_VERSION&quot;</span>),
+                        <span class="ident">sessionstoragemod</span>::<span class="ident">get_debug_text</span>()
+                        ).<span class="ident">into_bump_str</span>()
+                )]}
+            <span class="op">&lt;</span><span class="op">/</span><span class="ident">pre</span><span class="op">&gt;</span>
+            {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">websocketreconnectmod</span>::<span class="ident">div_reconnect</span>(<span class="ident">rrc</span>, <span class="ident">bump</span>)]}
+        <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
+        )
+    } <span class="kw">else</span> {
+        <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
+        <span class="op">&lt;</span><span class="ident">div</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="ident">div</span> <span class="ident">class</span><span class="op">=</span><span class="string">&quot;div_clickable&quot;</span> <span class="ident">onclick</span><span class="op">=</span>{<span class="kw">move</span> <span class="op">|</span><span class="ident">root</span>, <span class="ident">vdom</span>, <span class="ident">_event</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
+                <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">show_debug_info</span><span class="op">=</span><span class="bool-val">true</span>;
+                <span class="ident">vdom</span>.<span class="ident">schedule_render</span>();
+            }}<span class="op">&gt;</span>
+                <span class="op">&lt;</span><span class="ident">h5</span> <span class="ident">style</span><span class="op">=</span><span class="string">&quot;color:orange&quot;</span><span class="op">&gt;</span>
+                    {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(
+                    <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;Debug info {}&quot;</span>, <span class="macro">env</span><span class="macro">!</span>(<span class="string">&quot;CARGO_PKG_VERSION&quot;</span>))
+                    .<span class="ident">into_bump_str</span>(),
+                    )]}
+                <span class="op">&lt;</span><span class="op">/</span><span class="ident">h5</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
+        <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
+        )
+    }
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "mem5";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

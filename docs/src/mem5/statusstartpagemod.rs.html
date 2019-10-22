@@ -120,24 +120,20 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rootrenderingcomponentmod</span>::<span class="ident">RootRenderingComponent</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">websocketcommunicationmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">fetchgameconfigmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divnicknamemod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">gamedatamod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divfullscreenmod</span>;
+
+<span class="kw">use</span> <span class="ident">mem5_common</span>::{<span class="ident">GameStatus</span>, <span class="ident">Player</span>, <span class="ident">WsMessage</span>};
 
 <span class="comment">//use unwrap::unwrap;</span>
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">builder</span>::<span class="ident">text</span>;
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">bumpalo</span>::{<span class="self">self</span>, <span class="ident">Bump</span>};
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">Node</span>;
-<span class="kw">use</span> <span class="ident">mem5_common</span>::{<span class="ident">GameStatus</span>, <span class="ident">Player</span>, <span class="ident">WsMessage</span>};
 <span class="kw">use</span> <span class="ident">typed_html</span>::<span class="ident">dodrio</span>;
 <span class="comment">//use wasm_bindgen::JsCast; //don&#39;t remove this. It is needed for dyn_into.</span>
 <span class="comment">//endregion</span>
 
 <span class="doccomment">///render invite ask begin, ask to play for multiple contents/folders</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_start_page</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;bump</span><span class="op">&gt;</span>(<span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">RootRenderingComponent</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;bump</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="lifetime">&#39;a</span>: <span class="lifetime">&#39;bump</span>,
-{
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_start_page</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>(<span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="ident">RootRenderingComponent</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec_of_nodes</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
     <span class="comment">//I don&#39;t know how to solve the lifetime problems. So I just clone the small data.</span>
     <span class="kw">let</span> <span class="ident">ff</span> <span class="op">=</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">content_folders</span>.<span class="ident">clone</span>();
@@ -154,7 +150,7 @@
             <span class="op">&lt;</span><span class="ident">h2</span> <span class="ident">class</span><span class="op">=</span><span class="string">&quot;h2_user_can_click&quot;</span><span class="op">&gt;</span>
                 {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(
                 <span class="comment">//show Ask Player2 to Play!</span>
-                <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;Invite for {}&quot;</span>, <span class="ident">folder_name_clone2</span>)
+                <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">folder_name_clone2</span>)
                     .<span class="ident">into_bump_str</span>(),
                 )]}
             <span class="op">&lt;</span><span class="op">/</span><span class="ident">h2</span><span class="op">&gt;</span>
@@ -163,9 +159,13 @@
     }
     <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
     <span class="op">&lt;</span><span class="ident">div</span><span class="op">&gt;</span>
+        <span class="op">&lt;</span><span class="ident">h4</span><span class="op">&gt;</span>
+           {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(
+                <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;Wait for invitation or invite for {}&quot;</span>, <span class="string">&quot;&quot;</span>)
+                    .<span class="ident">into_bump_str</span>(),
+                )]}
+        <span class="op">&lt;</span><span class="op">/</span><span class="ident">h4</span><span class="op">&gt;</span>
         {<span class="ident">vec_of_nodes</span>}
-        {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divnicknamemod</span>::<span class="ident">div_nickname_input</span>(<span class="ident">rrc</span>,<span class="ident">bump</span>)]}
-        {<span class="ident">divfullscreenmod</span>::<span class="ident">div_fullscreen</span>(<span class="ident">rrc</span>,<span class="ident">bump</span>)}
     <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
     )
 }

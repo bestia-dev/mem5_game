@@ -88,27 +88,19 @@
 <span id="88">88</span>
 <span id="89">89</span>
 <span id="90">90</span>
-<span id="91">91</span>
-<span id="92">92</span>
-<span id="93">93</span>
-<span id="94">94</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// statustaketurnbeginmod.rs</span>
 <span class="doccomment">//! code flow from this status</span>
 
 <span class="comment">//region: use</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rootrenderingcomponentmod</span>::<span class="ident">RootRenderingComponent</span>;
-<span class="kw">use</span> <span class="ident">mem5_common</span>::{<span class="ident">GameStatus</span>, <span class="ident">WsMessage</span>, <span class="ident">MsgAckKind</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">gamedatamod</span>::{<span class="ident">CardStatusCardFace</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">logmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ackmsgmod</span>;
-<span class="comment">//use crate::utilsmod;</span>
+
+<span class="kw">use</span> <span class="ident">mem5_common</span>::{<span class="ident">GameStatus</span>, <span class="ident">WsMessage</span>, <span class="ident">MsgAckKind</span>};
 
 <span class="kw">use</span> <span class="ident">unwrap</span>::<span class="ident">unwrap</span>;
-<span class="comment">//use dodrio::builder::text;</span>
-<span class="comment">//use dodrio::bumpalo::{self, Bump};</span>
-<span class="comment">//use dodrio::Node;</span>
-<span class="comment">//use typed_html::dodrio;</span>
 <span class="comment">//endregion</span>
 
 <span class="doccomment">///on click</span>

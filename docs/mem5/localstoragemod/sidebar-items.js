@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["load_nickname","load nickname from local storage"],["save_nickname_to_localstorage","save nickname from html input elements to local storage and rrc"]]});

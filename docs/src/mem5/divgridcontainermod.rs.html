@@ -359,6 +359,67 @@
 <span id="359">359</span>
 <span id="360">360</span>
 <span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// divgridcontainermod.rs</span>
 <span class="doccomment">//! renders the grid container with the images</span>
@@ -369,14 +430,15 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rootrenderingcomponentmod</span>::<span class="ident">RootRenderingComponent</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">status1stcardmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">status2ndcardmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">logmod</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rootrenderingcomponentmod</span>;
+<span class="comment">//use crate::logmod;</span>
+
+<span class="kw">use</span> <span class="ident">mem5_common</span>::<span class="ident">GameStatus</span>;
 
 <span class="kw">use</span> <span class="ident">unwrap</span>::<span class="ident">unwrap</span>;
 <span class="kw">use</span> <span class="ident">conv</span>::{<span class="ident">ConvUtil</span>};
+<span class="kw">use</span> <span class="ident">conv</span>::{<span class="ident">ConvAsUtil</span>};
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">bumpalo</span>::{<span class="self">self</span>, <span class="ident">Bump</span>};
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">Node</span>;
-<span class="kw">use</span> <span class="ident">mem5_common</span>::<span class="ident">GameStatus</span>;
 <span class="kw">use</span> <span class="ident">typed_html</span>::<span class="ident">dodrio</span>;
 <span class="comment">//use wasm_bindgen::prelude::*;</span>
 <span class="kw">use</span> <span class="ident">wasm_bindgen</span>::<span class="ident">JsCast</span>; <span class="comment">//don&#39;t remove this. It is needed for dyn_into.</span>
@@ -387,14 +449,11 @@
 <span class="comment">//endregion</span>
 
 <span class="doccomment">///prepare the grid container</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_grid_container</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;bump</span><span class="op">&gt;</span>(
-    <span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">RootRenderingComponent</span>,
-    <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;bump</span> <span class="ident">Bump</span>,
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_grid_container</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>(
+    <span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="ident">RootRenderingComponent</span>,
+    <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">Bump</span>,
     <span class="ident">max_grid_size</span>: <span class="kw-2">&amp;</span><span class="ident">Size2d</span>,
-) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="lifetime">&#39;a</span>: <span class="lifetime">&#39;bump</span>,
-{
+) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">xstyle</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
         <span class="string">&quot;width:{}px; height:{}px;grid-template-columns: {} {} {} {};&quot;</span>,
         <span class="ident">max_grid_size</span>.<span class="ident">hor</span>,
@@ -431,14 +490,11 @@
 
 <span class="doccomment">///prepare a vector&lt;Node&gt; for the Virtual Dom for &#39;css grid&#39; item with &lt;img&gt;</span>
 <span class="doccomment">///the grid container needs only grid items. There is no need for rows and columns in &#39;css grid&#39;.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_grid_items</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;bump</span><span class="op">&gt;</span>(
-    <span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">RootRenderingComponent</span>,
-    <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;bump</span> <span class="ident">Bump</span>,
-) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_grid_items</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>(<span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="ident">RootRenderingComponent</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;&gt;</span> {
     <span class="comment">//this game_data mutable reference is dropped on the end of the function</span>
     <span class="kw">let</span> <span class="ident">game_data</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">rrc</span>.<span class="ident">game_data</span>;
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec_grid_items</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vec_grid_items</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
     <span class="kw">if</span> <span class="ident">game_data</span>.<span class="ident">game_config</span>.<span class="ident">is_some</span>() {
         <span class="comment">//The format 4x4 was too small for the game with multiple smartphones on the table.</span>
         <span class="comment">//Now I can choose different sizes gx x gy</span>
@@ -507,7 +563,8 @@
             };
 
             <span class="kw">let</span> <span class="ident">img_id</span> <span class="op">=</span>
-            <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;img{:02}&quot;</span>,<span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">game_data</span>.<span class="ident">card_grid_data</span>.<span class="ident">get</span>(<span class="ident">index</span>),<span class="string">&quot;game_data.card_grid_data.get(index)&quot;</span>).<span class="ident">card_index_and_id</span>)
+                <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;img{:02}&quot;</span>,<span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">game_data</span>.<span class="ident">card_grid_data</span>.<span class="ident">get</span>(<span class="ident">index</span>),
+                    <span class="string">&quot;game_data.card_grid_data.get(index)&quot;</span>).<span class="ident">card_index_and_id</span>)
                 .<span class="ident">into_bump_str</span>();
 
             <span class="kw">let</span> <span class="ident">opacity</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">img_src</span>
@@ -529,66 +586,87 @@
     <span class="ident">vec_grid_items</span>
 }
 <span class="doccomment">///on click is the most important part and here is more or less isolated</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_grid_item</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;bump</span><span class="op">&gt;</span>(
-    <span class="ident">_rrc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">RootRenderingComponent</span>,
-    <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;bump</span> <span class="ident">Bump</span>,
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_grid_item</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>(
+    <span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="ident">RootRenderingComponent</span>,
+    <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">Bump</span>,
     <span class="ident">img_src</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     <span class="ident">img_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     <span class="ident">opacity</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;</span> {
-    <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
-    <span class="op">&lt;</span><span class="ident">div</span> <span class="ident">class</span><span class="op">=</span> <span class="string">&quot;grid_item&quot;</span><span class="op">&gt;</span>
-    <span class="op">&lt;</span><span class="ident">img</span> <span class="ident">src</span><span class="op">=</span>{<span class="ident">img_src</span>} <span class="ident">id</span><span class="op">=</span>{<span class="ident">img_id</span>} <span class="ident">style</span><span class="op">=</span>{<span class="ident">opacity</span>} <span class="ident">onclick</span><span class="op">=</span>{<span class="kw">move</span> <span class="op">|</span><span class="ident">root</span>, <span class="ident">vdom</span>, <span class="ident">event</span><span class="op">|</span> {
-        <span class="comment">//on click needs a code Closure in Rust. Dodrio and wasm-bindgen</span>
-        <span class="comment">//generate the JavaScript code to call it properly.</span>
-        <span class="comment">//we need our Struct RootRenderingComponent for Rust to write any data.</span>
-        <span class="comment">//It comes in the parameter root.</span>
-        <span class="comment">//All we can change is inside the struct RootRenderingComponent fields.</span>
-        <span class="comment">//The method render will later use that for rendering the new html.</span>
-        <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
-        <span class="comment">//only if the gamestatus is play (1 or 2)</span>
-        <span class="kw">match</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span>{
-        <span class="ident">GameStatus</span>::<span class="ident">Status1stCard</span> <span class="op">|</span> <span class="ident">GameStatus</span>::<span class="ident">Status2ndCard</span> <span class="op">=&gt;</span> {
-            <span class="comment">// If the event&#39;s target is our image...</span>
-            <span class="kw">let</span> <span class="ident">img</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">event</span>
-                .<span class="ident">target</span>()
-                .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">t</span><span class="op">|</span> <span class="ident">t</span>.<span class="ident">dyn_into</span>::<span class="op">&lt;</span><span class="ident">web_sys</span>::<span class="ident">HtmlImageElement</span><span class="op">&gt;</span>().<span class="ident">ok</span>())
-            {
-                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span>,
-                <span class="comment">//?? Don&#39;t understand what this does. The original was written for Input element.</span>
-                <span class="prelude-val">Some</span>(<span class="ident">input</span>) <span class="op">=&gt;</span> <span class="ident">input</span>,
-            };
-            <span class="comment">//region:get the card index</span>
-            <span class="comment">//id attribute of image html element is prefixed with img ex. &quot;img12&quot;</span>
-            <span class="kw">let</span> <span class="ident">this_click_card_index</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(
-                (<span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">img</span>.<span class="ident">id</span>().<span class="ident">get</span>(<span class="number">3</span>..), <span class="string">&quot;error slicing&quot;</span>)).<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>(),
-                <span class="string">&quot;error parse img id to usize&quot;</span>
-            );
-            <span class="comment">//endregion</span>
-            <span class="comment">//click is usefull only on facedown cards</span>
-            <span class="kw">if</span> <span class="macro">unwrap</span><span class="macro">!</span>(
-                <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">card_grid_data</span>.<span class="ident">get</span>(<span class="ident">this_click_card_index</span>),
-                <span class="string">&quot;error this_click_card_index&quot;</span>
-            ).<span class="ident">status</span>.<span class="ident">as_ref</span>()<span class="op">==</span><span class="ident">CardStatusCardFace</span>::<span class="ident">Down</span>.<span class="ident">as_ref</span>(){
-                <span class="kw">match</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span>{
-                    <span class="ident">GameStatus</span>::<span class="ident">Status1stCard</span><span class="op">=&gt;</span>{
-                        <span class="ident">status1stcardmod</span>::<span class="ident">on_click_1st_card</span>(<span class="ident">rrc</span>, <span class="kw-2">&amp;</span><span class="ident">vdom</span>, <span class="ident">this_click_card_index</span>);
-                    },
-                    <span class="ident">GameStatus</span>::<span class="ident">Status2ndCard</span><span class="op">=&gt;</span>{
-                        <span class="ident">status2ndcardmod</span>::<span class="ident">on_click_2nd_card</span>(<span class="ident">rrc</span>, <span class="kw-2">&amp;</span><span class="ident">vdom</span>, <span class="ident">this_click_card_index</span>);
-                    },
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;This click is not expected in this status.&quot;</span>),
+) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span> {
+    <span class="kw">match</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_status</span> {
+        <span class="ident">GameStatus</span>::<span class="ident">Status1stCard</span> <span class="op">=&gt;</span> {
+            <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
+            <span class="op">&lt;</span><span class="ident">div</span> <span class="ident">class</span><span class="op">=</span> <span class="string">&quot;grid_item&quot;</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="ident">img</span> <span class="ident">src</span><span class="op">=</span>{<span class="ident">img_src</span>} <span class="ident">id</span><span class="op">=</span>{<span class="ident">img_id</span>} <span class="ident">style</span><span class="op">=</span>{<span class="ident">opacity</span>} <span class="ident">onclick</span><span class="op">=</span>{<span class="kw">move</span> <span class="op">|</span><span class="ident">root</span>, <span class="ident">vdom</span>, <span class="ident">event</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
+                <span class="comment">// If the event&#39;s target is our image...</span>
+                <span class="kw">let</span> <span class="ident">img</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">event</span>
+                    .<span class="ident">target</span>()
+                    .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">t</span><span class="op">|</span> <span class="ident">t</span>.<span class="ident">dyn_into</span>::<span class="op">&lt;</span><span class="ident">web_sys</span>::<span class="ident">HtmlImageElement</span><span class="op">&gt;</span>().<span class="ident">ok</span>())
+                {
+                    <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span>,
+                    <span class="comment">//?? Don&#39;t understand what this does. The original was written for Input element.</span>
+                    <span class="prelude-val">Some</span>(<span class="ident">input</span>) <span class="op">=&gt;</span> <span class="ident">input</span>,
+                };
+                <span class="comment">//id attribute of image html element is prefixed with img ex. &quot;img12&quot;</span>
+                <span class="kw">let</span> <span class="ident">this_click_card_index</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(
+                    (<span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">img</span>.<span class="ident">id</span>().<span class="ident">get</span>(<span class="number">3</span>..), <span class="string">&quot;error slicing&quot;</span>)).<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>(),
+                    <span class="string">&quot;error parse img id to usize&quot;</span>
+                );
+                <span class="comment">//click is usefull only on facedown cards</span>
+                <span class="kw">if</span> <span class="macro">unwrap</span><span class="macro">!</span>(
+                    <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">card_grid_data</span>.<span class="ident">get</span>(<span class="ident">this_click_card_index</span>),
+                    <span class="string">&quot;error this_click_card_index&quot;</span>
+                ).<span class="ident">status</span>.<span class="ident">as_ref</span>()<span class="op">==</span><span class="ident">CardStatusCardFace</span>::<span class="ident">Down</span>.<span class="ident">as_ref</span>(){
+                    <span class="ident">status1stcardmod</span>::<span class="ident">on_click_1st_card</span>(<span class="ident">rrc</span>, <span class="kw-2">&amp;</span><span class="ident">vdom</span>, <span class="ident">this_click_card_index</span>);
+                    <span class="comment">// Finally, re-render the component on the next animation frame.</span>
+                    <span class="ident">vdom</span>.<span class="ident">schedule_render</span>();
                 }
-                <span class="comment">// Finally, re-render the component on the next animation frame.</span>
-                <span class="ident">vdom</span>.<span class="ident">schedule_render</span>();
-            }
-        },
-        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">logmod</span>::<span class="ident">debug_write</span>(<span class="string">&quot;This click on img is not expected in this status.&quot;</span>),
-            }
-    }}<span class="op">&gt;</span>
-    <span class="op">&lt;</span><span class="op">/</span><span class="ident">img</span><span class="op">&gt;</span>
-    <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
-    )
+            }}<span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="op">/</span><span class="ident">img</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
+            )
+        }
+        <span class="ident">GameStatus</span>::<span class="ident">Status2ndCard</span> <span class="op">=&gt;</span> {
+            <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
+            <span class="op">&lt;</span><span class="ident">div</span> <span class="ident">class</span><span class="op">=</span> <span class="string">&quot;grid_item&quot;</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="ident">img</span> <span class="ident">src</span><span class="op">=</span>{<span class="ident">img_src</span>} <span class="ident">id</span><span class="op">=</span>{<span class="ident">img_id</span>} <span class="ident">style</span><span class="op">=</span>{<span class="ident">opacity</span>} <span class="ident">onclick</span><span class="op">=</span>{<span class="kw">move</span> <span class="op">|</span><span class="ident">root</span>, <span class="ident">vdom</span>, <span class="ident">event</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">unwrap_mut</span>::<span class="op">&lt;</span><span class="ident">RootRenderingComponent</span><span class="op">&gt;</span>();
+                <span class="comment">// If the event&#39;s target is our image...</span>
+                <span class="kw">let</span> <span class="ident">img</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">event</span>
+                    .<span class="ident">target</span>()
+                    .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">t</span><span class="op">|</span> <span class="ident">t</span>.<span class="ident">dyn_into</span>::<span class="op">&lt;</span><span class="ident">web_sys</span>::<span class="ident">HtmlImageElement</span><span class="op">&gt;</span>().<span class="ident">ok</span>())
+                {
+                    <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span>,
+                    <span class="comment">//?? Don&#39;t understand what this does. The original was written for Input element.</span>
+                    <span class="prelude-val">Some</span>(<span class="ident">input</span>) <span class="op">=&gt;</span> <span class="ident">input</span>,
+                };
+                <span class="comment">//id attribute of image html element is prefixed with img ex. &quot;img12&quot;</span>
+                <span class="kw">let</span> <span class="ident">this_click_card_index</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(
+                    (<span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">img</span>.<span class="ident">id</span>().<span class="ident">get</span>(<span class="number">3</span>..), <span class="string">&quot;error slicing&quot;</span>)).<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>(),
+                    <span class="string">&quot;error parse img id to usize&quot;</span>
+                );
+                <span class="comment">//click is usefull only on facedown cards</span>
+                <span class="kw">if</span> <span class="macro">unwrap</span><span class="macro">!</span>(
+                    <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">card_grid_data</span>.<span class="ident">get</span>(<span class="ident">this_click_card_index</span>),
+                    <span class="string">&quot;error this_click_card_index&quot;</span>
+                ).<span class="ident">status</span>.<span class="ident">as_ref</span>()<span class="op">==</span><span class="ident">CardStatusCardFace</span>::<span class="ident">Down</span>.<span class="ident">as_ref</span>(){
+                    <span class="ident">status2ndcardmod</span>::<span class="ident">on_click_2nd_card</span>(<span class="ident">rrc</span>, <span class="kw-2">&amp;</span><span class="ident">vdom</span>, <span class="ident">this_click_card_index</span>);
+                    <span class="comment">// Finally, re-render the component on the next animation frame.</span>
+                    <span class="ident">vdom</span>.<span class="ident">schedule_render</span>();
+                }
+            }}<span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="op">/</span><span class="ident">img</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
+            )
+        }
+        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
+            <span class="op">&lt;</span><span class="ident">div</span> <span class="ident">class</span><span class="op">=</span> <span class="string">&quot;grid_item&quot;</span><span class="op">&gt;</span>
+                <span class="op">&lt;</span><span class="ident">img</span> <span class="ident">src</span><span class="op">=</span>{<span class="ident">img_src</span>} <span class="ident">id</span><span class="op">=</span>{<span class="ident">img_id</span>} <span class="ident">style</span><span class="op">=</span>{<span class="ident">opacity</span>} <span class="op">&gt;</span>
+                <span class="op">&lt;</span><span class="op">/</span><span class="ident">img</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
+        ),
+    }
 }
 
 <span class="doccomment">/// play sound mp3</span>
@@ -621,7 +699,7 @@
 <span class="doccomment">///grid width in pixels</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">grid_width</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
     <span class="comment">//the size of  the visible part of the window</span>
-    <span class="kw">let</span> <span class="ident">usize_inner_width</span> <span class="op">=</span> <span class="ident">rootrenderingcomponentmod</span>::<span class="ident">usize_window_inner_width</span>();
+    <span class="kw">let</span> <span class="ident">usize_inner_width</span> <span class="op">=</span> <span class="ident">usize_window_inner_width</span>();
     <span class="comment">//width min: 300px, max: 600 px in between width=visible width</span>
     <span class="comment">//3 columnsdelimiter 5px wide</span>
     <span class="kw">let</span> <span class="ident">grid_width</span>: <span class="ident">usize</span>;
@@ -638,7 +716,7 @@
 <span class="doccomment">///grid height in pixels</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">grid_height</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
     <span class="comment">//the size of  the visible part of the window</span>
-    <span class="kw">let</span> <span class="ident">usize_inner_height</span> <span class="op">=</span> <span class="ident">rootrenderingcomponentmod</span>::<span class="ident">usize_window_inner_height</span>();
+    <span class="kw">let</span> <span class="ident">usize_inner_height</span> <span class="op">=</span> <span class="ident">usize_window_inner_height</span>();
 
     <span class="comment">//height minimum 300, max 1000, else 0.8*visible height</span>
     <span class="comment">//3 row separetors 5px wide</span>
@@ -659,8 +737,8 @@
     <span class="comment">//if the game_config is None, then return full screen</span>
     <span class="kw">if</span> <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">game_config</span>.<span class="ident">is_none</span>() {
         <span class="ident">Size2d</span> {
-            <span class="ident">hor</span>: <span class="ident">rootrenderingcomponentmod</span>::<span class="ident">usize_window_inner_width_but_max_600</span>(),
-            <span class="ident">ver</span>: <span class="ident">rootrenderingcomponentmod</span>::<span class="ident">usize_window_inner_height</span>(),
+            <span class="ident">hor</span>: <span class="ident">usize_window_inner_width_but_max_600</span>(),
+            <span class="ident">ver</span>: <span class="ident">usize_window_inner_height</span>(),
         }
     } <span class="kw">else</span> {
         <span class="comment">//grid_container width and height</span>
@@ -719,6 +797,50 @@
             <span class="ident">hor</span>: <span class="ident">max_grid_width</span>,
             <span class="ident">ver</span>: <span class="ident">max_grid_height</span>,
         }
+    }
+}
+
+<span class="doccomment">/// return window inner height</span>
+<span class="doccomment">/// the size of  the visible part of the window</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">usize_window_inner_height</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">let</span> <span class="ident">window</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">web_sys</span>::<span class="ident">window</span>(), <span class="string">&quot;error: web_sys::window&quot;</span>);
+    <span class="kw">let</span> <span class="ident">jsvalue_inner_height</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">window</span>.<span class="ident">inner_height</span>(), <span class="string">&quot;window.inner_height&quot;</span>);
+
+    <span class="kw">let</span> <span class="ident">f64_inner_height</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(
+        <span class="ident">jsvalue_inner_height</span>.<span class="ident">as_f64</span>(),
+        <span class="string">&quot;jsValue_inner_height.as_f64()&quot;</span>
+    );
+    <span class="kw">let</span> <span class="ident">usize_inner_height</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">f64_inner_height</span>.<span class="ident">approx</span>());
+    <span class="comment">//return</span>
+    <span class="ident">usize_inner_height</span>
+}
+
+<span class="doccomment">/// return window inner width</span>
+<span class="doccomment">/// the size of  the visible part of the window</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">usize_window_inner_width</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">let</span> <span class="ident">window</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">web_sys</span>::<span class="ident">window</span>(), <span class="string">&quot;error: web_sys::window&quot;</span>);
+
+    <span class="kw">let</span> <span class="ident">jsvalue_inner_width</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">window</span>.<span class="ident">inner_width</span>(), <span class="string">&quot;window.inner_width&quot;</span>);
+
+    <span class="kw">let</span> <span class="ident">f64_inner_width</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(
+        <span class="ident">jsvalue_inner_width</span>.<span class="ident">as_f64</span>(),
+        <span class="string">&quot;jsValue_inner_width.as_string()&quot;</span>
+    );
+    <span class="kw">let</span> <span class="ident">usize_inner_width</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">f64_inner_width</span>.<span class="ident">approx</span>());
+    <span class="comment">//return</span>
+    <span class="ident">usize_inner_width</span>
+}
+
+<span class="doccomment">/// return window inner width, but maximum 600px</span>
+<span class="doccomment">/// the size of  the visible part of the window</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">usize_window_inner_width_but_max_600</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">usize_window_inner_width</span>();
+    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">600</span> {
+        <span class="comment">//return</span>
+        <span class="number">600</span>
+    } <span class="kw">else</span> {
+        <span class="comment">//return</span>
+        <span class="ident">x</span>
     }
 }
 </pre></div>

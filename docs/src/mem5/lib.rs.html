@@ -370,6 +370,7 @@
 <span id="370">370</span>
 <span id="371">371</span>
 <span id="372">372</span>
+<span id="373">373</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">doc</span>(
     <span class="ident">html_favicon_url</span> <span class="op">=</span> <span class="string">&quot;https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-16.png&quot;</span>
@@ -380,7 +381,7 @@
 <span class="comment">//region: lmake_readme insert &quot;readme.md&quot;</span>
 <span class="doccomment">//! # mem5</span>
 <span class="doccomment">//! </span>
-<span class="doccomment">//! version: 19.10.21-20.11  </span>
+<span class="doccomment">//! version: 19.10.22-18.40  </span>
 <span class="doccomment">//! </span>
 <span class="doccomment">//! mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web App).  </span>
 <span class="doccomment">//! </span>
@@ -485,10 +486,10 @@
 <span class="doccomment">//! </span>
 <span class="doccomment">//! | Game Status1         | Render               | User action           | GameStatus2 p.p. | Sends Msg       | On rcv Msg o.p.       | GameStatus2 o.p. |</span>
 <span class="doccomment">//! | -------------------- | -------------------- | --------------------- | ---------------- | --------------  | -------------------   | --------------   |</span>
-<span class="doccomment">//! | StatusStartPage      | div_start_page       | on_click_invite       | StatusInviting   | MsgInvite       | on_msg_invite         | StatusInvited    |</span>
-<span class="doccomment">//! | StatusInvited        | div_invited          | on_click_accept       | StatusAccepted   | MsgAccept       | on_msg_accept         | -                |</span>
-<span class="doccomment">//! | StatusAccepted       | div_invite_accepted  |                       |                  |                 |                       | -                |</span>
-<span class="doccomment">//! | StatusInviting       | div_inviting         | on_click_start_game   | Status1stCard    | MsgStartGame    | on_msg_start_game     | Status1stCard    |</span>
+<span class="doccomment">//! | p.p. StatusStartPage | div_start_page       | on_click_invite       | StatusInviting   | MsgInvite       | on_msg_invite         | StatusInvited    |</span>
+<span class="doccomment">//! | o.p. StatusInvited   | div_invited          | on_click_accept       | StatusAccepted   | MsgAccept       | on_msg_accept         | -                |</span>
+<span class="doccomment">//! | o.p. StatusAccepted  | div_invite_accepted  |                       |                  |                 |                       | -                |</span>
+<span class="doccomment">//! | p.p. StatusInviting  | div_inviting         | on_click_start_game   | Status1stCard    | MsgStartGame    | on_msg_start_game     | Status1stCard    |</span>
 <span class="doccomment">//! </span>
 <span class="doccomment">//! This starts the game flow, that repeats until the game is over.  </span>
 <span class="doccomment">//!   </span>
@@ -500,14 +501,14 @@
 <span class="doccomment">//! Because of unreliable networks ther must be an acknowledge ack msg to confirm, that the msg is received to continue the game.  </span>
 <span class="doccomment">//! The rendering is scheduled and it will happen shortly (async).  </span>
 <span class="doccomment">//! </span>
-<span class="doccomment">//! | Game Status1      | Render                     | User action                    | Condition                     | GameStatus2 p.p. | Sends Msg            | On rcv Msg o.p.             | GameStatus2 o.p.               |</span>
-<span class="doccomment">//! | ----------------  | -------------------------- | ------------------------------ | ----------------------------- | ---------------- | ----------------     | --------------------------  | ----------------------------   |</span>
-<span class="doccomment">//! | Status1stCard     | div_grid_container         | on_click_1st_card()            | -                             | Status2ndCard    | MsgClick1stCard      | on_msg_click_1st_card       | Status2ndCard                  |</span>
-<span class="doccomment">//! | Status2ndCard     | div_grid_container         | on_click_2nd_card()            | If cards match                | Status1stCard    | MsgClick2ndCardPoint | on_msg_click_2nd_card_point | Status1stCard                  |</span>
-<span class="doccomment">//! | -                 | -                          | continues on ack msgs received | if all cards permanently up   | StatusGameOver   | StatusGameOver       | on_msg_game_over            | StatusGameOver                 |</span>
-<span class="doccomment">//! | Status2ndCard     | div_grid_container         | on_click_2nd_card()            | else cards don&#39;t match        | MsgTakeTurnBegin | MsgTakeTurnBegin     | on_msg_take_turn            | MsgTakeTurnBegin               |</span>
-<span class="doccomment">//! | MsgTakeTurnBegin  | div_take_turn_begin        | on_click_take_turn_begin       | -                             | Status1stCard    | MsgTakeTurnEnd       | on_msg_take_turn_end        | Status1stCard, the next player |</span>
-<span class="doccomment">//! | StatusGameOver    | div_game_over              | window.location().reload()     | -                             | -                | -                    | -                           | -                              |</span>
+<span class="doccomment">//! | Game Status1      | Render                     | User action                    | Condition                     | GameStatus2 p.p.    | Sends Msg            | On rcv Msg o.p.             | GameStatus2 o.p.               |</span>
+<span class="doccomment">//! | ----------------  | -------------------------- | ------------------------------ | ----------------------------- | ----------------    | ----------------     | --------------------------  | ----------------------------   |</span>
+<span class="doccomment">//! | Status1stCard     | div_grid_container         | on_click_1st_card()            | -                             | Status2ndCard       | MsgClick1stCard      | on_msg_click_1st_card       | Status2ndCard                  |</span>
+<span class="doccomment">//! | Status2ndCard     | div_grid_container         | on_click_2nd_card()            | If cards match                | Status1stCard       | MsgClick2ndCardPoint | on_msg_click_2nd_card_point | Status1stCard                  |</span>
+<span class="doccomment">//! | -                 | -                          | continues on ack msgs received | if all cards permanently up   | StatusGameOver      | MsgGameOver          | on_msg_game_over            | StatusGameOver                 |</span>
+<span class="doccomment">//! | Status2ndCard     | div_grid_container         | on_click_take_turn_begin       | else cards don&#39;t match        | StatusTakeTurnBegin | MsgTakeTurnBegin     | on_msg_take_turn_begin      | MsgTakeTurnBegin               |</span>
+<span class="doccomment">//! | MsgTakeTurnBegin  | div_take_turn_begin        | on_click_take_turn_end         | -                             | Status1stCard       | MsgTakeTurnEnd       | on_msg_take_turn_end        | Status1stCard, the next player |</span>
+<span class="doccomment">//! | StatusGameOver    | div_game_over              | window.location().reload()     | -                             | -                   | -                    | -                           | -                              |</span>
 <span class="doccomment">//! |  |  |  |  |  |  |  |  |</span>
 <span class="doccomment">//! </span>
 <span class="doccomment">//! p.p. = playing player,   o.p. = other players,  rrc = rrc, rcv = receive</span>
@@ -643,6 +644,7 @@
 <span class="kw">mod</span> <span class="ident">divcardmonikermod</span>;
 <span class="kw">mod</span> <span class="ident">divfordebuggingmod</span>;
 <span class="kw">mod</span> <span class="ident">divfullscreenmod</span>;
+<span class="kw">mod</span> <span class="ident">divgametitlemod</span>;
 <span class="kw">mod</span> <span class="ident">divgridcontainermod</span>;
 <span class="kw">mod</span> <span class="ident">divplayeractionsmod</span>;
 <span class="kw">mod</span> <span class="ident">divplayersandscoresmod</span>;
@@ -728,7 +730,7 @@
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rrc</span> <span class="op">=</span> <span class="ident">rootrenderingcomponentmod</span>::<span class="ident">RootRenderingComponent</span>::<span class="ident">new</span>(<span class="ident">ws_c</span>, <span class="ident">my_ws_uid</span>);
     <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">href</span> <span class="op">=</span> <span class="ident">location_href</span>.<span class="ident">to_string</span>();
-
+    <span class="ident">rrc</span>.<span class="ident">game_data</span>.<span class="ident">is_fullscreen</span> <span class="op">=</span> <span class="ident">divfullscreenmod</span>::<span class="ident">is_fullscreen</span>(<span class="kw-2">&amp;</span><span class="ident">rrc</span>);
     <span class="comment">// Mount the component to the `&lt;div id=&quot;div_for_virtual_dom&quot;&gt;`.</span>
     <span class="kw">let</span> <span class="ident">vdom</span> <span class="op">=</span> <span class="ident">dodrio</span>::<span class="ident">Vdom</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">div_for_virtual_dom</span>, <span class="ident">rrc</span>);
 

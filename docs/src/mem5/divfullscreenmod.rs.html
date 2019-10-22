@@ -99,11 +99,6 @@
 <span id="99"> 99</span>
 <span id="100">100</span>
 <span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// divfullscreenmod.rs</span>
 <span class="doccomment">//! instruction and button for fullscreen</span>
@@ -168,19 +163,14 @@ fn is_iphone() -&gt; bool {
 }
 
 <span class="doccomment">///render the div for fullscreen</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_fullscreen</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;bump</span><span class="op">&gt;</span>(
-    <span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">RootRenderingComponent</span>,
-    <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;bump</span> <span class="ident">Bump</span>,
-) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;&gt;</span>
-<span class="kw">where</span>
-    <span class="lifetime">&#39;a</span>: <span class="lifetime">&#39;bump</span>,
-{
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_fullscreen</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>(<span class="ident">is_fullscreen</span>: <span class="ident">bool</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret_val</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
         <span class="op">&lt;</span><span class="ident">div</span><span class="op">&gt;</span>
         <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
     )];
 
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">is_fullscreen</span>(<span class="ident">rrc</span>) <span class="op">&amp;&amp;</span> <span class="ident">javascriptimportmod</span>::<span class="ident">is_mobile_device</span>() {
+    <span class="comment">// !is_fullscreen(rrc)</span>
+    <span class="kw">if</span> <span class="op">!</span><span class="ident">is_fullscreen</span> <span class="op">&amp;&amp;</span> <span class="ident">javascriptimportmod</span>::<span class="ident">is_mobile_device</span>() {
         <span class="ident">ret_val</span>.<span class="ident">push</span>(<span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
         <span class="op">&lt;</span><span class="ident">div</span> <span class="ident">id</span><span class="op">=</span><span class="string">&quot;div_fullscreen&quot;</span> <span class="ident">class</span><span class="op">=</span><span class="string">&quot;div_clickable&quot;</span>
         <span class="ident">onclick</span><span class="op">=</span>{<span class="kw">move</span> <span class="op">|</span><span class="ident">root</span>, <span class="ident">vdom</span>, <span class="ident">_event</span><span class="op">|</span> {
@@ -191,7 +181,7 @@ fn is_iphone() -&gt; bool {
             }}<span class="op">&gt;</span>
             <span class="op">&lt;</span><span class="ident">h2</span> <span class="ident">id</span><span class="op">=</span><span class="string">&quot;h2_fullscreen&quot;</span> <span class="op">&gt;</span>
                 {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(
-                        <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;Click for FullScreen{}!&quot;</span>, <span class="string">&quot;&quot;</span>)
+                        <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;FullScreen{}&quot;</span>, <span class="string">&quot;&quot;</span>)
                     .<span class="ident">into_bump_str</span>(),
                 )]}
             <span class="op">&lt;</span><span class="op">/</span><span class="ident">h2</span><span class="op">&gt;</span>
@@ -199,12 +189,12 @@ fn is_iphone() -&gt; bool {
         ));
         <span class="ident">ret_val</span>.<span class="ident">push</span>(<span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
         <span class="op">&lt;</span><span class="ident">div</span><span class="op">&gt;</span>
-            <span class="op">&lt;</span><span class="ident">h3</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="ident">h5</span><span class="op">&gt;</span>
                 {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(
-                    <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;or choose Add to Homescreen from your browser menu{}&quot;</span>, <span class="string">&quot;&quot;</span>)
+                    <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;or choose &#39;Add to Homescreen&#39; in your browser.{}&quot;</span>, <span class="string">&quot;&quot;</span>)
                 .<span class="ident">into_bump_str</span>(),
                 )]}
-            <span class="op">&lt;</span><span class="op">/</span><span class="ident">h3</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="op">/</span><span class="ident">h5</span><span class="op">&gt;</span>
         <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
         ));
     }

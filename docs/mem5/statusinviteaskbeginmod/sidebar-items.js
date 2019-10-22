@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["div_invite_ask_begin","render invite ask begin, ask to play for multiple contents/folders"],["div_invite_ask_begin_on_click","on click updates some data and sends msgs msgs will be asynchronously received and processed"],["div_nickname_input","render the nickname input"],["on_msg_invite","msg invite"]]});

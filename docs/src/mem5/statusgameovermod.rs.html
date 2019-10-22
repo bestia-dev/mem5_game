@@ -41,14 +41,14 @@
 <span id="41">41</span>
 <span id="42">42</span>
 <span id="43">43</span>
-<span id="44">44</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// statusgameovermod.rs</span>
 <span class="doccomment">//! code flow from this status</span>
 
 <span class="comment">//region: use</span>
-<span class="kw">use</span> <span class="ident">mem5_common</span>::<span class="ident">GameStatus</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rootrenderingcomponentmod</span>::<span class="ident">RootRenderingComponent</span>;
+
+<span class="kw">use</span> <span class="ident">mem5_common</span>::<span class="ident">GameStatus</span>;
 
 <span class="kw">use</span> <span class="ident">unwrap</span>::<span class="ident">unwrap</span>;
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">builder</span>::<span class="ident">text</span>;
@@ -58,9 +58,7 @@
 <span class="comment">//endregion</span>
 
 <span class="doccomment">///play again</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_game_over</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;bump</span><span class="op">&gt;</span>(<span class="ident">_rrc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">RootRenderingComponent</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;bump</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="lifetime">&#39;a</span>: <span class="lifetime">&#39;bump</span>,
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_game_over</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>(<span class="ident">_rrc</span>: <span class="op">&amp;</span> <span class="ident">RootRenderingComponent</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>
 {
     <span class="comment">//end game ,Play again?  reload webpage</span>
     <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,

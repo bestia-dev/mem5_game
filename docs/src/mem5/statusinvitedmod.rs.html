@@ -84,9 +84,6 @@
 <span id="84">84</span>
 <span id="85">85</span>
 <span id="86">86</span>
-<span id="87">87</span>
-<span id="88">88</span>
-<span id="89">89</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// statusinvitedmod.rs</span>
 <span class="doccomment">//! code flow for this status</span>
@@ -96,18 +93,17 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">websocketcommunicationmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">gamedatamod</span>;
 
+<span class="kw">use</span> <span class="ident">mem5_common</span>::{<span class="ident">GameStatus</span>, <span class="ident">Player</span>, <span class="ident">WsMessage</span>};
+
 <span class="kw">use</span> <span class="ident">unwrap</span>::<span class="ident">unwrap</span>;
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">builder</span>::<span class="ident">text</span>;
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">bumpalo</span>::{<span class="self">self</span>, <span class="ident">Bump</span>};
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">Node</span>;
-<span class="kw">use</span> <span class="ident">mem5_common</span>::{<span class="ident">GameStatus</span>, <span class="ident">Player</span>, <span class="ident">WsMessage</span>};
 <span class="kw">use</span> <span class="ident">typed_html</span>::<span class="ident">dodrio</span>;
 <span class="comment">//endregion</span>
 
 <span class="doccomment">///render asked</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_invited</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;bump</span><span class="op">&gt;</span>(<span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">RootRenderingComponent</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;bump</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="lifetime">&#39;a</span>: <span class="lifetime">&#39;bump</span>,
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_invited</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>(<span class="ident">rrc</span>: <span class="op">&amp;</span> <span class="ident">RootRenderingComponent</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>
 {
     <span class="comment">//return Click here to Accept play</span>
     <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
@@ -164,12 +160,10 @@
 }
 
 <span class="doccomment">///render play accepted</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_invite_accepted</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;bump</span><span class="op">&gt;</span>(
-    <span class="ident">rrc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">RootRenderingComponent</span>,
-    <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;bump</span> <span class="ident">Bump</span>,
-) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="lifetime">&#39;a</span>: <span class="lifetime">&#39;bump</span>,
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_invite_accepted</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>(
+    <span class="ident">rrc</span>: <span class="op">&amp;</span> <span class="ident">RootRenderingComponent</span>,
+    <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">Bump</span>,
+) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>
 {
     <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
     <span class="op">&lt;</span><span class="ident">h2</span> <span class="ident">class</span><span class="op">=</span><span class="string">&quot;h2_user_must_wait&quot;</span><span class="op">&gt;</span>

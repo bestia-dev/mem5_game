@@ -23,8 +23,9 @@ All players must be in physical proximity around a table. \
 Open this link 
 https://bestia.dev/mem5
 on all smartphones. \
-Use the QR code on the bottom of this text. \
-For better user experience click on ";
+Use the QR code on the bottom of this text. 
+For better user experience 
+click on ";
 
 const GAME_RULES2: &str = "On the start page write your nickname. \
 Now put all the smartphones on the table near to each other, \

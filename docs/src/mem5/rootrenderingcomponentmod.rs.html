@@ -141,75 +141,6 @@
 <span id="141">141</span>
 <span id="142">142</span>
 <span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// rootrenderingcomponentmod.rs</span>
 <span class="doccomment">//! renders the web page</span>
@@ -218,43 +149,42 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divcardmonikermod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divfordebuggingmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divgridcontainermod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divgametitlemod</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divnicknamemod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divplayeractionsmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divplayersandscoresmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">divrulesanddescriptionmod</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">gamedatamod</span>;
 
-<span class="kw">use</span> <span class="ident">unwrap</span>::<span class="ident">unwrap</span>;
+<span class="kw">use</span> <span class="ident">mem5_common</span>::<span class="ident">GameStatus</span>;
+
+<span class="comment">//use unwrap::unwrap;</span>
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">builder</span>::<span class="ident">text</span>;
 <span class="kw">use</span> <span class="ident">dodrio</span>::<span class="ident">bumpalo</span>::{<span class="self">self</span>, <span class="ident">Bump</span>};
 <span class="kw">use</span> <span class="ident">dodrio</span>::{<span class="ident">Cached</span>, <span class="ident">Node</span>, <span class="ident">Render</span>};
-<span class="kw">use</span> <span class="ident">mem5_common</span>::<span class="ident">GameStatus</span>;
 <span class="kw">use</span> <span class="ident">typed_html</span>::<span class="ident">dodrio</span>;
 <span class="kw">use</span> <span class="ident">web_sys</span>::<span class="ident">WebSocket</span>;
-<span class="kw">use</span> <span class="ident">conv</span>::{<span class="ident">ConvAsUtil</span>};
 <span class="comment">//endregion</span>
 
-<span class="doccomment">///Root Render Component: the card grid struct has all the needed data for play logic and rendering</span>
+<span class="doccomment">/// Root Rendering Component has all</span>
+<span class="doccomment">/// the data needed for play logic and rendering</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RootRenderingComponent</span> {
     <span class="doccomment">///game data will be inside of Root</span>
     <span class="kw">pub</span> <span class="ident">game_data</span>: <span class="ident">gamedatamod</span>::<span class="ident">GameData</span>,
-    <span class="doccomment">///subComponent: players and scores. The data is a cached copy of GameData.</span>
+    <span class="doccomment">///subComponent 1: players and scores. The data is a cached copy of GameData.</span>
     <span class="kw">pub</span> <span class="ident">cached_players_and_scores</span>: <span class="ident">Cached</span><span class="op">&lt;</span><span class="ident">divplayersandscoresmod</span>::<span class="ident">PlayersAndScores</span><span class="op">&gt;</span>,
-    <span class="doccomment">///subComponent: the static parts can be cached.</span>
+    <span class="doccomment">///subComponent 2: the static parts can be cached.</span>
     <span class="kw">pub</span> <span class="ident">cached_rules_and_description</span>: <span class="ident">Cached</span><span class="op">&lt;</span><span class="ident">divrulesanddescriptionmod</span>::<span class="ident">RulesAndDescription</span><span class="op">&gt;</span>,
 }
 
-<span class="comment">//region:RootRenderingComponent struct is the only persistent data we have in Rust Virtual Dom.dodrio</span>
-<span class="comment">//in the constructor we initialize that data.</span>
-<span class="comment">//Later on click we change this data.</span>
-<span class="comment">//at every animation frame we use only this data to render the virtual Dom.</span>
-<span class="comment">//It knows nothing about HTML and Virtual dom.</span>
+<span class="doccomment">///methods</span>
 <span class="kw">impl</span> <span class="ident">RootRenderingComponent</span> {
-    <span class="doccomment">/// Construct a new `RootRenderingComponent` component. Only once at the beginning.</span>
+    <span class="doccomment">/// Construct a new `RootRenderingComponent` at the beginning only once.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ws</span>: <span class="ident">WebSocket</span>, <span class="ident">my_ws_uid</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">game_data</span> <span class="op">=</span> <span class="ident">gamedatamod</span>::<span class="ident">GameData</span>::<span class="ident">new</span>(<span class="ident">ws</span>, <span class="ident">my_ws_uid</span>);
 
-        <span class="kw">let</span> <span class="ident">game_rule_01</span> <span class="op">=</span> <span class="ident">divrulesanddescriptionmod</span>::<span class="ident">RulesAndDescription</span> {};
-        <span class="kw">let</span> <span class="ident">cached_rules_and_description</span> <span class="op">=</span> <span class="ident">Cached</span>::<span class="ident">new</span>(<span class="ident">game_rule_01</span>);
+        <span class="kw">let</span> <span class="ident">cached_rules_and_description</span> <span class="op">=</span>
+            <span class="ident">Cached</span>::<span class="ident">new</span>(<span class="ident">divrulesanddescriptionmod</span>::<span class="ident">RulesAndDescription</span>::<span class="ident">new</span>());
         <span class="kw">let</span> <span class="ident">cached_players_and_scores</span> <span class="op">=</span>
             <span class="ident">Cached</span>::<span class="ident">new</span>(<span class="ident">divplayersandscoresmod</span>::<span class="ident">PlayersAndScores</span>::<span class="ident">new</span>(<span class="ident">my_ws_uid</span>));
 
@@ -272,6 +202,12 @@
         {
             <span class="ident">Cached</span>::<span class="ident">invalidate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">cached_players_and_scores</span>);
         }
+        <span class="kw">if</span> <span class="self">self</span>
+            .<span class="ident">cached_rules_and_description</span>
+            .<span class="ident">update_intern_cache</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">game_data</span>)
+        {
+            <span class="ident">Cached</span>::<span class="ident">invalidate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">cached_rules_and_description</span>);
+        }
     }
     <span class="doccomment">///reset the data to replay the game</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
@@ -288,24 +224,12 @@
 
         <span class="self">self</span>.<span class="ident">check_invalidate_for_all_components</span>();
     }
-    <span class="comment">//region: all functions for receive message (like events)</span>
-    <span class="comment">// I separate the code into functions to avoid looking at all that boilerplate in the big match around futures and components.</span>
-    <span class="comment">// All the data changing must be encapsulated inside these functions.</span>
-    <span class="doccomment">///msg response with uid, just to check. because the WebSocket server</span>
-    <span class="doccomment">///gets the uid from the client in the url_param. The client generates a random number.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_response_ws_uid</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">your_ws_uid</span>: <span class="ident">usize</span>) {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">game_data</span>.<span class="ident">my_ws_uid</span> <span class="op">!=</span> <span class="ident">your_ws_uid</span> {
-            <span class="self">self</span>.<span class="ident">game_data</span>.<span class="ident">error_text</span> <span class="op">=</span> <span class="string">&quot;my_ws_uid is incorrect!&quot;</span>.<span class="ident">to_string</span>();
-        }
-    }
 }
 <span class="comment">//endregion</span>
 
 <span class="comment">//region: `Render` trait implementation on RootRenderingComponent struct</span>
 <span class="doccomment">///It is called for every Dodrio animation frame to render the vdom.</span>
-<span class="doccomment">///Probably only when something changes. Here it is a click on the cards.</span>
-<span class="doccomment">///Not sure about that, but I don&#39;t see a reason to make execute it otherwise.</span>
-<span class="doccomment">///It is the only place where I create HTML elements in Virtual Dom.</span>
+<span class="doccomment">///Only when render is scheduled after aomw change id the game data.</span>
 <span class="kw">impl</span> <span class="ident">Render</span> <span class="kw">for</span> <span class="ident">RootRenderingComponent</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">render</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;bump</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">bump</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;bump</span> <span class="ident">Bump</span>) <span class="op">-&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="lifetime">&#39;bump</span><span class="op">&gt;</span>
@@ -315,60 +239,42 @@
         <span class="comment">//the card grid is a html css grid object (like a table) with &lt;img&gt; inside</span>
         <span class="comment">//other html elements are pretty simple.</span>
 
-        <span class="comment">//region: private helper fn for Render()</span>
-        <span class="comment">//here I use private functions for readability only, to avoid deep code nesting.</span>
-        <span class="comment">//I don&#39;t understand closures enough to use them properly.</span>
-        <span class="comment">//These private functions are not in the &quot;impl Render forRootRenderingComponent&quot; because of the error</span>
-        <span class="comment">//method `from_card_number_to_img_src` is not a member of trait `Render`</span>
-        <span class="comment">//there is not possible to write private and public methods in one impl block there are only pub methods.</span>
-        <span class="comment">//`pub` not permitted there because it&#39;s implied</span>
-        <span class="comment">//so I have to write functions outside of the impl block but inside my &quot;module&quot;</span>
-
         <span class="comment">//region: create the whole virtual dom. The verbose stuff is in private functions</span>
-
+        <span class="comment">//the UI has different &#39;pages&#39; for playing or errors</span>
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">game_data</span>.<span class="ident">error_text</span> <span class="op">==</span> <span class="string">&quot;&quot;</span> {
             <span class="kw">let</span> <span class="ident">xmax_grid_size</span> <span class="op">=</span> <span class="ident">divgridcontainermod</span>::<span class="ident">max_grid_size</span>(<span class="self">self</span>);
-            <span class="comment">//let xmax_grid_size_add_two = unwrap!(xmax_grid_size.hor.checked_add(2));</span>
-            <span class="comment">//let xstyle2 = format!(&quot;width:{}px;&quot;, xmax_grid_size_add_two);</span>
-            <span class="comment">//logmod::debug_write(&amp;format!(&quot;width m_container {}&quot;, xmax_grid_size_add_two));</span>
-
-            <span class="comment">//the main HTML render</span>
-            <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
-            <span class="op">&lt;</span><span class="ident">div</span> <span class="ident">class</span><span class="op">=</span> <span class="string">&quot;m_container&quot;</span> <span class="op">&gt;</span>
-                {
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">game_data</span>.<span class="ident">is_status_for_grid_container</span>(){
-                        <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divgridcontainermod</span>::<span class="ident">div_grid_container</span>(<span class="self">self</span>,<span class="ident">bump</span>,<span class="kw-2">&amp;</span><span class="ident">xmax_grid_size</span>)]
-                    }<span class="kw">else</span> {
-                        <span class="macro">vec</span><span class="macro">!</span>[<span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
-                            <span class="op">&lt;</span><span class="ident">div</span><span class="op">&gt;</span>
-                            <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
-                        )]
-                    }
-                }
-                {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divplayeractionsmod</span>::<span class="ident">div_player_actions_from_game_status</span>(<span class="self">self</span>, <span class="ident">bump</span>)]}
-                {
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">game_data</span>.<span class="ident">is_status_for_grid_container</span>(){
-                        <span class="macro">vec</span><span class="macro">!</span>[<span class="self">self</span>.<span class="ident">cached_players_and_scores</span>.<span class="ident">render</span>(<span class="ident">bump</span>)]
-                    }<span class="kw">else</span> {
-                        <span class="macro">vec</span><span class="macro">!</span>[<span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
-                            <span class="op">&lt;</span><span class="ident">div</span><span class="op">&gt;</span>
-                            <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
-                        )]
-                    }
-                }
-                {<span class="ident">divcardmonikermod</span>::<span class="ident">div_grid_card_moniker</span>(<span class="self">self</span>, <span class="ident">bump</span>)}
-                {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divfordebuggingmod</span>::<span class="ident">div_for_debugging</span>(<span class="self">self</span>, <span class="ident">bump</span>)]}
-                {<span class="macro">vec</span><span class="macro">!</span>[<span class="self">self</span>.<span class="ident">cached_rules_and_description</span>.<span class="ident">render</span>(<span class="ident">bump</span>)]}
-            <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
-            )
+            <span class="comment">//the UI has 2 different &#39;pages&#39;, depends on the status</span>
+            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">game_data</span>.<span class="ident">is_status_for_grid_container</span>() {
+                <span class="comment">//page2: the game grid</span>
+                <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
+                <span class="op">&lt;</span><span class="ident">div</span> <span class="ident">class</span><span class="op">=</span> <span class="string">&quot;m_container&quot;</span> <span class="op">&gt;</span>
+                    {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divgridcontainermod</span>::<span class="ident">div_grid_container</span>(<span class="self">self</span>,<span class="ident">bump</span>,<span class="kw-2">&amp;</span><span class="ident">xmax_grid_size</span>)]}
+                    {<span class="ident">divcardmonikermod</span>::<span class="ident">div_grid_card_moniker</span>(<span class="self">self</span>, <span class="ident">bump</span>)}
+                    {<span class="macro">vec</span><span class="macro">!</span>[<span class="self">self</span>.<span class="ident">cached_players_and_scores</span>.<span class="ident">render</span>(<span class="ident">bump</span>)]}
+                    {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divplayeractionsmod</span>::<span class="ident">div_player_actions_from_game_status</span>(<span class="self">self</span>, <span class="ident">bump</span>)]}
+                    {<span class="ident">divgametitlemod</span>::<span class="ident">div_game_title</span>(<span class="self">self</span>, <span class="ident">bump</span>)}
+                    {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divfordebuggingmod</span>::<span class="ident">div_for_debugging</span>(<span class="self">self</span>, <span class="ident">bump</span>)]}
+                <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
+                )
+            } <span class="kw">else</span> {
+                <span class="comment">//page1: the startpage with invitation and instructions</span>
+                <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
+                <span class="op">&lt;</span><span class="ident">div</span> <span class="ident">class</span><span class="op">=</span> <span class="string">&quot;m_container&quot;</span> <span class="op">&gt;</span>
+                    {<span class="ident">divgametitlemod</span>::<span class="ident">div_game_title</span>(<span class="self">self</span>, <span class="ident">bump</span>)}
+                    {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divnicknamemod</span>::<span class="ident">div_nickname_input</span>(<span class="self">self</span>,<span class="ident">bump</span>)]}
+                    {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divplayeractionsmod</span>::<span class="ident">div_player_actions_from_game_status</span>(<span class="self">self</span>, <span class="ident">bump</span>)]}
+                    {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">divfordebuggingmod</span>::<span class="ident">div_for_debugging</span>(<span class="self">self</span>, <span class="ident">bump</span>)]}
+                    {<span class="macro">vec</span><span class="macro">!</span>[<span class="self">self</span>.<span class="ident">cached_rules_and_description</span>.<span class="ident">render</span>(<span class="ident">bump</span>)]}
+                <span class="op">&lt;</span><span class="op">/</span><span class="ident">div</span><span class="op">&gt;</span>
+                )
+            }
         } <span class="kw">else</span> {
-            <span class="comment">//render only the error text to the screen.</span>
-            <span class="comment">//because I want to debug the WebSocket lost connection</span>
+            <span class="comment">//page3: on error</span>
             <span class="macro">dodrio</span><span class="macro">!</span>(<span class="ident">bump</span>,
                 <span class="op">&lt;</span><span class="ident">div</span><span class="op">&gt;</span>
                     <span class="op">&lt;</span><span class="ident">h2</span> <span class="ident">class</span><span class="op">=</span><span class="string">&quot;h2_user_must_wait&quot;</span><span class="op">&gt;</span>
                         {<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">text</span>(
-                            <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;error_text {} !&quot;</span>, <span class="self">self</span>.<span class="ident">game_data</span>.<span class="ident">error_text</span>)
+                            <span class="ident">bumpalo</span>::<span class="macro">format</span><span class="macro">!</span>(<span class="kw">in</span> <span class="ident">bump</span>, <span class="string">&quot;error_text {}&quot;</span>, <span class="self">self</span>.<span class="ident">game_data</span>.<span class="ident">error_text</span>)
                                 .<span class="ident">into_bump_str</span>(),
                             )]}
                     <span class="op">&lt;</span><span class="op">/</span><span class="ident">h2</span><span class="op">&gt;</span>
@@ -379,49 +285,5 @@
     }
 }
 <span class="comment">//endregion</span>
-
-<span class="doccomment">/// return window inner height</span>
-<span class="doccomment">/// the size of  the visible part of the window</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">usize_window_inner_height</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
-    <span class="kw">let</span> <span class="ident">window</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">web_sys</span>::<span class="ident">window</span>(), <span class="string">&quot;error: web_sys::window&quot;</span>);
-    <span class="kw">let</span> <span class="ident">jsvalue_inner_height</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">window</span>.<span class="ident">inner_height</span>(), <span class="string">&quot;window.inner_height&quot;</span>);
-
-    <span class="kw">let</span> <span class="ident">f64_inner_height</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(
-        <span class="ident">jsvalue_inner_height</span>.<span class="ident">as_f64</span>(),
-        <span class="string">&quot;jsValue_inner_height.as_f64()&quot;</span>
-    );
-    <span class="kw">let</span> <span class="ident">usize_inner_height</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">f64_inner_height</span>.<span class="ident">approx</span>());
-    <span class="comment">//return</span>
-    <span class="ident">usize_inner_height</span>
-}
-
-<span class="doccomment">/// return window inner width</span>
-<span class="doccomment">/// the size of  the visible part of the window</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">usize_window_inner_width</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
-    <span class="kw">let</span> <span class="ident">window</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">web_sys</span>::<span class="ident">window</span>(), <span class="string">&quot;error: web_sys::window&quot;</span>);
-
-    <span class="kw">let</span> <span class="ident">jsvalue_inner_width</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">window</span>.<span class="ident">inner_width</span>(), <span class="string">&quot;window.inner_width&quot;</span>);
-
-    <span class="kw">let</span> <span class="ident">f64_inner_width</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(
-        <span class="ident">jsvalue_inner_width</span>.<span class="ident">as_f64</span>(),
-        <span class="string">&quot;jsValue_inner_width.as_string()&quot;</span>
-    );
-    <span class="kw">let</span> <span class="ident">usize_inner_width</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="macro">unwrap</span><span class="macro">!</span>(<span class="ident">f64_inner_width</span>.<span class="ident">approx</span>());
-    <span class="comment">//return</span>
-    <span class="ident">usize_inner_width</span>
-}
-
-<span class="doccomment">/// return window inner width, but maximum 600px</span>
-<span class="doccomment">/// the size of  the visible part of the window</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">usize_window_inner_width_but_max_600</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
-    <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">usize_window_inner_width</span>();
-    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span> <span class="number">600</span> {
-        <span class="comment">//return</span>
-        <span class="number">600</span>
-    } <span class="kw">else</span> {
-        <span class="comment">//return</span>
-        <span class="ident">x</span>
-    }
-}
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "mem5";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
