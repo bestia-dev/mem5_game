@@ -61,17 +61,14 @@ pub fn is_fullscreen(rrc: &RootRenderingComponent) -> bool {
 }
 
 ///render the div for fullscreen
-pub fn div_fullscreen<'b>(
-    rrc: & RootRenderingComponent,
-    bump: &'b Bump,
-) -> Vec<Node<'b>>
-{
+pub fn div_fullscreen<'b>(is_fullscreen: bool, bump: &'b Bump) -> Vec<Node<'b>> {
     let mut ret_val = vec![dodrio!(bump,
         <div>
         </div>
     )];
 
-    if !is_fullscreen(rrc) && javascriptimportmod::is_mobile_device() {
+    // !is_fullscreen(rrc)
+    if !is_fullscreen && javascriptimportmod::is_mobile_device() {
         ret_val.push(dodrio!(bump,
         <div id="div_fullscreen" class="div_clickable"
         onclick={move |root, vdom, _event| {
@@ -82,7 +79,7 @@ pub fn div_fullscreen<'b>(
             }}>
             <h2 id="h2_fullscreen" >
                 {vec![text(
-                        bumpalo::format!(in bump, "Click for FullScreen{}!", "")
+                        bumpalo::format!(in bump, "FullScreen{}!", "")
                     .into_bump_str(),
                 )]}
             </h2>
@@ -90,12 +87,12 @@ pub fn div_fullscreen<'b>(
         ));
         ret_val.push(dodrio!(bump,
         <div>
-            <h3>
+            <h5>
                 {vec![text(
-                    bumpalo::format!(in bump, "or choose Add to Homescreen from your browser menu{}", "")
+                    bumpalo::format!(in bump, "or choose Add to Homescreen from your browser.{}", "")
                 .into_bump_str(),
                 )]}
-            </h3>
+            </h5>
         </div>
         ));
     }

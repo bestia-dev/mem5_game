@@ -93,7 +93,7 @@ fn main() {
     //endregion
 
     //region: cmdline parameters
-    let matches = App::new("mem5_server")
+    let matches = App::new(env!("CARGO_PKG_NAME"))
         .version(env!("CARGO_PKG_VERSION"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(env!("CARGO_PKG_DESCRIPTION"))

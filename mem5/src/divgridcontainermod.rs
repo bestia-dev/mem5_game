@@ -7,7 +7,7 @@ use crate::gamedatamod::{CardStatusCardFace, Size2d};
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::status1stcardmod;
 use crate::status2ndcardmod;
-use crate::logmod;
+//use crate::logmod;
 
 use mem5_common::GameStatus;
 
@@ -30,8 +30,7 @@ pub fn div_grid_container<'b>(
     rrc: &RootRenderingComponent,
     bump: &'b Bump,
     max_grid_size: &Size2d,
-) -> Node<'b>
-{
+) -> Node<'b> {
     let xstyle = format!(
         "width:{}px; height:{}px;grid-template-columns: {} {} {} {};",
         max_grid_size.hor,
@@ -68,10 +67,7 @@ pub fn div_grid_container<'b>(
 
 ///prepare a vector<Node> for the Virtual Dom for 'css grid' item with <img>
 ///the grid container needs only grid items. There is no need for rows and columns in 'css grid'.
-pub fn div_grid_items<'b>(
-    rrc: & RootRenderingComponent,
-    bump: &'b Bump,
-) -> Vec<Node<'b>> {
+pub fn div_grid_items<'b>(rrc: &RootRenderingComponent, bump: &'b Bump) -> Vec<Node<'b>> {
     //this game_data mutable reference is dropped on the end of the function
     let game_data = &rrc.game_data;
 
@@ -144,7 +140,8 @@ pub fn div_grid_items<'b>(
             };
 
             let img_id =
-            bumpalo::format!(in bump, "img{:02}",unwrap!(game_data.card_grid_data.get(index),"game_data.card_grid_data.get(index)").card_index_and_id)
+                bumpalo::format!(in bump, "img{:02}",unwrap!(game_data.card_grid_data.get(index),
+                    "game_data.card_grid_data.get(index)").card_index_and_id)
                 .into_bump_str();
 
             let opacity = if img_src
@@ -167,65 +164,86 @@ pub fn div_grid_items<'b>(
 }
 ///on click is the most important part and here is more or less isolated
 pub fn div_grid_item<'b>(
-    _rrc: & RootRenderingComponent,
+    rrc: &RootRenderingComponent,
     bump: &'b Bump,
     img_src: &str,
     img_id: &str,
     opacity: &str,
 ) -> Node<'b> {
-    dodrio!(bump,
-    <div class= "grid_item">
-    <img src={img_src} id={img_id} style={opacity} onclick={move |root, vdom, event| {
-        //on click needs a code Closure in Rust. Dodrio and wasm-bindgen
-        //generate the JavaScript code to call it properly.
-        //we need our Struct RootRenderingComponent for Rust to write any data.
-        //It comes in the parameter root.
-        //All we can change is inside the struct RootRenderingComponent fields.
-        //The method render will later use that for rendering the new html.
-        let rrc = root.unwrap_mut::<RootRenderingComponent>();
-        //only if the gamestatus is play (1 or 2)
-        match rrc.game_data.game_status{
-        GameStatus::Status1stCard | GameStatus::Status2ndCard => {
-            // If the event's target is our image...
-            let img = match event
-                .target()
-                .and_then(|t| t.dyn_into::<web_sys::HtmlImageElement>().ok())
-            {
-                None => return,
-                //?? Don't understand what this does. The original was written for Input element.
-                Some(input) => input,
-            };
-            //region:get the card index
-            //id attribute of image html element is prefixed with img ex. "img12"
-            let this_click_card_index = unwrap!(
-                (unwrap!(img.id().get(3..), "error slicing")).parse::<usize>(),
-                "error parse img id to usize"
-            );
-            //endregion
-            //click is usefull only on facedown cards
-            if unwrap!(
-                rrc.game_data.card_grid_data.get(this_click_card_index),
-                "error this_click_card_index"
-            ).status.as_ref()==CardStatusCardFace::Down.as_ref(){
-                match rrc.game_data.game_status{
-                    GameStatus::Status1stCard=>{
-                        status1stcardmod::on_click_1st_card(rrc, &vdom, this_click_card_index);
-                    },
-                    GameStatus::Status2ndCard=>{
-                        status2ndcardmod::on_click_2nd_card(rrc, &vdom, this_click_card_index);
-                    },
-                    _ => unreachable!("This click is not expected in this status."),
+    match rrc.game_data.game_status {
+        GameStatus::Status1stCard => {
+            dodrio!(bump,
+            <div class= "grid_item">
+            <img src={img_src} id={img_id} style={opacity} onclick={move |root, vdom, event| {
+                let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                // If the event's target is our image...
+                let img = match event
+                    .target()
+                    .and_then(|t| t.dyn_into::<web_sys::HtmlImageElement>().ok())
+                {
+                    None => return,
+                    //?? Don't understand what this does. The original was written for Input element.
+                    Some(input) => input,
+                };
+                //id attribute of image html element is prefixed with img ex. "img12"
+                let this_click_card_index = unwrap!(
+                    (unwrap!(img.id().get(3..), "error slicing")).parse::<usize>(),
+                    "error parse img id to usize"
+                );
+                //click is usefull only on facedown cards
+                if unwrap!(
+                    rrc.game_data.card_grid_data.get(this_click_card_index),
+                    "error this_click_card_index"
+                ).status.as_ref()==CardStatusCardFace::Down.as_ref(){
+                    status1stcardmod::on_click_1st_card(rrc, &vdom, this_click_card_index);
+                    // Finally, re-render the component on the next animation frame.
+                    vdom.schedule_render();
                 }
-                // Finally, re-render the component on the next animation frame.
-                vdom.schedule_render();
-            }
-        },
-        _ => logmod::debug_write("This click on img is not expected in this status."),
-            }
-    }}>
-    </img>
-    </div>
-    )
+            }}>
+            </img>
+            </div>
+            )
+        }
+        GameStatus::Status2ndCard => {
+            dodrio!(bump,
+            <div class= "grid_item">
+            <img src={img_src} id={img_id} style={opacity} onclick={move |root, vdom, event| {
+                let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                // If the event's target is our image...
+                let img = match event
+                    .target()
+                    .and_then(|t| t.dyn_into::<web_sys::HtmlImageElement>().ok())
+                {
+                    None => return,
+                    //?? Don't understand what this does. The original was written for Input element.
+                    Some(input) => input,
+                };
+                //id attribute of image html element is prefixed with img ex. "img12"
+                let this_click_card_index = unwrap!(
+                    (unwrap!(img.id().get(3..), "error slicing")).parse::<usize>(),
+                    "error parse img id to usize"
+                );
+                //click is usefull only on facedown cards
+                if unwrap!(
+                    rrc.game_data.card_grid_data.get(this_click_card_index),
+                    "error this_click_card_index"
+                ).status.as_ref()==CardStatusCardFace::Down.as_ref(){
+                    status2ndcardmod::on_click_2nd_card(rrc, &vdom, this_click_card_index);
+                    // Finally, re-render the component on the next animation frame.
+                    vdom.schedule_render();
+                }
+            }}>
+            </img>
+            </div>
+            )
+        }
+        _ => dodrio!(bump,
+            <div class= "grid_item">
+                <img src={img_src} id={img_id} style={opacity} >
+                </img>
+            </div>
+        ),
+    }
 }
 
 /// play sound mp3
@@ -358,6 +376,7 @@ pub fn max_grid_size(rrc: &RootRenderingComponent) -> Size2d {
         }
     }
 }
+
 /// return window inner height
 /// the size of  the visible part of the window
 pub fn usize_window_inner_height() -> usize {

@@ -157,7 +157,7 @@ pub fn div_click_2nd_card<'b>(
         dodrio!(bump,
         <div >
             <h2 class="h2_must_do_something">
-                {vec![text(bumpalo::format!(in bump, "Play {} {} !",
+                {vec![text(bumpalo::format!(in bump, "Play {} {}",
                 unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
                 utilsmod::ordinal_numbers(rrc.game_data.player_turn)
                 ).into_bump_str())]}
@@ -168,7 +168,7 @@ pub fn div_click_2nd_card<'b>(
         //return wait for the other player
         dodrio!(bump,
         <h2 class="h2_user_must_wait">
-            {vec![text(bumpalo::format!(in bump, "Wait for {} {} !",
+            {vec![text(bumpalo::format!(in bump, "Wait for {} {}",
             unwrap!(rrc.game_data.players.get(rrc.game_data.player_turn-1)).nickname,
             utilsmod::ordinal_numbers(rrc.game_data.player_turn)
             ).into_bump_str())]}

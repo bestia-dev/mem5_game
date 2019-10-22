@@ -1,7 +1,7 @@
 // divcardmonikermod.rs
 //! renders the card moniker (card name/title)
 
-//region: use, const
+//region: use statements
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 
 use unwrap::unwrap;
@@ -9,14 +9,10 @@ use dodrio::builder::text;
 use dodrio::bumpalo::{self, Bump};
 use dodrio::Node;
 use typed_html::dodrio;
-
-///game title
-const GAME_TITLE: &str = "mem5";
 //endregion
 
 ///the header can show only the game title or two card monikers. Not everything together.
-//pub fn div_grid_card_moniker<'a>(rrc: &'a RootRenderingComponent, bump: &'a Bump) -> Vec<Node<'a>> {
-    pub fn div_grid_card_moniker<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Vec<Node<'b>> {
+pub fn div_grid_card_moniker<'b>(rrc: &RootRenderingComponent, bump: &'b Bump) -> Vec<Node<'b>> {
     //this game_data mutable reference is dropped on the end of the function
     let game_data = &rrc.game_data;
     let mut vec_node = Vec::new();
@@ -50,9 +46,9 @@ const GAME_TITLE: &str = "mem5";
         let right_fontsize = calc_font_size(right_text_len);
         let right_style_string =
             bumpalo::format!(in bump, "font-size:{}rem;", right_fontsize).into_bump_str();
-        vec_node.push(
-        dodrio!(bump,
-        <div class= "grid_container_header" style="grid-template-columns: 50% 50%;min-height: 60px; vertical-align: middle;">
+        vec_node.push(dodrio!(bump,
+        <div class= "grid_container_header" style="grid-template-columns: 50% 50%;\
+            min-height: 60px; vertical-align: middle;">
             <div id="card_moniker_left" class= "grid_item" style={left_style_string} >
                 {vec![text(bumpalo::format!(in bump, "{}",left_text).into_bump_str())]}
             </div>
@@ -62,25 +58,13 @@ const GAME_TITLE: &str = "mem5";
         </div>
         ));
     }
-
-    let version = env!("CARGO_PKG_VERSION");
-    let style_string = bumpalo::format!(in bump, "font-size:{}rem;", 2.0).into_bump_str();
-    vec_node.push( dodrio!(bump,
-    <div class= "grid_container_header" style= "grid-template-columns: auto;min-height: 60px; vertical-align: middle;">
-        <div id="card_moniker_center" class= "grid_item" style={style_string} >
-            {vec![text(GAME_TITLE),
-                text(" - "),
-                text(version)]}
-        </div>
-    </div>
-    ));
     //return
     vec_node
 }
 
-///when the lenght is bigger, the fontsize get smaller
-///if the len is 10 the fontsize is 3.0rem, if the len is 20 the fontsize is 1.5rem
-///this means that the 80 is constant:  10*3.0=30 20*1.5=30
+/// when the lenght is bigger, the fontsize get smaller
+/// if the len is 10 the fontsize is 3.0rem, if the len is 20 the fontsize is 1.5rem
+/// this means that the 80 is constant:  10*3.0=30 20*1.5=30
 #[allow(
     clippy::integer_arithmetic,
     clippy::integer_division,

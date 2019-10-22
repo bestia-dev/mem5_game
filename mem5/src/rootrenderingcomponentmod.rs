@@ -5,6 +5,8 @@
 use crate::divcardmonikermod;
 use crate::divfordebuggingmod;
 use crate::divgridcontainermod;
+use crate::divgametitlemod;
+use crate::divnicknamemod;
 use crate::divplayeractionsmod;
 use crate::divplayersandscoresmod;
 use crate::divrulesanddescriptionmod;
@@ -20,7 +22,7 @@ use typed_html::dodrio;
 use web_sys::WebSocket;
 //endregion
 
-/// Root Rendering Component has all 
+/// Root Rendering Component has all
 /// the data needed for play logic and rendering
 pub struct RootRenderingComponent {
     ///game data will be inside of Root
@@ -37,7 +39,9 @@ impl RootRenderingComponent {
     pub fn new(ws: WebSocket, my_ws_uid: usize) -> Self {
         let game_data = gamedatamod::GameData::new(ws, my_ws_uid);
 
-        let game_rule_01 = divrulesanddescriptionmod::RulesAndDescription {};
+        let game_rule_01 = divrulesanddescriptionmod::RulesAndDescription {
+            is_fullscreen:false,
+        };
         let cached_rules_and_description = Cached::new(game_rule_01);
         let cached_players_and_scores =
             Cached::new(divplayersandscoresmod::PlayersAndScores::new(my_ws_uid));
@@ -55,6 +59,12 @@ impl RootRenderingComponent {
             .update_intern_cache(&self.game_data)
         {
             Cached::invalidate(&mut self.cached_players_and_scores);
+        }
+          if self
+            .cached_rules_and_description
+            .update_intern_cache(&self.game_data)
+        {
+            Cached::invalidate(&mut self.cached_rules_and_description);
         }
     }
     ///reset the data to replay the game
@@ -91,9 +101,8 @@ impl Render for RootRenderingComponent {
         //the UI has different 'pages' for playing or errors
         if self.game_data.error_text == "" {
             let xmax_grid_size = divgridcontainermod::max_grid_size(self);
-           
             //the UI has 2 different 'pages', depends on the status
-            if self.game_data.is_status_for_grid_container(){
+            if self.game_data.is_status_for_grid_container() {
                 //page2: the game grid
                 dodrio!(bump,
                 <div class= "m_container" >
@@ -101,15 +110,17 @@ impl Render for RootRenderingComponent {
                     {vec![divplayeractionsmod::div_player_actions_from_game_status(self, bump)]}
                     {vec![self.cached_players_and_scores.render(bump)]}
                     {divcardmonikermod::div_grid_card_moniker(self, bump)}
+                    {divgametitlemod::div_game_title(self, bump)}
                     {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
                 </div>
                 )
-            }
-            else{
+            } else {
                 //page1: the startpage with invitation and instructions
                 dodrio!(bump,
                 <div class= "m_container" >
-                    {vec![divplayeractionsmod::div_player_actions_from_game_status(self, bump)]}    
+                    {divgametitlemod::div_game_title(self, bump)}
+                    {vec![divnicknamemod::div_nickname_input(self,bump)]}
+                    {vec![divplayeractionsmod::div_player_actions_from_game_status(self, bump)]}
                     {vec![divfordebuggingmod::div_for_debugging(self, bump)]}
                     {vec![self.cached_rules_and_description.render(bump)]}
                 </div>
@@ -121,7 +132,7 @@ impl Render for RootRenderingComponent {
                 <div>
                     <h2 class="h2_user_must_wait">
                         {vec![text(
-                            bumpalo::format!(in bump, "error_text {} !", self.game_data.error_text)
+                            bumpalo::format!(in bump, "error_text {}", self.game_data.error_text)
                                 .into_bump_str(),
                             )]}
                     </h2>
@@ -132,4 +143,3 @@ impl Render for RootRenderingComponent {
     }
 }
 //endregion
-

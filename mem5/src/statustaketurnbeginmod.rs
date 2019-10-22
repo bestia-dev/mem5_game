@@ -77,11 +77,7 @@ pub fn update_on_take_turn_begin(rrc: &mut RootRenderingComponent) {
 
 ///render div
 #[allow(clippy::integer_arithmetic)]
-pub fn div_take_turn_begin<'b>(
-    rrc: & RootRenderingComponent,
-    bump: &'b Bump,
-) -> Node<'b>
-{
+pub fn div_take_turn_begin<'b>(rrc: &RootRenderingComponent, bump: &'b Bump) -> Node<'b> {
     logmod::debug_write(&format!(
         "div_take_turn_begin: player_turn {}  my_player_number {}",
         &rrc.game_data.player_turn, &rrc.game_data.my_player_number
@@ -99,7 +95,7 @@ pub fn div_take_turn_begin<'b>(
                 }}>
             <h2 class="h2_user_must_click">
                 {vec![text(
-                    bumpalo::format!(in bump, "{} {}, click here to take your turn !",
+                    bumpalo::format!(in bump, "{} {}, click here to take your turn",
                         unwrap!(rrc.game_data.players.get(rrc.game_data.my_player_number-1)).nickname,
                         utilsmod::ordinal_numbers(rrc.game_data.my_player_number)
                     )
@@ -112,7 +108,7 @@ pub fn div_take_turn_begin<'b>(
         //return wait for the other player
         dodrio!(bump,
         <h2 class="h2_user_must_wait">
-            {vec![text(bumpalo::format!(in bump, "Wait for {} {} !",
+            {vec![text(bumpalo::format!(in bump, "Wait for {} {}",
             unwrap!(rrc.game_data.players.get(next_player-1)).nickname,
             utilsmod::ordinal_numbers(next_player)
             ).into_bump_str())]}

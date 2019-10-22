@@ -5,9 +5,7 @@
 use crate::rootrenderingcomponentmod::RootRenderingComponent;
 use crate::websocketcommunicationmod;
 use crate::fetchgameconfigmod;
-use crate::divnicknamemod;
 use crate::gamedatamod;
-use crate::divfullscreenmod;
 
 use mem5_common::{GameStatus, Player, WsMessage};
 
@@ -20,8 +18,7 @@ use typed_html::dodrio;
 //endregion
 
 ///render invite ask begin, ask to play for multiple contents/folders
-pub fn div_start_page<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Node<'b>
-{
+pub fn div_start_page<'b>(rrc: &RootRenderingComponent, bump: &'b Bump) -> Node<'b> {
     let mut vec_of_nodes = Vec::new();
     //I don't know how to solve the lifetime problems. So I just clone the small data.
     let ff = rrc.game_data.content_folders.clone();
@@ -38,7 +35,7 @@ pub fn div_start_page<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Node
             <h2 class="h2_user_can_click">
                 {vec![text(
                 //show Ask Player2 to Play!
-                bumpalo::format!(in bump, "Invite for {}", folder_name_clone2)
+                bumpalo::format!(in bump, "{}", folder_name_clone2)
                     .into_bump_str(),
                 )]}
             </h2>
@@ -47,9 +44,13 @@ pub fn div_start_page<'b>(rrc: & RootRenderingComponent, bump: &'b Bump) -> Node
     }
     dodrio!(bump,
     <div>
+        <h4>
+           {vec![text(
+                bumpalo::format!(in bump, "Wait for invitation or invite for {}", "")
+                    .into_bump_str(),
+                )]}
+        </h4>
         {vec_of_nodes}
-        {vec![divnicknamemod::div_nickname_input(rrc,bump)]}
-        {divfullscreenmod::div_fullscreen(rrc,bump)}
     </div>
     )
 }

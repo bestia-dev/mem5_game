@@ -38,7 +38,7 @@ pub fn get_debug_text() -> String {
     let window = unwrap!(web_sys::window(), "window");
     let ls = unwrap!(unwrap!(window.session_storage()));
     let empty1 = "".to_string();
-    //return nickname
+    //return 
     unwrap!(ls.get_item("debug_text")).unwrap_or(empty1)
 }
 
