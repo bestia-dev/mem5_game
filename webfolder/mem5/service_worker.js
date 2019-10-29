@@ -6,7 +6,7 @@
 //But the new service worker will not be activated untill all 
 //tabs with this webapp are closed.
 
-const CACHE_NAME = '19.10.22-18.40';
+const CACHE_NAME = '19.10.29-12.21';
 
 self.addEventListener('install', event => {
     console.log('event install ', CACHE_NAME);
@@ -45,7 +45,7 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    console.log('event fetch');
+    //console.log('event fetch');
     // Let the browser do its default thing
     // for non-GET requests.
     if (event.request.method != 'GET') return;
@@ -57,7 +57,7 @@ self.addEventListener('fetch', event => {
         const cachedResponse = await cache.match(event.request);
 
         if (cachedResponse) {
-            console.log('from cache');
+            //console.log('from cache');
             // If we found a match in the cache, return it, but also
             // update the entry in the cache in the background.
             event.waitUntil(cache.add(event.request));

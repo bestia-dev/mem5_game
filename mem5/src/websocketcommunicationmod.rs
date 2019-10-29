@@ -72,6 +72,21 @@ pub fn setup_ws_connection(
             ),
             "Failed to send 'test' to server"
         );
+        //region heartbeat ping pong keepalive
+        let ws2 = ws_c.clone();
+        let timeout = gloo_timers::callback::Interval::new(10_000, move || {
+            // Do something after the one second timeout is up!
+            let now = js_sys::Date::new_0();
+            let usize_time = now.get_minutes() as usize * 100000 as usize
+                + now.get_seconds() as usize * 1000 as usize
+                + now.get_milliseconds() as usize;
+            let msg = WsMessage::MsgPing { msg_id: usize_time };
+            ws_send_msg(ws2.as_ref(), &msg);
+            //logmod::console_log(format!("gloo timer: {}", usize_time).as_str());
+        });
+        // Since we don't plan on cancelling the timeout, call `forget`.
+        timeout.forget();
+        //endregion
     });
 
     let cb_oh: Closure<dyn Fn()> = Closure::wrap(open_handler);
@@ -106,6 +121,12 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
         match msg {
             //I don't know why I need a dummy, but is entertaining to have one.
             WsMessage::MsgDummy { dummy } => logmod::debug_write(dummy.as_str()),
+            WsMessage::MsgPing { msg_id: _ } => {
+                unreachable!("mem5 wasm must not receive MsgPing");
+            }
+            WsMessage::MsgPong { msg_id } => {
+                logmod::debug_write(format!("MsgPong {}", msg_id).as_str())
+            }
             WsMessage::MsgRequestWsUid {
                 my_ws_uid,
                 players_ws_uid,
@@ -133,7 +154,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                         move |root| {
                             //logmod::debug_write(&format!("MsgResponseWsUid: {}  ", your_ws_uid));
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            on_response_ws_uid(rrc,your_ws_uid);
+                            on_response_ws_uid(rrc, your_ws_uid);
                         }
                     })
                     .map_err(|_| ()),

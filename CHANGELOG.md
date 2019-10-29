@@ -12,3 +12,4 @@
 2019-10-16 PWA, screen-width, fullscreen, service worker fetch in cache  
 2019-10-18 acknowledge msg because of bad network  
 2019-10-21 renaming, refactoring, docs  
+2019-10-29 heartbeat every 10 seconds ping pong keepalive  

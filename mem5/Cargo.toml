@@ -1,6 +1,6 @@
 [package]
 name = "mem5"
-version = "19.10.22-18.40" #no need for semver if it is not a public library
+version = "19.10.29-12.21" #no need for semver if it is not a public library
 authors = ["Luciano Furlan <Luciano.Bestia@gmail.com>"]
 edition = "2018"
 description = "Learning Rust Wasm/WebAssembly with Virtual Dom Dodrio"
@@ -35,6 +35,7 @@ strum = "0.16.0"
 strum_macros = "0.16.0"
 typed-html = {version="0.2.1", features = ["dodrio_macro"]}
 conv = "0.3.3"
+gloo-timers = "0.1.0"
 
 [dependencies.web-sys]
 version = "0.3.28"

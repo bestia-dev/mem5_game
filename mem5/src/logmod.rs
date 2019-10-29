@@ -3,12 +3,12 @@
 
 use crate::sessionstoragemod;
 
-//use web_sys::console;
-//use wasm_bindgen::prelude::*;
+use web_sys::console;
+use wasm_bindgen::prelude::*;
 
 /*
 ///simple console write with a string
-pub fn log1_str(x: &str) {
+pub fn console_log(x: &str) {
     console::log_1(&JsValue::from_str(x));
 }
 */

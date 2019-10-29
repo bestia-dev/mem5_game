@@ -1,10 +1,14 @@
-#![doc(html_favicon_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-16.png")]
-#![doc(html_logo_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-192.png")]
+#![doc(
+    html_favicon_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-16.png"
+)]
+#![doc(
+    html_logo_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-192.png"
+)]
 //region: lmake_readme insert "readme.md"
 //! # mem5_common
-//! 
+//!
 //! version: 19.10.21-20.7  
-//! 
+//!
 //! **commons for mem5 wasm and server**  
 //! Learning to code Rust for a http + WebSocket.  
 //! Here are just the structures, that are in common between frontend and backend.  
@@ -68,6 +72,16 @@ pub enum WsMessage {
         your_ws_uid: usize,
         ///server version
         server_version: String,
+    },
+    ///MsgPing
+    MsgPing {
+        ///random msg_id
+        msg_id: usize,
+    },
+    ///MsgPong
+    MsgPong {
+        ///random msg_id
+        msg_id: usize,
     },
     ///invite
     MsgInvite {
@@ -195,7 +209,7 @@ pub enum GameStatus {
     StatusInvited,
     ///InviteAccepted
     StatusAccepted,
-    ///before first card 
+    ///before first card
     Status1stCard,
     ///before second card
     Status2ndCard,

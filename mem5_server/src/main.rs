@@ -294,8 +294,31 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
             //send to other users for reconnect. Do nothing if there is not yet other users.
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
-        WsMessage::MsgInvite { .. } => broadcast(users, ws_uid_of_message, &new_msg),
-        WsMessage::MsgResponseWsUid { .. } => info!("MsgResponseWsUid: {}", ""),
+        WsMessage::MsgPing { msg_id } => {
+            info!("MsgPing: {}", msg_id);
+
+            let j = unwrap!(serde_json::to_string(&WsMessage::MsgPong { msg_id }));
+            info!("send MsgPong: {}", j);
+            match users
+                .lock()
+                .expect("error users.lock()")
+                .get(&ws_uid_of_message)
+                .unwrap()
+                .unbounded_send(Message::text(j))
+            {
+                Ok(()) => (),
+                Err(_disconnected) => {}
+            }
+        }
+        WsMessage::MsgPong { msg_id: _ } => {
+            unreachable!("mem5_server must not receive MsgPong");
+        }
+        WsMessage::MsgInvite { .. } => {
+            broadcast(users, ws_uid_of_message, &new_msg);
+        }
+        WsMessage::MsgResponseWsUid { .. } => {
+            info!("MsgResponseWsUid: {}", "");
+        }
         WsMessage::MsgAccept { players_ws_uid, .. }
         | WsMessage::MsgStartGame { players_ws_uid, .. }
         | WsMessage::MsgClick1stCard { players_ws_uid, .. }
