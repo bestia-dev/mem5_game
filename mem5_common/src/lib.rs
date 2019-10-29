@@ -194,6 +194,19 @@ pub enum WsMessage {
         ///kind of ack msg
         msg_ack_kind: MsgAckKind,
     },
+    ///when the acknowledge msg includes an error
+    MsgAckError {
+        ///msg sender uid
+        my_ws_uid: usize,
+        ///send msg to this players
+        players_ws_uid: String,
+        ///msg id (random)
+        msg_id: usize,
+        ///kind of ack msg
+        msg_ack_kind: MsgAckKind,
+        ///error msg if there is an error
+        err_msg: String,
+    },
 }
 
 ///the game can be in various statuses and that differentiate the UI and actions

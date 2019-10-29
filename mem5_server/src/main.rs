@@ -295,10 +295,10 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
         WsMessage::MsgPing { msg_id } => {
-            info!("MsgPing: {}", msg_id);
+            //info!("MsgPing: {}", msg_id);
 
             let j = unwrap!(serde_json::to_string(&WsMessage::MsgPong { msg_id }));
-            info!("send MsgPong: {}", j);
+            //info!("send MsgPong: {}", j);
             match users
                 .lock()
                 .expect("error users.lock()")
@@ -327,7 +327,8 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         | WsMessage::MsgTakeTurnEnd { players_ws_uid, .. }
         | WsMessage::MsgGameOver { players_ws_uid, .. }
         | WsMessage::MsgAllGameData { players_ws_uid, .. }
-        | WsMessage::MsgAck { players_ws_uid, .. } => {
+        | WsMessage::MsgAck { players_ws_uid, .. }
+        | WsMessage::MsgAckError { players_ws_uid, .. } => {
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
     }

@@ -100,15 +100,17 @@ pub fn setup_ws_connection(
 
 /// receive WebSocket msg callback.
 #[allow(clippy::unneeded_field_pattern)]
-pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
+pub fn setup_ws_msg_recv(ws: &WebSocket, vdom: dodrio::VdomWeak) {
     let msg_recv_handler = Box::new(move |msg: JsValue| {
         let data: JsValue = unwrap!(
             Reflect::get(&msg, &"data".into()),
             "No 'data' field in WebSocket message!"
         );
         let data = data.as_string().expect("Field 'data' is not string");
-        logmod::debug_write(&data);
-
+        //don't log ping pong there are too much
+        if !(data.to_string().contains("MsgPing") || data.to_string().contains("MsgPong")) {
+            logmod::debug_write(&data);
+        }
         //serde_json can find out the variant of WsMessage
         //parse json and put data in the enum
         let msg: WsMessage = serde_json::from_str(&data).unwrap_or_else(|_x| WsMessage::MsgDummy {
@@ -134,8 +136,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 logmod::debug_write(players_ws_uid.as_str());
                 //this is a reconnect. Send all data to this player.
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             websocketreconnectmod::on_msg_request_ws_uid(rrc, my_ws_uid);
@@ -150,7 +152,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 server_version: _,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
+                    vdom.with_component({
                         move |root| {
                             //logmod::debug_write(&format!("MsgResponseWsUid: {}  ", your_ws_uid));
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
@@ -167,8 +169,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 asked_game_name,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
 
@@ -196,8 +198,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 my_nickname,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusinvitedmod::on_msg_accept(rrc, my_ws_uid, my_nickname);
@@ -215,8 +217,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 players,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
 
@@ -243,8 +245,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 msg_id,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             status1stcardmod::on_msg_click_1st_card(
@@ -266,8 +268,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 msg_id,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             status2ndcardmod::on_msg_click_2nd_card_point(
@@ -289,8 +291,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 msg_id,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statustaketurnbeginmod::on_msg_take_turn_begin(
@@ -311,8 +313,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 msg_id,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statustaketurnendmod::on_msg_take_turn_end(rrc, my_ws_uid, msg_id);
@@ -327,8 +329,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 players_ws_uid: _,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             statusgameovermod::on_msg_game_over(rrc);
@@ -349,8 +351,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 game_status,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             websocketreconnectmod::on_msg_all_game_data(
@@ -375,8 +377,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                 msg_ack_kind,
             } => {
                 wasm_bindgen_futures::spawn_local(
-                    weak.with_component({
-                        let v2 = weak.clone();
+                    vdom.with_component({
+                        let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             match msg_ack_kind {
@@ -407,6 +409,52 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
+            WsMessage::MsgAckError {
+                my_ws_uid,
+                players_ws_uid: _,
+                msg_id,
+                msg_ack_kind,
+                err_msg,
+            } => {
+                wasm_bindgen_futures::spawn_local(
+                    vdom.with_component({
+                        let v2 = vdom.clone();
+                        move |root| {
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                            match msg_ack_kind {
+                                /*
+                                MsgAckKind::MsgTakeTurnEnd => {
+                                    statustaketurnendmod::on_msg_ack_err_take_turn_end(
+                                        rrc, my_ws_uid, msg_id,
+                                    );
+                                }
+                                */
+                                MsgAckKind::MsgClick1stCard => {
+                                    status1stcardmod::on_msg_ack_err_click_1st_card(
+                                        rrc, my_ws_uid, msg_id, err_msg, &v2,
+                                    );
+                                } /*
+                                MsgAckKind::MsgClick2ndCardPoint => {
+                                status2ndcardmod::on_msg_ack_err_player_click2nd_card_point(
+                                rrc, my_ws_uid, msg_id,
+                                );
+                                }
+                                 */
+                                /*
+                                MsgAckKind::MsgTakeTurnBegin => {
+                                    statustaketurnbeginmod::on_msg_ack_err_take_turn_begin(
+                                        rrc, my_ws_uid, msg_id,
+                                    );
+                                }
+                                */
+                                _ => (), //just for debugging not exhaustive
+                            }
+                            v2.schedule_render();
+                        }
+                    })
+                    .map_err(|_| ()),
+                );
+            }
         }
     });
 
@@ -419,14 +467,14 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, weak: dodrio::VdomWeak) {
 }
 
 /// on error write it on the screen for debugging
-pub fn setup_ws_onerror(ws: &WebSocket, weak: dodrio::VdomWeak) {
+pub fn setup_ws_onerror(ws: &WebSocket, vdom: dodrio::VdomWeak) {
     let onerror_callback = Closure::wrap(Box::new(move |e: ErrorEvent| {
         let err_text = format!("error event {:?}", e);
         //logmod::debug_write(&err_text);
         {
             wasm_bindgen_futures::spawn_local(
-                weak.with_component({
-                    let v2 = weak.clone();
+                vdom.with_component({
+                    let v2 = vdom.clone();
                     move |root| {
                         let rrc = root.unwrap_mut::<RootRenderingComponent>();
                         rrc.game_data.error_text = err_text;
@@ -441,14 +489,14 @@ pub fn setup_ws_onerror(ws: &WebSocket, weak: dodrio::VdomWeak) {
     onerror_callback.forget();
 }
 /// on close WebSocket connection
-pub fn setup_ws_onclose(ws: &WebSocket, weak: dodrio::VdomWeak) {
+pub fn setup_ws_onclose(ws: &WebSocket, vdom: dodrio::VdomWeak) {
     let onclose_callback = Closure::wrap(Box::new(move |e: ErrorEvent| {
         let err_text = format!("ws_onclose {:?}", e);
         logmod::debug_write(&format!("onclose_callback {}", &err_text));
         {
             wasm_bindgen_futures::spawn_local(
-                weak.with_component({
-                    let v2 = weak.clone();
+                vdom.with_component({
+                    let v2 = vdom.clone();
                     move |root| {
                         let rrc = root.unwrap_mut::<RootRenderingComponent>();
                         //I want to show a reconnect button to the user
@@ -464,15 +512,15 @@ pub fn setup_ws_onclose(ws: &WebSocket, weak: dodrio::VdomWeak) {
     onclose_callback.forget();
 }
 ///setup all ws events
-pub fn setup_all_ws_events(ws: &WebSocket, weak: dodrio::VdomWeak) {
+pub fn setup_all_ws_events(ws: &WebSocket, vdom: dodrio::VdomWeak) {
     //WebSocket on receive message callback
-    setup_ws_msg_recv(ws, weak.clone());
+    setup_ws_msg_recv(ws, vdom.clone());
 
     //WebSocket on error message callback
-    setup_ws_onerror(ws, weak.clone());
+    setup_ws_onerror(ws, vdom.clone());
 
     //WebSocket on close message callback
-    setup_ws_onclose(ws, weak);
+    setup_ws_onclose(ws, vdom);
 }
 
 ///generic send ws message

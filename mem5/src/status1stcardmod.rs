@@ -8,6 +8,7 @@ use crate::logmod;
 use crate::ackmsgmod;
 use crate::divgridcontainermod;
 use crate::utilsmod;
+use crate::status2ndcardmod;
 
 use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 
@@ -26,7 +27,6 @@ pub fn on_click_1st_card(
 ) {
     //change card status and game status
     rrc.game_data.card_index_of_first_click = this_click_card_index;
-    divgridcontainermod::play_sound(rrc, this_click_card_index);
 
     let msg_id = ackmsgmod::prepare_for_ack_msg_waiting(rrc, vdom);
     let msg = WsMessage::MsgClick1stCard {
@@ -36,6 +36,7 @@ pub fn on_click_1st_card(
         msg_id,
     };
     ackmsgmod::send_msg_and_write_in_queue(rrc, &msg, msg_id);
+    divgridcontainermod::play_sound(rrc, this_click_card_index);
     //after ack for this message call on_msg_click_1st_card(rrc, this_click_card_index);
 }
 
@@ -46,9 +47,24 @@ pub fn on_msg_click_1st_card(
     card_index_of_first_click: usize,
     msg_id: usize,
 ) {
-    ackmsgmod::send_ack(rrc, msg_sender_ws_uid, msg_id, MsgAckKind::MsgClick1stCard);
-    rrc.game_data.card_index_of_first_click = card_index_of_first_click;
-    update_on_1st_card(rrc);
+    //it happens that 2 smartphones send the msg simultaneosly.
+    //They send it like it is 1st click.
+    //If one receives the 1st click in the status 2nd click it is an exception
+    if let GameStatus::Status2ndCard = rrc.game_data.game_status {
+        //I should return ack message with ah error.
+        // the original sender should than execute the code for 2nd click
+        ackmsgmod::send_ack_with_error(
+            rrc,
+            msg_sender_ws_uid,
+            msg_id,
+            MsgAckKind::MsgClick1stCard,
+            format!("Err:resend as 2nd click: {}", card_index_of_first_click),
+        );
+    } else {
+        ackmsgmod::send_ack(rrc, msg_sender_ws_uid, msg_id, MsgAckKind::MsgClick1stCard);
+        rrc.game_data.card_index_of_first_click = card_index_of_first_click;
+        update_on_1st_card(rrc);
+    }
 }
 
 ///on msg ack
@@ -63,6 +79,34 @@ pub fn on_msg_ack_click_1st_card(
     }
     //TODO: timer if after 3 seconds the ack is not received resend the msg
     //do this 3 times and then hard error
+}
+
+///on msg ack with error
+pub fn on_msg_ack_err_click_1st_card(
+    rrc: &mut RootRenderingComponent,
+    _player_ws_uid: usize,
+    msg_id: usize,
+    err_msg: String,
+    vdom: &dodrio::VdomWeak,
+) {
+    let str_err_begin = "Err:resend as 2nd click:";
+    let len_str_err_begin = str_err_begin.len();
+    if &err_msg[..len_str_err_begin] == str_err_begin {
+        logmod::debug_write(str_err_begin);
+        let str_this_click = &err_msg[(len_str_err_begin + 1)..];
+        let usize_this_click: usize = unwrap!(str_this_click.parse());
+        logmod::debug_write(&format!("usize_click {}", usize_this_click));
+        //remove all the waiting msgs from the queue because they are wrong
+        //I use the oposite method "retain" because there is not a method "remove"
+        rrc.game_data
+            .msgs_waiting_ack
+            .retain(|x| !(x.msg_id == msg_id));
+        //begin the complete procedure for 2nd click
+        status2ndcardmod::on_click_2nd_card(rrc, &vdom, usize_this_click);
+    } else {
+        logmod::debug_write("the slice is not equal");
+        logmod::debug_write(&err_msg[..len_str_err_begin]);
+    }
 }
 
 ///update game data

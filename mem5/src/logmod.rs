@@ -3,8 +3,8 @@
 
 use crate::sessionstoragemod;
 
-use web_sys::console;
-use wasm_bindgen::prelude::*;
+//use web_sys::console;
+//use wasm_bindgen::prelude::*;
 
 /*
 ///simple console write with a string
