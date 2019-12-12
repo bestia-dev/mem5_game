@@ -40,7 +40,7 @@ pub fn on_msg_take_turn_begin(
     card_index_of_second_click: usize,
     msg_id: usize,
 ) {
-    logmod::debug_write("on_msg_take_turn_begin");
+    //logmod::debug_write("on_msg_take_turn_begin");
     ackmsgmod::send_ack(rrc, msg_sender_ws_uid, msg_id, MsgAckKind::MsgTakeTurnBegin);
     rrc.game_data.card_index_of_second_click = card_index_of_second_click;
 
@@ -61,7 +61,7 @@ pub fn on_msg_ack_take_turn_begin(
 
 ///update game data
 pub fn update_on_take_turn_begin(rrc: &mut RootRenderingComponent) {
-    logmod::debug_write("update_on_take_turn_begin");
+    //logmod::debug_write("update_on_take_turn_begin");
 
     //flip the card up
     unwrap!(

@@ -92,24 +92,3 @@ pub fn send_ack(
         },
     );
 }
-
-///send ack with error
-pub fn send_ack_with_error(
-    rrc: &mut RootRenderingComponent,
-    msg_sender_ws_uid: usize,
-    msg_id: usize,
-    msg_ack_kind: MsgAckKind,
-    err_msg: String,
-) {
-    //send back the ACK msg to the sender with error
-    websocketcommunicationmod::ws_send_msg(
-        &rrc.game_data.ws,
-        &WsMessage::MsgAckError {
-            my_ws_uid: rrc.game_data.my_ws_uid,
-            players_ws_uid: unwrap!(serde_json::to_string(&vec![msg_sender_ws_uid])),
-            msg_id,
-            msg_ack_kind,
-            err_msg,
-        },
-    );
-}

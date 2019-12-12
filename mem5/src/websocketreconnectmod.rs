@@ -4,7 +4,7 @@
 // Websocket has a lot of problems with maintaining a stable connection.
 // When a player is out of sync with others it is probably because
 // of a websocket connection problem.
-// The button Reconnect first connects to the ws server and sends a msg to other players.
+// The button Resync first connects to the ws server and sends a msg to other players.
 // All other players send him the complete data. He uses only the data from the first msg
 // he receives and ignore all others.
 
@@ -28,7 +28,7 @@ pub fn div_reconnect<'b>(_rrc: &RootRenderingComponent, bump: &'b Bump) -> Node<
     <div>
       <h4>
             {vec![text(bumpalo::format!(in bump,
-            "Click on Reconnect if there are problems with receiving msgs over the network:{}", "")
+            "Click on Resync if there are problems with receiving msgs over the network:{}", "")
             .into_bump_str(),)]}
         </h4>
         <div class="div_clickable" onclick={
@@ -60,7 +60,7 @@ pub fn div_reconnect<'b>(_rrc: &RootRenderingComponent, bump: &'b Bump) -> Node<
             <h2 class="h2_user_can_click">
                 {vec![text(
                 //StatusReconnect?
-                bumpalo::format!(in bump, "Reconnect{}", "").into_bump_str(),
+                bumpalo::format!(in bump, "Resync{}", "").into_bump_str(),
                 )]}
             </h2>
         </div>
@@ -68,8 +68,9 @@ pub fn div_reconnect<'b>(_rrc: &RootRenderingComponent, bump: &'b Bump) -> Node<
     )
 }
 
-///send all data to reconnected player
-pub fn on_msg_request_ws_uid(rrc: &RootRenderingComponent, _my_ws_uid: usize) {
+///send all data to resync gamedata
+pub fn send_msg_for_resync(rrc: &RootRenderingComponent, _my_ws_uid: usize) {
+    logmod::debug_write("send_msg_for_resync MsgAllGameData");
     websocketcommunicationmod::ws_send_msg(
         &rrc.game_data.ws,
         &WsMessage::MsgAllGameData {
@@ -89,7 +90,7 @@ pub fn on_msg_request_ws_uid(rrc: &RootRenderingComponent, _my_ws_uid: usize) {
     );
 }
 
-///after reconnect receive allthe data from other player
+///after reconnect receive all the data from other player
 #[allow(clippy::needless_pass_by_value)]
 pub fn on_msg_all_game_data(
     rrc: &mut RootRenderingComponent,
@@ -100,14 +101,16 @@ pub fn on_msg_all_game_data(
     player_turn: usize,
     game_status: GameStatus,
 ) {
+    logmod::debug_write("on_msg_all_game_data");
     //only the first message is processed
-    if rrc.game_data.is_reconnect {
-        rrc.game_data.is_reconnect = false;
-        rrc.game_data.players = unwrap!(serde_json::from_str(&players));
-        rrc.game_data.card_grid_data = unwrap!(serde_json::from_str(&card_grid_data));
-        rrc.game_data.card_index_of_first_click = card_index_of_first_click;
-        rrc.game_data.card_index_of_second_click = card_index_of_second_click;
-        rrc.game_data.player_turn = player_turn;
-        rrc.game_data.game_status = game_status;
-    }
+    //if rrc.game_data.is_reconnect {
+    rrc.game_data.is_reconnect = false;
+    rrc.game_data.players = unwrap!(serde_json::from_str(&players));
+    rrc.game_data.card_grid_data = unwrap!(serde_json::from_str(&card_grid_data));
+    rrc.game_data.card_index_of_first_click = card_index_of_first_click;
+    rrc.game_data.card_index_of_second_click = card_index_of_second_click;
+    rrc.game_data.player_turn = player_turn;
+    rrc.game_data.game_status = game_status;
+    rrc.game_data.msgs_waiting_ack.retain(|_x| false);
+    //}
 }

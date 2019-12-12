@@ -141,7 +141,7 @@ pub struct GameData {
     /// vector of msgs waiting for ack. If the 3 sec timeout passes it resends the same msg.
     pub msgs_waiting_ack: Vec<MsgInQueue>,
     /// show debug info on the smartphone screen
-    pub show_debug_info:bool,
+    pub show_debug_info: bool,
 }
 //endregion
 
@@ -287,7 +287,7 @@ impl GameData {
             is_reconnect: false,
             is_fullscreen: false,
             msgs_waiting_ack: vec![],
-            show_debug_info:false,
+            show_debug_info: false,
         }
     }
     /*

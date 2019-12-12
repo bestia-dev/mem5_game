@@ -109,7 +109,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, vdom: dodrio::VdomWeak) {
         let data = data.as_string().expect("Field 'data' is not string");
         //don't log ping pong there are too much
         if !(data.to_string().contains("MsgPing") || data.to_string().contains("MsgPong")) {
-            logmod::debug_write(&data);
+            //logmod::debug_write(&data);
         }
         //serde_json can find out the variant of WsMessage
         //parse json and put data in the enum
@@ -126,8 +126,8 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, vdom: dodrio::VdomWeak) {
             WsMessage::MsgPing { msg_id: _ } => {
                 unreachable!("mem5 wasm must not receive MsgPing");
             }
-            WsMessage::MsgPong { msg_id } => {
-                logmod::debug_write(format!("MsgPong {}", msg_id).as_str())
+            WsMessage::MsgPong { msg_id: _ } => {
+                //logmod::debug_write(format!("MsgPong {}", msg_id).as_str())
             }
             WsMessage::MsgRequestWsUid {
                 my_ws_uid,
@@ -140,7 +140,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, vdom: dodrio::VdomWeak) {
                         let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            websocketreconnectmod::on_msg_request_ws_uid(rrc, my_ws_uid);
+                            websocketreconnectmod::send_msg_for_resync(rrc, my_ws_uid);
                             v2.schedule_render();
                         }
                     })
@@ -340,36 +340,6 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, vdom: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
-            WsMessage::MsgAllGameData {
-                my_ws_uid: _,
-                players_ws_uid: _,
-                players,
-                card_grid_data,
-                card_index_of_first_click,
-                card_index_of_second_click,
-                player_turn,
-                game_status,
-            } => {
-                wasm_bindgen_futures::spawn_local(
-                    vdom.with_component({
-                        let v2 = vdom.clone();
-                        move |root| {
-                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            websocketreconnectmod::on_msg_all_game_data(
-                                rrc,
-                                players,
-                                card_grid_data,
-                                card_index_of_first_click,
-                                card_index_of_second_click,
-                                player_turn,
-                                game_status,
-                            );
-                            v2.schedule_render();
-                        }
-                    })
-                    .map_err(|_| ()),
-                );
-            }
             WsMessage::MsgAck {
                 my_ws_uid,
                 players_ws_uid: _,
@@ -409,46 +379,46 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, vdom: dodrio::VdomWeak) {
                     .map_err(|_| ()),
                 );
             }
-            WsMessage::MsgAckError {
-                my_ws_uid,
+            WsMessage::MsgAskPlayer1ForResync {
+                my_ws_uid:_,
                 players_ws_uid: _,
-                msg_id,
-                msg_ack_kind,
-                err_msg,
             } => {
                 wasm_bindgen_futures::spawn_local(
                     vdom.with_component({
                         let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            match msg_ack_kind {
-                                /*
-                                MsgAckKind::MsgTakeTurnEnd => {
-                                    statustaketurnendmod::on_msg_ack_err_take_turn_end(
-                                        rrc, my_ws_uid, msg_id,
-                                    );
-                                }
-                                */
-                                MsgAckKind::MsgClick1stCard => {
-                                    status1stcardmod::on_msg_ack_err_click_1st_card(
-                                        rrc, my_ws_uid, msg_id, err_msg, &v2,
-                                    );
-                                } /*
-                                MsgAckKind::MsgClick2ndCardPoint => {
-                                status2ndcardmod::on_msg_ack_err_player_click2nd_card_point(
-                                rrc, my_ws_uid, msg_id,
-                                );
-                                }
-                                 */
-                                /*
-                                MsgAckKind::MsgTakeTurnBegin => {
-                                    statustaketurnbeginmod::on_msg_ack_err_take_turn_begin(
-                                        rrc, my_ws_uid, msg_id,
-                                    );
-                                }
-                                */
-                                _ => (), //just for debugging not exhaustive
-                            }
+                            websocketreconnectmod::send_msg_for_resync(rrc, rrc.game_data.my_ws_uid);
+                            v2.schedule_render();
+                        }
+                    })
+                    .map_err(|_| ()),
+                );
+            }
+            WsMessage::MsgAllGameData {
+                my_ws_uid: _,
+                players_ws_uid: _,
+                players,
+                card_grid_data,
+                card_index_of_first_click,
+                card_index_of_second_click,
+                player_turn,
+                game_status,
+            } => {
+                wasm_bindgen_futures::spawn_local(
+                    vdom.with_component({
+                        let v2 = vdom.clone();
+                        move |root| {
+                            let rrc = root.unwrap_mut::<RootRenderingComponent>();
+                            websocketreconnectmod::on_msg_all_game_data(
+                                rrc,
+                                players,
+                                card_grid_data,
+                                card_index_of_first_click,
+                                card_index_of_second_click,
+                                player_turn,
+                                game_status,
+                            );
                             v2.schedule_render();
                         }
                     })

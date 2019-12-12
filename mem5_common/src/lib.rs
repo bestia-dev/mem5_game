@@ -164,6 +164,24 @@ pub enum WsMessage {
         ///msg id (random)
         msg_id: usize,
     },
+    ///acknowledge msg, that the receiver received the message
+    MsgAck {
+        ///msg sender uid
+        my_ws_uid: usize,
+        ///send msg to this players
+        players_ws_uid: String,
+        ///msg id (random)
+        msg_id: usize,
+        ///kind of ack msg
+        msg_ack_kind: MsgAckKind,
+    },
+    ///ask player1 for resync
+    MsgAskPlayer1ForResync {
+        ///msg sender uid
+        my_ws_uid: usize,
+        ///send msg to this players
+        players_ws_uid: String,
+    },
     ///all game data
     MsgAllGameData {
         ///ws client instance unique id. To not listen the echo to yourself.
@@ -182,30 +200,6 @@ pub enum WsMessage {
         player_turn: usize,
         ///game status
         game_status: GameStatus,
-    },
-    ///acknowledge msg, that the receiver received the message
-    MsgAck {
-        ///msg sender uid
-        my_ws_uid: usize,
-        ///send msg to this players
-        players_ws_uid: String,
-        ///msg id (random)
-        msg_id: usize,
-        ///kind of ack msg
-        msg_ack_kind: MsgAckKind,
-    },
-    ///when the acknowledge msg includes an error
-    MsgAckError {
-        ///msg sender uid
-        my_ws_uid: usize,
-        ///send msg to this players
-        players_ws_uid: String,
-        ///msg id (random)
-        msg_id: usize,
-        ///kind of ack msg
-        msg_ack_kind: MsgAckKind,
-        ///error msg if there is an error
-        err_msg: String,
     },
 }
 

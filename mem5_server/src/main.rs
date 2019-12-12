@@ -328,7 +328,7 @@ fn receive_message(ws_uid_of_message: usize, messg: &Message, users: &Users) {
         | WsMessage::MsgGameOver { players_ws_uid, .. }
         | WsMessage::MsgAllGameData { players_ws_uid, .. }
         | WsMessage::MsgAck { players_ws_uid, .. }
-        | WsMessage::MsgAckError { players_ws_uid, .. } => {
+        | WsMessage::MsgAskPlayer1ForResync { players_ws_uid, .. } => {
             send_to_other_players(users, ws_uid_of_message, &new_msg, &players_ws_uid)
         }
     }

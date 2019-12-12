@@ -8,7 +8,8 @@ use crate::logmod;
 use crate::ackmsgmod;
 use crate::divgridcontainermod;
 use crate::utilsmod;
-use crate::status2ndcardmod;
+use crate::websocketreconnectmod;
+use crate::websocketcommunicationmod;
 
 use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 
@@ -25,6 +26,7 @@ pub fn on_click_1st_card(
     vdom: &dodrio::VdomWeak,
     this_click_card_index: usize,
 ) {
+    logmod::debug_write("on_click_1st_card");
     //change card status and game status
     rrc.game_data.card_index_of_first_click = this_click_card_index;
 
@@ -47,23 +49,30 @@ pub fn on_msg_click_1st_card(
     card_index_of_first_click: usize,
     msg_id: usize,
 ) {
+    logmod::debug_write("on_msg_click_1st_card");
     //it happens that 2 smartphones send the msg simultaneosly.
     //They send it like it is 1st click.
-    //If one receives the 1st click in the status 2nd click it is an exception
-    if let GameStatus::Status2ndCard = rrc.game_data.game_status {
-        //I should return ack message with ah error.
-        // the original sender should than execute the code for 2nd click
-        ackmsgmod::send_ack_with_error(
-            rrc,
-            msg_sender_ws_uid,
-            msg_id,
-            MsgAckKind::MsgClick1stCard,
-            format!("Err:resend as 2nd click: {}", card_index_of_first_click),
-        );
-    } else {
+    //Only is status1St is ok to receive 1st click. All else is a conflict.
+    if let GameStatus::Status1stCard = rrc.game_data.game_status {
         ackmsgmod::send_ack(rrc, msg_sender_ws_uid, msg_id, MsgAckKind::MsgClick1stCard);
         rrc.game_data.card_index_of_first_click = card_index_of_first_click;
         update_on_1st_card(rrc);
+    } else {
+        //This is a conflict and only the Player1 must resolve it so to send his data.
+        //If this is Player1 than just send GameData
+        if rrc.game_data.my_player_number == 1 {
+            websocketreconnectmod::send_msg_for_resync(rrc, rrc.game_data.my_ws_uid);
+        } else {
+            websocketcommunicationmod::ws_send_msg(
+                &rrc.game_data.ws,
+                &WsMessage::MsgAskPlayer1ForResync {
+                    my_ws_uid: rrc.game_data.my_ws_uid,
+                    players_ws_uid: unwrap!(serde_json::to_string(&vec![
+                        rrc.game_data.players[0].ws_uid
+                    ])),
+                },
+            );
+        }
     }
 }
 
@@ -73,6 +82,7 @@ pub fn on_msg_ack_click_1st_card(
     player_ws_uid: usize,
     msg_id: usize,
 ) {
+    logmod::debug_write("on_msg_ack_click_1st_card");
     if ackmsgmod::remove_ack_msg_from_queue(rrc, player_ws_uid, msg_id) {
         logmod::debug_write("update_on_1st_card (rrc)");
         update_on_1st_card(rrc);
@@ -81,36 +91,9 @@ pub fn on_msg_ack_click_1st_card(
     //do this 3 times and then hard error
 }
 
-///on msg ack with error
-pub fn on_msg_ack_err_click_1st_card(
-    rrc: &mut RootRenderingComponent,
-    _player_ws_uid: usize,
-    msg_id: usize,
-    err_msg: String,
-    vdom: &dodrio::VdomWeak,
-) {
-    let str_err_begin = "Err:resend as 2nd click:";
-    let len_str_err_begin = str_err_begin.len();
-    if &err_msg[..len_str_err_begin] == str_err_begin {
-        logmod::debug_write(str_err_begin);
-        let str_this_click = &err_msg[(len_str_err_begin + 1)..];
-        let usize_this_click: usize = unwrap!(str_this_click.parse());
-        logmod::debug_write(&format!("usize_click {}", usize_this_click));
-        //remove all the waiting msgs from the queue because they are wrong
-        //I use the oposite method "retain" because there is not a method "remove"
-        rrc.game_data
-            .msgs_waiting_ack
-            .retain(|x| !(x.msg_id == msg_id));
-        //begin the complete procedure for 2nd click
-        status2ndcardmod::on_click_2nd_card(rrc, &vdom, usize_this_click);
-    } else {
-        logmod::debug_write("the slice is not equal");
-        logmod::debug_write(&err_msg[..len_str_err_begin]);
-    }
-}
-
 ///update game data
 pub fn update_on_1st_card(rrc: &mut RootRenderingComponent) {
+    logmod::debug_write("update_on_1st_card");
     //flip the card up
     unwrap!(rrc
         .game_data
