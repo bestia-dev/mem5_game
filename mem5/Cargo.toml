@@ -1,6 +1,6 @@
 [package]
 name = "mem5"
-version = "19.10.30-22.16" #no need for semver if it is not a public library
+version = "2019.1231.1026"
 authors = ["Luciano Furlan <Luciano.Bestia@gmail.com>"]
 edition = "2018"
 description = "Learning Rust Wasm/WebAssembly with Virtual Dom Dodrio"
@@ -12,8 +12,6 @@ categories = ["game","learning"]
 
 [lib]
 crate-type = ["cdylib"]
-
-[features]
 
 [dependencies]
 unwrap = "1.2.1"
@@ -79,6 +77,3 @@ features = [
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.1"
-
-
-

@@ -58,7 +58,6 @@ pub fn send_msg_and_write_in_queue(
     msg: &WsMessage,
     msg_id: usize,
 ) {
-    websocketcommunicationmod::ws_send_msg(&rrc.game_data.ws, msg);
     //write the msgs in the queue
     for player in &rrc.game_data.players {
         if player.ws_uid != rrc.game_data.my_ws_uid {
@@ -72,6 +71,7 @@ pub fn send_msg_and_write_in_queue(
                 });
         }
     }
+    websocketcommunicationmod::ws_send_msg(&rrc.game_data.ws, msg);
 }
 
 ///send ack

@@ -13,3 +13,4 @@
 2019-10-18 acknowledge msg because of bad network  
 2019-10-21 renaming, refactoring, docs  
 2019-10-29 heartbeat every 10 seconds ping pong keepalive  
+2019-12-31 solved conflict on 2 simultaneous click1st  

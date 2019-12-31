@@ -8,8 +8,7 @@ use crate::logmod;
 use crate::ackmsgmod;
 use crate::divgridcontainermod;
 use crate::utilsmod;
-use crate::websocketreconnectmod;
-use crate::websocketcommunicationmod;
+use crate::status2ndcardmod;
 
 use mem5_common::{GameStatus, WsMessage, MsgAckKind};
 
@@ -45,34 +44,26 @@ pub fn on_click_1st_card(
 ///on msg
 pub fn on_msg_click_1st_card(
     rrc: &mut RootRenderingComponent,
+    vdom: &dodrio::VdomWeak,
     msg_sender_ws_uid: usize,
     card_index_of_first_click: usize,
     msg_id: usize,
 ) {
-    logmod::debug_write("on_msg_click_1st_card");
-    //it happens that 2 smartphones send the msg simultaneosly.
-    //They send it like it is 1st click.
-    //Only is status1St is ok to receive 1st click. All else is a conflict.
-    if let GameStatus::Status1stCard = rrc.game_data.game_status {
-        ackmsgmod::send_ack(rrc, msg_sender_ws_uid, msg_id, MsgAckKind::MsgClick1stCard);
+    ackmsgmod::send_ack(rrc, msg_sender_ws_uid, msg_id, MsgAckKind::MsgClick1stCard);
+    //it can happen that 2 smartphones send the msg click1st simultaneosly.
+    //This is a conflict.
+    //Only one Player can be the judge and I choosen the Player 1 to resolve it.
+    if rrc.game_data.my_player_number == 1 && GameStatus::Status1stCard != rrc.game_data.game_status
+    {
+        logmod::debug_write("CONFLICT on_msg_click_1st_card");
+        //do the whole click1st process
+        on_click_1st_card(rrc, vdom, rrc.game_data.card_index_of_first_click);
+        //do the whole click2nd process
+        status2ndcardmod::on_click_2nd_card(rrc, vdom, card_index_of_first_click)
+    } else {
+        logmod::debug_write("on_msg_click_1st_card");
         rrc.game_data.card_index_of_first_click = card_index_of_first_click;
         update_on_1st_card(rrc);
-    } else {
-        //This is a conflict and only the Player1 must resolve it so to send his data.
-        //If this is Player1 than just send GameData
-        if rrc.game_data.my_player_number == 1 {
-            websocketreconnectmod::send_msg_for_resync(rrc, rrc.game_data.my_ws_uid);
-        } else {
-            websocketcommunicationmod::ws_send_msg(
-                &rrc.game_data.ws,
-                &WsMessage::MsgAskPlayer1ForResync {
-                    my_ws_uid: rrc.game_data.my_ws_uid,
-                    players_ws_uid: unwrap!(serde_json::to_string(&vec![
-                        rrc.game_data.players[0].ws_uid
-                    ])),
-                },
-            );
-        }
     }
 }
 

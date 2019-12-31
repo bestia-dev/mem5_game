@@ -205,7 +205,7 @@ pub enum WsMessage {
 
 ///the game can be in various statuses and that differentiate the UI and actions
 /// all players have the same game status
-#[derive(Display, AsRefStr, Serialize, Deserialize, Clone)]
+#[derive(Display, AsRefStr, Serialize, Deserialize, Clone, PartialEq)]
 #[allow(clippy::pub_enum_variant_names)]
 pub enum GameStatus {
     /// start page

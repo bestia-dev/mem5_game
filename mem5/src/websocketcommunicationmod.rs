@@ -251,6 +251,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, vdom: dodrio::VdomWeak) {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
                             status1stcardmod::on_msg_click_1st_card(
                                 rrc,
+                                &v2,
                                 my_ws_uid,
                                 card_index_of_first_click,
                                 msg_id,
@@ -380,7 +381,7 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, vdom: dodrio::VdomWeak) {
                 );
             }
             WsMessage::MsgAskPlayer1ForResync {
-                my_ws_uid:_,
+                my_ws_uid: _,
                 players_ws_uid: _,
             } => {
                 wasm_bindgen_futures::spawn_local(
@@ -388,7 +389,10 @@ pub fn setup_ws_msg_recv(ws: &WebSocket, vdom: dodrio::VdomWeak) {
                         let v2 = vdom.clone();
                         move |root| {
                             let rrc = root.unwrap_mut::<RootRenderingComponent>();
-                            websocketreconnectmod::send_msg_for_resync(rrc, rrc.game_data.my_ws_uid);
+                            websocketreconnectmod::send_msg_for_resync(
+                                rrc,
+                                rrc.game_data.my_ws_uid,
+                            );
                             v2.schedule_render();
                         }
                     })
