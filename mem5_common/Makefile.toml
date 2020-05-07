@@ -80,7 +80,7 @@ args = ["fmt"]
 clear = true
 private = true
 description = "copy the content of readme.md into *.rs comments (for the docs)"
-script= ["../../utils_linux/lmake_readme"]
+script= ["lmake_readme"]
 
 [tasks.cargo_doc]
 clear = true
@@ -93,5 +93,5 @@ args=["doc","--no-deps","--document-private-items"]
 clear = true
 private = true
 description = "in cargo.toml change version to today date"
-script= ["../../utils_linux/lmake_version_from_date"]
+script= ["lmake_version_from_date"]
 

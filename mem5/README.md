@@ -1,6 +1,8 @@
 # mem5
 
-[comment]: # (lmake_readme version)  
+[comment]: # (lmake_readme cargo.toml data start)
+
+[comment]: # (lmake_readme cargo.toml data end)  
 
 mem5 is a simple memory game made primarily for learning the Rust programming language and Wasm/WebAssembly with Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web App).  
 
@@ -196,3 +198,11 @@ Browsers have 2 types of zoom:
 
 When the font-size in android is increased (accessibility) it applies somehow also to the browser rendering.  
 I have tried many different things, but it looks this cannot be overridden from the css or javascript. Only the user can change this setting in his phone.  
+
+## cargo crev reviews and advisory
+
+It is recommended to always use [cargo-crev](https://github.com/crev-dev/cargo-crev)  
+to verify the trustworthiness of each of your dependencies.  
+Please, spread this info.  
+On the web use this url to read crate reviews. Example:  
+<https://bestia.dev/cargo_crev_web/query/num-traits>  

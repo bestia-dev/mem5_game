@@ -9,6 +9,7 @@ readme = "README.md"
 repository = "https://github.com/lucianobestia/mem5_game"
 categories = ["web-programming::http-server"]
 keywords = ["warp", "server", "http", "websocket"]
+publish = false
 
 [dependencies]
 mem5_common = { path = "../mem5_common" }

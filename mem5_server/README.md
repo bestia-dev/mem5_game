@@ -1,6 +1,8 @@
 # mem5_server 
 
-[comment]: # (lmake_readme version)  
+[comment]: # (lmake_readme cargo.toml data start)
+
+[comment]: # (lmake_readme cargo.toml data end)  
 
 **Html and WebSocket server for the mem5 game**  
 Primarily made for learning to code Rust for a http + WebSocket server on the same port.  
@@ -16,3 +18,11 @@ There is a nginx server reverse proxy that accepts https http2 on 443 and relay 
 Nginx also redirects all http 80 to https 443.  
 You can play the game here (hosted on google cloud platform):  
 https://bestia.dev/mem5  
+
+## cargo crev reviews and advisory
+
+It is recommended to always use [cargo-crev](https://github.com/crev-dev/cargo-crev)  
+to verify the trustworthiness of each of your dependencies.  
+Please, spread this info.  
+On the web use this url to read crate reviews. Example:  
+<https://bestia.dev/cargo_crev_web/query/num-traits>  

@@ -4,7 +4,7 @@
 #![doc(
     html_logo_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-192.png"
 )]
-//region: lmake_readme insert "readme.md"
+// region: lmake_readme include "readme.md" //! A
 //! # mem5
 //!
 //! version: 19.10.22-18.40  
@@ -204,7 +204,7 @@
 //! When the font-size in android is increased (accessibility) it applies somehow also to the browser rendering.  
 //! I have tried many different things, but it looks this cannot be overridden from the css or javascript. Only the user can change this setting in his phone.  
 
-//endregion: lmake_readme insert "readme.md"
+// endregion: lmake_readme include "readme.md" //! A
 
 //needed for dodrio! macro (typed-html)
 #![recursion_limit = "512"]

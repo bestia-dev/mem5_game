@@ -47,6 +47,15 @@ I prepared some flows and tasks for Cargo make for the workspace.
 `cargo make loc` - Lines Of Rust Code with tokei  
 `cargo make depver` - list of not latest dependencies  
 
+## cargo crev reviews and advisory
+
+It is recommended to always use [cargo-crev](https://github.com/crev-dev/cargo-crev)  
+to verify the trustworthiness of each of your dependencies.  
+Please, spread this info.  
+On the web use this url to read crate reviews. Example:  
+<https://bestia.dev/cargo_crev_web/query/num-traits>  
+
+
 ## TODO and CHANGELOG
 
 Read files [TODO.md](https://github.com/LucianoBestia/mem5_game/blob/master/TODO.md) and [CHANGELOG.md](https://github.com/LucianoBestia/mem5_game/blob/master/CHANGELOG.md).  

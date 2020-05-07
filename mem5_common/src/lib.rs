@@ -4,7 +4,7 @@
 #![doc(
     html_logo_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-192.png"
 )]
-//region: lmake_readme insert "readme.md"
+// region: lmake_readme include "readme.md" //! A
 //! # mem5_common
 //!
 //! version: 19.10.21-20.7  
@@ -14,7 +14,7 @@
 //! Here are just the structures, that are in common between frontend and backend.  
 //! Mostly because of the Messages.  
 
-//endregion: lmake_readme insert "readme.md"
+// endregion: lmake_readme include "readme.md" //! A
 
 //region: Clippy
 #![warn(

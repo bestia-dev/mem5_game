@@ -105,7 +105,7 @@ args = ["fmt"]
 description = "copy the content of readme.md into *.rs comments (for the docs)"
 clear = true
 private = true
-script= ["../../utils_linux/lmake_readme"]
+script= ["lmake_readme"]
 
 [tasks.cargo_doc]
 description = "generate docs from source code"
@@ -118,7 +118,7 @@ args=["doc","--no-deps","--document-private-items"]
 description = "in cargo.toml change version to today date"
 clear = true
 private = true
-script= ["../../utils_linux/lmake_version_from_date ../webfolder/mem5/service_worker.js"]
+script= ["lmake_version_from_date"]
 
 [tasks.delete_old_js_snippets]
 description = "delete old snippets"
