@@ -72,7 +72,7 @@ args = ["build","--release"]
 clear=true
 private=true
 script = [
-    "\\cp ~/rustprojects/mem5_game/target/debug/mem5_server -rf -v ~/rustprojects/mem5_game/webfolder",
+    "\\cp /mnt/c/Users/Luciano/rustprojects/mem5_game/target/debug/mem5_server -rf -v /mnt/c/Users/Luciano/rustprojects/mem5_game/webfolder",
     # I cannot script the exact IP here.  
     # It must be copied from the mem5_server.exe output.
     "alias chrome=\"/mnt/c/Program\\ Files\\ \\(x86\\)/Google/Chrome/Application/chrome.exe\"",
@@ -87,7 +87,7 @@ script = [
 clear=true
 private=true
 script = [
-    "\\cp ~/rustprojects/mem5_game/target/release/mem5_server -rf -v ~/rustprojects/mem5_game/webfolder",
+    "\\cp /mnt/c/Users/Luciano/rustprojects/mem5_game/target/release/mem5_server -rf -v /mnt/c/Users/Luciano/rustprojects/mem5_game/webfolder",
     # I cannot script the exact IP here.  
     # It must be copied from the mem5_server.exe output.
     "alias chrome=\"/mnt/c/Program\\ Files\\ \\(x86\\)/Google/Chrome/Application/chrome.exe\"",

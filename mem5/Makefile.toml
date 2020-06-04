@@ -84,7 +84,7 @@ description = "copy wasm pkg to webfolder"
 clear = true
 private = true
 script = [
-    "\\rsync -avz --delete-after ~/rustprojects/mem5_game/mem5/pkg/  ~/rustprojects/mem5_game/webfolder/mem5/pkg/",
+    "\\rsync -avz --delete-after /mnt/c/Users/Luciano/rustprojects/mem5_game/mem5/pkg/  /mnt/c/Users/Luciano/rustprojects/mem5_game/webfolder/mem5/pkg/",
 ]
 
 [tasks.cargo_audit]

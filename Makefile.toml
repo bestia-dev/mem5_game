@@ -77,10 +77,10 @@ skip_core_tasks = true
     # backslash is the escape character for all other special characters.
     # and then another time I have to escape the backslash. So 4 backslash for one backslash.
     script = [
-        "rsync -avz --delete-after /home/luciano/rustprojects/mem5_game/webfolder/ /home/luciano/rustprojects/googlecloud/var/www/webapps/mem5_game/",
+        "rsync -avz --delete-after /mnt/c/Users/Luciano/rustprojects/mem5_game/webfolder/ /mnt/c/Users/Luciano/rustprojects/googlecloud/var/www/webapps/mem5_game/",
         "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@bestia.dev screen -dr mem5-8085 -X stuff $'\\\\003'",
         "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@bestia.dev screen -dr mem5-8085 -X stuff 'cd\\ \\/var\\/www\\/webapps\\/mem5_game\\\\n'",
-        "rsync -e ssh -avz --delete-after /home/luciano/rustprojects/googlecloud/var/www/webapps/mem5_game/ luciano_bestia@bestia.dev:/var/www/webapps/mem5_game/",
+        "rsync -e ssh -avz --delete-after /mnt/c/Users/Luciano/rustprojects/googlecloud/var/www/webapps/mem5_game/ luciano_bestia@bestia.dev:/var/www/webapps/mem5_game/",
         "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@bestia.dev screen -dr mem5-8085 -X stuff 'chmod\\ \\+x\\ mem5_server\\\\n'",
         "ssh -tt -i /home/luciano/.ssh/luciano_googlecloud luciano_bestia@bestia.dev screen -dr mem5-8085 -X stuff 'sudo\\ \\.\\/mem5_server\\\\n'",
     ]
@@ -141,5 +141,5 @@ workspace=false
 clear = true
 private = false
 script = [
-    "\\rsync -avz --delete-after ~/rustprojects/mem5_game/target/doc/*  ~/rustprojects/mem5_game/docs/",
+    "\\rsync -avz --delete-after /mnt/c/Users/Luciano/rustprojects/mem5_game/target/doc/*  /mnt/c/Users/Luciano/rustprojects/mem5_game/docs/",
 ]
