@@ -1,10 +1,10 @@
 # mem5_game
 
+**Learning Rust Wasm/WebAssembly, Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web Apps) - part five**  
+***version: 5.0  date: 2019-12-31 author: [Dev_Bestia](https://bestia.dev) repository: [GitHub](https://github.com/LucianoBestia/mem5_game)***  
+
 ![loc](https://img.shields.io/badge/lines_of_Rust_code-4591-success)
 ![loc](https://img.shields.io/badge/lines_of_docs/comments-1231-informational)
-
-**Learning Rust Wasm/WebAssembly, Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web Apps) - part five**  
-*Things are changing fast. This is the situation on 2019-12-31.*
 
 ## Documentation
 
@@ -54,7 +54,6 @@ to verify the trustworthiness of each of your dependencies.
 Please, spread this info.  
 On the web use this url to read crate reviews. Example:  
 <https://web.crev.dev/rust-reviews/crate/num-traits/>  
-
 
 ## TODO and CHANGELOG
 
