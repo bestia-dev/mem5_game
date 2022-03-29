@@ -2,11 +2,11 @@
 name = "mem5_server"
 version = "19.10.30-22.2" #no need for semver if it is not a library
 description = "server for the game mem5 http + WebSocket on the same port"
-authors = ["Luciano Bestia"]
+authors = ["bestia.dev"]
 edition = "2018"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/lucianobestia/mem5_game"
+repository = "https://github.com/bestia-dev/mem5_game"
 categories = ["web-programming::http-server"]
 keywords = ["warp", "server", "http", "websocket"]
 publish = false

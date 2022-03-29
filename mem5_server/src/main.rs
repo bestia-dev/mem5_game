@@ -1,8 +1,8 @@
 #![doc(
-    html_favicon_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-16.png"
+    html_favicon_url = "https://github.com/bestia-dev/mem5_game/raw/master/webfolder/mem5/images/icons-16.png"
 )]
 #![doc(
-    html_logo_url = "https://github.com/LucianoBestia/mem5_game/raw/master/webfolder/mem5/images/icons-192.png"
+    html_logo_url = "https://github.com/bestia-dev/mem5_game/raw/master/webfolder/mem5/images/icons-192.png"
 )]
 // region: lmake_readme include "readme.md" //! A
 //! # mem5_server

@@ -1,7 +1,7 @@
 # mem5_game
 
 **Learning Rust Wasm/WebAssembly, Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web Apps) - part five**  
-***version: 5.0  date: 2019-12-31 author: [Dev_Bestia](https://bestia.dev) repository: [GitHub](https://github.com/LucianoBestia/mem5_game)***  
+***version: 5.0  date: 2019-12-31 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/mem5_game)***  
 
 ![loc](https://img.shields.io/badge/lines_of_Rust_code-4591-success)
 ![loc](https://img.shields.io/badge/lines_of_docs/comments-1231-informational)
@@ -9,7 +9,7 @@
 ## Documentation
 
 Documentation generated from source code:  
-<https://lucianobestia.github.io/mem5_game/mem5/index.html>  
+<https://bestia-dev.github.io/mem5_game/mem5/index.html>  
 The workspace mem5_game is made of projects:  
 
 1. Wasm/WebAssembly (for browsers) frontend - mem5  
@@ -19,12 +19,12 @@ The workspace mem5_game is made of projects:
 Every project has its own readme.md.  
 
 - [mem5/README.md](
-https://github.com/LucianoBestia/mem5_game/blob/master/mem5/README.md)  
-- [mem5_common/README.md](https://github.com/LucianoBestia/mem5_game/blob/master/mem5_common/README.md)  
-- [mem5_server/README.md](https://github.com/LucianoBestia/mem5_game/blob/master/mem5_server/README.md)  
+https://github.com/bestia-dev/mem5_game/blob/master/mem5/README.md)  
+- [mem5_common/README.md](https://github.com/bestia-dev/mem5_game/blob/master/mem5_common/README.md)  
+- [mem5_server/README.md](https://github.com/bestia-dev/mem5_game/blob/master/mem5_server/README.md)  
   
 Read also my `Previous projects` on Github:  
-<https://github.com/LucianoBestia/mem4_game>  
+<https://github.com/bestia-dev/mem4_game>  
 
 ## Working game server
 
@@ -57,4 +57,4 @@ On the web use this url to read crate reviews. Example:
 
 ## TODO and CHANGELOG
 
-Read files [TODO.md](https://github.com/LucianoBestia/mem5_game/blob/master/TODO.md) and [CHANGELOG.md](https://github.com/LucianoBestia/mem5_game/blob/master/CHANGELOG.md).  
+Read files [TODO.md](https://github.com/bestia-dev/mem5_game/blob/master/TODO.md) and [CHANGELOG.md](https://github.com/bestia-dev/mem5_game/blob/master/CHANGELOG.md).  

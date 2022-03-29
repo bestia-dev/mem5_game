@@ -2,11 +2,11 @@
 name = "mem5_common"
 version = "2019.1231.1022" #no need for semver if it is not a library
 description = "commons for mem5 wasm and server"
-authors = ["Luciano Bestia"]
+authors = ["bestia.dev"]
 edition = "2018"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/lucianobestia/mem5_game"
+repository = "https://github.com/bestia-dev/mem5_game"
 categories = ["web-programming::http-server"]
 keywords = ["warp", "server", "http", "websocket"]
 publish = false

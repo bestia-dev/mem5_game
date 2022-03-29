@@ -93,9 +93,9 @@ impl Render for RulesAndDescription {
             </h4>
              <h6>
                 /*TODO: tried to add rel="noreferrer", but the dodrio! macro doesn't understand that */
-                <a href= "https://github.com/LucianoBestia/mem5_game" target="_blank" style="color:#74bbfb">
+                <a href= "https://github.com/bestia-dev/mem5_game" target="_blank" style="color:#74bbfb">
                     {vec![text(bumpalo::format!(in bump,
-                    "https://github.com /LucianoBestia /mem5_game{}", "").into_bump_str(),)]}
+                    "https://github.com /bestia-dev /mem5_game{}", "").into_bump_str(),)]}
                 </a>
             </h6>
             <h2>
