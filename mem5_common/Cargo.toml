@@ -3,6 +3,7 @@ name = "mem5_common"
 version = "2019.1231.1022" #no need for semver if it is not a library
 description = "commons for mem5 wasm and server"
 authors = ["bestia.dev"]
+homepage = "https://bestia.dev"
 edition = "2018"
 license = "MIT"
 readme = "README.md"
