@@ -5,7 +5,7 @@
 
 ![loc](https://img.shields.io/badge/lines_of_Rust_code-4591-success)
 ![loc](https://img.shields.io/badge/lines_of_docs/comments-1231-informational)
-![Hits](https://bestia.dev/webpage_hit_counter/get_svg_image/748188469)
+![Hits](https://bestia.dev/webpage_hit_counter/get_svg_image/748188469.svg)
 
 Hashtags: #rustlang #game #tutorial  
 My projects on Github are more like a tutorial than a finished product: [bestia-dev tutorials](https://github.com/bestia-dev/tutorials_rust_wasm).
