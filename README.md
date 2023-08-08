@@ -3,7 +3,8 @@
 **Learning Rust Wasm/WebAssembly, Virtual Dom Dodrio, WebSocket communication and PWA (Progressive Web Apps) - part five**  
 ***version: 5.0  date: 2019-12-31 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/mem5_game)***  
 
-![status](https://img.shields.io/badge/obsolete-yellow) 
+![status](https://img.shields.io/badge/obsolete-red) 
+![status](https://img.shields.io/badge/archived-red) 
 ![status](https://img.shields.io/badge/tutorial-yellow) 
 ![loc](https://img.shields.io/badge/lines_of_Rust_code-4591-success)
 ![loc](https://img.shields.io/badge/lines_of_docs/comments-1231-informational)
